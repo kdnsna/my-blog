@@ -1,14 +1,29 @@
 {
-  "name": "blog",
+  "name": "my-blog",
   "version": "0.1.0",
-  "private": true,
+  "description": "基于 Next.js + MDX 的个人博客系统，支持日记、笔记、关于页面，具备定时日记同步自动化能力",
+  "private": false,
+  "homepage": "https://github.com/kdnsna/my-blog",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kdnsna/my-blog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kdnsna/my-blog/issues"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync:diaries": "npx ts-node scripts/sync-diary.ts",
+    "sync:diaries:watch": "npx ts-node scripts/sync-diary.ts --watch"
   },
   "dependencies": {
+    "@mdx-js/loader": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
+    "@next/mdx": "^16.2.2",
+    "gray-matter": "^4.0.3",
     "next": "16.2.2",
     "react": "19.2.4",
     "react-dom": "19.2.4"

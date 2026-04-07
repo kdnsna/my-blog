@@ -1,0 +1,80 @@
+name: Bug 报告
+about: 报告一个 Bug 帮助我们改进
+title: "[Bug] "
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您报告 Bug！请尽可能详细地描述问题，以便我们快速定位和修复。
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug 描述
+      description: 请详细描述您遇到的问题
+      placeholder: |
+        描述：
+        1. 您想要完成什么操作？
+        2. 实际发生了什么？
+        3. 预期行为是什么？
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 请按步骤描述如何复现这个问题
+      placeholder: |
+        1. 打开页面 ...
+        2. 点击按钮 ...
+        3. 出现错误
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为
+      description: 您期望的正确行为是什么？
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图/录屏
+      description: 如有截图或录屏，请在此粘贴链接或描述
+    validations:
+      required: false
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: 环境信息
+      description: 您的运行环境
+      options:
+        - macOS
+        - Windows
+        - Linux
+        - 其他
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: 版本号
+      description: 问题的版本（如 v0.1.0）
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 其他信息
+      description: 任何其他有助于解决问题的信息
+    validations:
+      required: false
