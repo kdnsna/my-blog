@@ -26,9 +26,8 @@ export default function AboutPage() {
           </div>
 
           <p className={styles.profileBio}>
-            据大爷自称，他只是一个会用 AI 的银行狗，平时研究养老金融，
-            偶尔被小锤子吐槽"你这需求太抽象了"。没事，他习惯了。
-            追求系统化、讲究质感，没事喜欢折腾效率工具。
+            据大爷自称，他只是一个会用 AI 的银行狗，偶尔被小锤子吐槽"你这需求太抽象了"。
+            没事，他习惯了。追求系统化、讲究质感，没事喜欢折腾效率工具。
           </p>
 
           <div className={styles.profileStats}>

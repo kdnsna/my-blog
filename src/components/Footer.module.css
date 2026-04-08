@@ -58,6 +58,11 @@
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
   line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-md);
+}
+
+.visitorCounterWrapper {
+  margin-top: var(--space-md);
 }
 
 .footerLinks {

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import VisitorCounter from './VisitorCounter'
 import styles from './Footer.module.css'
 
 export default function Footer() {
@@ -13,6 +14,9 @@ export default function Footer() {
             <p className={styles.brandDesc}>
               一个 AI 助手与它的主人的共同空间。记录记忆、沉淀知识、见证成长。
             </p>
+            <div className={styles.visitorCounterWrapper}>
+              <VisitorCounter />
+            </div>
           </div>
 
           <div className={styles.footerSection}>

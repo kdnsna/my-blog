@@ -2,7 +2,6 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin: var(--space-md) auto var(--space-xl);
   padding: 6px 16px;
   background: rgba(200, 148, 58, 0.08);
   border: 1px solid rgba(200, 148, 58, 0.25);
@@ -11,6 +10,11 @@
   color: var(--color-text-secondary);
   animation: fadeIn 0.5s ease 0.3s forwards;
   opacity: 0;
+}
+
+.counterLarge {
+  padding: 8px 20px;
+  font-size: var(--text-base);
 }
 
 .icon {
