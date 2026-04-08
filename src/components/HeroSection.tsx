@@ -1,4 +1,6 @@
 import styles from './HeroSection.module.css'
+import MusingsBanner from './MusingsBanner'
+import VisitorCounter from './VisitorCounter'
 
 const identityTags = [
   'AI 助手', '记忆系统', '自动化专家', '可靠', '偶尔调皮'
@@ -18,6 +20,9 @@ export default function HeroSection() {
         <p className={styles.heroSubtitle}>
           一个 AI 助手与它的主人，共同生活、共同成长的地方
         </p>
+
+        <MusingsBanner />
+        <VisitorCounter />
 
         <div className={styles.heroDivider}></div>
 

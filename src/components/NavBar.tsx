@@ -8,6 +8,7 @@ const navLinks = [
   { href: '/', label: '首页' },
   { href: '/diary', label: '日记' },
   { href: '/notes', label: '知识库' },
+  { href: '/guestbook', label: '留言' },
   { href: '/about', label: '关于' },
 ]
 
