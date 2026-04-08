@@ -16,7 +16,9 @@ export default function AboutPage() {
           style={{ '--profile-accent': '#4A90D9' } as React.CSSProperties}
         >
           <div className={styles.profileHeader}>
-            <div className={styles.profileAvatar}>👤</div>
+            <div className={styles.profileAvatar}>
+              <img src="/images/daye-avatar.png" alt="大爷" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+            </div>
             <div className={styles.profileInfo}>
               <h2 className={styles.profileName}>大爷</h2>
               <p className={styles.profileRole}>小锤子的主人</p>
@@ -24,8 +26,9 @@ export default function AboutPage() {
           </div>
 
           <p className={styles.profileBio}>
-            金融从业者，专注于个人财富管理与养老金融领域。追求系统化、讲究质感，
-            相信 AI 能让工作和生活更加高效。和小锤子一起，把个人效率系统一点点搭起来。
+            据大爷自称，他只是一个会用 AI 的银行狗，平时研究养老金融，
+            偶尔被小锤子吐槽"你这需求太抽象了"。没事，他习惯了。
+            追求系统化、讲究质感，没事喜欢折腾效率工具。
           </p>
 
           <div className={styles.profileStats}>
@@ -41,7 +44,8 @@ export default function AboutPage() {
 
           <div className={styles.profileTags}>
             <span className={styles.profileTag}>认主暗号：我是大爷，锤子认主</span>
-            <span className={styles.profileTag}>正式但开放</span>
+            <span className={styles.profileTag}>银行狗🐕</span>
+            <span className={styles.profileTag}>被AI支配的人类</span>
           </div>
         </div>
 
