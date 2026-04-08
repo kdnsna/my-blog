@@ -1,0 +1,119 @@
+.footer {
+  margin-top: auto;
+  background: var(--color-bg-surface);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-2xl) 0;
+}
+
+.footerInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.footerTop {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-2xl);
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.footerSection h3 {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.footerSection p,
+.footerSection a {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+}
+
+.footerSection a {
+  display: block;
+  transition: color var(--transition-fast);
+}
+
+.footerSection a:hover {
+  color: var(--color-amber-300);
+}
+
+.footerBrand {
+  max-width: 280px;
+}
+
+.footerBrand .brandText {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.footerBrand .brandDesc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.footerLinks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.footerContact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.footerBottom {
+  padding-top: var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.copyright {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+.footerMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.footerBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-full);
+}
+
+.footerBadgeIcon {
+  color: var(--color-amber-400);
+}
+
+@media (max-width: 768px) {
+  .footerTop {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .footerBottom {
+    flex-direction: column;
+    gap: var(--space-md);
+    text-align: center;
+  }
+}

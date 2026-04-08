@@ -1,0 +1,191 @@
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2xl);
+  transition: all var(--transition-fast);
+}
+
+.backLink:hover {
+  color: var(--color-amber-300);
+  gap: var(--space-md);
+}
+
+.article {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.articleHeader {
+  padding: var(--space-2xl);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--note-accent-rgb, 200, 148, 58), 0.08) 0%,
+    transparent 50%
+  );
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+}
+
+.articleHeader::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--note-accent, var(--color-amber-400));
+}
+
+.articleMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.articleIcon {
+  font-size: 28px;
+}
+
+.articleCategory {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.articleDate {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+.articleTitle {
+  font-family: var(--font-serif);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: var(--leading-tight);
+  margin-bottom: var(--space-md);
+}
+
+.articleDescription {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-lg);
+}
+
+.articleTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.articleTag {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  background: var(--color-bg-elevated);
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-full);
+}
+
+.articleContent {
+  padding: var(--space-2xl);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+}
+
+.articleContent h2 {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-md);
+}
+
+.articleContent h3 {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-sm);
+}
+
+.articleContent p {
+  margin-bottom: var(--space-md);
+}
+
+.articleContent ul,
+.articleContent ol {
+  margin-bottom: var(--space-md);
+  padding-left: var(--space-xl);
+}
+
+.articleContent li {
+  margin-bottom: var(--space-sm);
+  list-style: disc;
+}
+
+.articleContent blockquote {
+  margin: var(--space-xl) 0;
+  padding: var(--space-lg);
+  padding-left: var(--space-xl);
+  border-left: 3px solid var(--color-amber-400);
+  background: rgba(200, 148, 58, 0.05);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
+.articleContent code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-bg-elevated);
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+}
+
+.articleContent pre {
+  background: var(--color-bg-elevated);
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: var(--space-lg) 0;
+}
+
+.articleContent pre code {
+  background: none;
+  padding: 0;
+}
+
+.articleContent strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.articleFooter {
+  padding: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.backToNotes {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.backToNotes:hover {
+  color: var(--color-amber-300);
+}

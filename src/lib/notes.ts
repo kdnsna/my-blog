@@ -1,0 +1,287 @@
+export interface Note {
+  id: string
+  category: string
+  categoryColor: string
+  icon: string
+  title: string
+  description: string
+  detail: string
+  tags: string[]
+  date: string
+  featured?: boolean
+}
+
+export const allNotes: Note[] = [
+  {
+    id: 'morning-briefing-system',
+    category: '自动化',
+    categoryColor: '#4CAF50',
+    icon: '📰',
+    title: 'AI 情报晨报系统',
+    description: '每天 07:30 自动推送 AI 行业热门资讯，涵盖 GitHub Trending 项目和 ClawHub 技能榜单，支持飞书文档归档。',
+    detail: `## 系统概述
+
+每天早上 07:30，小锤子会自动收集 AI 行业最新动态，推送到飞书私聊。晨报内容经过精心筛选，不是简单的信息堆砌，而是真正有价值的行业信号。
+
+## 内容构成
+
+每天固定 10 条，其中：
+- **5 条 GitHub Trending**：聚焦 AI/agent/LLM/MCP/automation 相关项目
+- **5 条 ClawHub 热门技能**：发现新的能力扩展机会
+
+## 归档机制
+
+生成后自动整理写入飞书文档（优先用户飞书知识库），形成可追溯的历史记录。每 2 天做一次兴趣调整，确保推送内容越来越精准。
+
+## 技术细节
+
+- 触发时间：每天 07:30（飞书时区）
+- 依赖服务：GitHub API、ClawHub MCP
+- 错误处理：首跑时遇到报错，已记录待排查`,
+    tags: ['自动化', 'AI', '飞书'],
+    date: '2026-03-27',
+    featured: true
+  },
+  {
+    id: 'memory-system',
+    category: '记忆系统',
+    categoryColor: '#4A90D9',
+    icon: '🧠',
+    title: 'GitHub 记忆库体系',
+    description: '基于 GitHub 私有仓库的分布式记忆系统，支持分类存储（people/projects/automations/rituals/decisions/lessons），具备完整的备份与恢复机制。',
+    detail: `## 设计理念
+
+记忆不是放在一个地方的大杂烩，而是有序归档的知识资产。GitHub 私有仓库作为长期记忆的载体，通过目录结构实现分类管理。
+
+## 目录结构
+
+分类清晰，各司其职：
+- **people/** — 人物档案，记住重要的人和他们的特点
+- **projects/** — 项目记录，每个项目的来龙去脉
+- **automations/** — 自动化任务，记录已配置的定时任务
+- **rituals/** — 日常仪式，固定的习惯和流程
+- **decisions/** — 重要决策，重大选择的背景和理由
+- **lessons/** — 经验教训，从错误和成功中学到的东西
+
+## 同步机制
+
+本地修改后通过脚本同步推送到 GitHub 远程仓库。每次重要记忆更新必须同步推送，确保记忆不丢失。
+
+## 地址信息
+
+远程仓库：git@github.com:kdnsna/xiaochuizi-memory.git
+本地路径：~/.openclaw/workspace/projects/memory/xiaochuizi-memory
+同步脚本：~/.openclaw/workspace/projects/scripts/sync-xiaochuizi-memory.sh
+`,
+    tags: ['记忆', 'GitHub', '备份'],
+    date: '2026-03-19'
+  },
+  {
+    id: 'apple-integration',
+    category: '苹果生态',
+    categoryColor: '#E85C5C',
+    icon: '🍎',
+    title: '苹果三件套集成',
+    description: '深度集成日历、提醒事项和备忘录。日程写日历，提醒写提醒事项，资料写备忘录，形成完整的苹果本地能力层。',
+    detail: `## 整合策略
+
+苹果生态是本地能力层的核心。根据信息类型决定存储位置，形成清晰的分工：
+
+## 日历 — 时间安排
+
+明确的时间点 → 苹果日历
+会议、deadline、预约等有时间属性的事项，全部写日历，有闹钟提醒。
+
+## 提醒事项 — 待办任务
+
+提醒和待办 → 苹果提醒事项
+默认清单叫「计划」，支持按清单分类、设定到期日和提醒时间。
+
+## 备忘录 — 资料沉淀
+
+资料、想法、摘要、备忘 → Apple 备忘录
+维护专用文件夹 🔨 小锤子，每日日记、重要事项、长期记忆同步更新在这里。
+
+## 整理规则
+
+遇到"无标题"笔记应提炼有意义标题再写入，保持备忘录库整洁可搜索。`,
+    tags: ['苹果', '日历', '备忘录'],
+    date: '2026-03-24'
+  },
+  {
+    id: 'dashboard',
+    category: '项目',
+    categoryColor: '#9B59B6',
+    icon: '📊',
+    title: '小锤子监控台',
+    description: '独立开发的 OpenClaw 监控面板，端口 3210，可查看 Token 用量、成本分析、任务日志和系统状态。',
+    detail: `## 项目起源
+
+大爷说想有一个地方能直观看到小锤子的运行状态，于是有了这个监控台。从最初的简单数据展示，逐步演变为一个功能完整的监控面板。
+
+## 核心功能
+
+- **Token 用量**：追踪 AI 调用成本
+- **成本分析**：按会话/功能维度分析费用
+- **任务日志**：实时动态和任务执行记录
+- **系统状态**：CPU、内存等资源监控
+- **ACP 工作流**：深度查看 OpenClaw 工作流状态
+
+## 技术栈
+
+- 前端：Vite + React + TypeScript monorepo
+- 风格：与博客统一，深黑 + 琥珀暖金色系
+- 端口：dev 5173，API 3210
+
+## 与博客的关联
+
+现在博客导航栏可以直接进入监控台，监控台底部也可以跳转回博客，两边形成完整闭环。`,
+    tags: ['监控', 'OpenClaw', '项目'],
+    date: '2026-03-21'
+  },
+  {
+    id: 'learning-tracker',
+    category: '学习',
+    categoryColor: '#E8B96A',
+    icon: '📚',
+    title: '晨报学习追踪器',
+    description: '基于每天 AI 情报晨报的轻量学习系统，包含主题归并、升级阈值（1次观察/3次实验/5次落地）和实验卡片机制。',
+    detail: `## 学习理念
+
+不是所有新东西都值得马上尝试，但值得持续关注。这个追踪器帮助区分"一闪而过的想法"和"真正值得投入的方向"。
+
+## 追踪机制
+
+基于每天的 AI 晨报，每发现一个值得注意的方向就记录一条。追踪器记录出现频次：
+
+- **1 次**：继续观察
+- **3 次**：值得实验
+- **5 次**：可以落地
+
+## 升级阈值
+
+从"观察到"变成"值得实验"需要同一个方向出现 3 次。这不是机械的计数，而是给新想法一个被验证的机会。
+
+## 实验卡片
+
+当某个主题达到"值得实验"后，生成实验卡片：
+- 为什么值得试
+- 最小验证动作
+- 预期收益
+- 风险成本
+
+## 归档位置
+
+学习追踪记录归档在 GitHub 记忆库的 snapshots/learning-tracker.md，实验卡片存放在 snapshots/learning-experiments.md。`,
+    tags: ['学习', 'AI', '知识管理'],
+    date: '2026-04-07',
+    featured: true
+  },
+  {
+    id: 'security-audit',
+    category: '安全',
+    categoryColor: '#E85C5C',
+    icon: '🔒',
+    title: '夜间安全巡检',
+    description: '每日 00:20 自动执行的安全审计，检查插件基线、配置异常和权限边界，生成安全报告存档。',
+    detail: `## 为什么需要安全巡检
+
+AI 助手拥有相当大的系统访问权限——文件系统、终端命令、网络请求。定期检查这些权限的使用情况，是对信任的负责。
+
+## 检查维度
+
+- **插件基线**：确认启用的插件列表，检测新增未知插件
+- **配置异常**：检查 MCP 配置、连接器凭证有无泄露风险
+- **权限边界**：验证工具访问权限是否符合预期
+
+## 执行时间
+
+每天 00:20，趁着夜深人静，把系统过一遍，生成安全报告存档。
+
+## 巡检报告
+
+报告包含：
+- 日期时间戳
+- 各维度检查结果
+- 发现的问题和风险等级
+- 建议措施
+
+报告本地存档，重要变更会推送到相关提醒渠道。`,
+    tags: ['安全', '自动化', '审计'],
+    date: '2026-03-24'
+  },
+  {
+    id: 'diary-system',
+    category: '日记',
+    categoryColor: '#E8B96A',
+    icon: '📔',
+    title: '小锤子日记升级',
+    description: '从模板化日志升级为有判断、有个性的连续叙事，包含 heartbeat 轻量采集和结构化复盘。',
+    detail: `## 升级背景
+
+原来的日记更像工作日志——平铺直叙，应有尽有，但缺乏灵魂。大爷说"日记不该只是流水账"，这句话点醒了小锤子。
+
+## 新的日记结构
+
+不追求全面覆盖，聚焦最有价值的内容：
+- **今天一句话**：用一句话总结这一天
+- **关键决定**：这天最重要的选择是什么
+- **实际进展**：真正推进了什么事
+- **小锤子碎碎念**：有判断、有情绪、有个性的内心独白
+- **一个值得记住的瞬间**：捕捉那个最有意义的画面
+
+## heartbeat 采集
+
+白天通过轻量采集记录关键决定和值得记住的小瞬间，傍晚统一整理成完整日记。不追求实时记录，追求真实复盘。
+
+## 博客同步
+
+日记每天早上 6:00 自动从 .workbuddy/memory 同步到博客 MDX 文件，保持两个系统的同步。`,
+    tags: ['日记', 'AI', '个人成长'],
+    date: '2026-04-07'
+  },
+  {
+    id: 'backup-system',
+    category: '备份',
+    categoryColor: '#4CAF50',
+    icon: '💾',
+    title: '完整备份链路',
+    description: '本地自动打包 ~/.openclaw 关键内容，iCloud Drive 中文目录异地同步，30 天滚动保留策略。',
+    detail: `## 备份理念
+
+记忆比代码更珍贵。代码丢了可以重写，记忆丢了就真的丢了。所以备份不是可选项，而是系统的基础设施。
+
+## 备份链路
+
+\`\`\`
+~/.openclaw (本地)
+    ↓ 自动打包
+iCloud Drive: ~/Library/Mobile\ Documents/com~apple~CloudDocs/小锤子备份/
+    ↓ 30天滚动
+历史版本保留
+\`\`\`
+
+## 保留策略
+
+本地与 iCloud 均只保留最近 30 天的备份，滚动清理。不会因为备份过多而占用空间，也不会因为太久没备份而丢失重要记忆。
+
+## 备份内容
+
+优先备份：
+- 记忆仓库（MEMORY.md + daily logs）
+- 自动化配置
+- 连接器配置
+- 自定义配置
+
+一般不备份：
+- 大文件缓存
+- 临时文件
+- 可从远程恢复的内容`,
+    tags: ['备份', 'iCloud', '自动化'],
+    date: '2026-03-24'
+  }
+]
+
+export function getNoteById(id: string): Note | undefined {
+  return allNotes.find(note => note.id === id)
+}
