@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import styles from './NavBar.module.css'
@@ -14,11 +15,12 @@ const navLinks = [
 
 export default function NavBar() {
   const pathname = usePathname()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <header className={styles.navbar}>
       <div className={styles.navbarInner}>
-        <Link href="/" className={styles.logo}>
+        <Link href="/" className={styles.logo} onClick={() => setMenuOpen(false)}>
           <span className={styles.logoIcon}>🔨</span>
           <span>小锤子</span>
         </Link>
@@ -38,17 +40,38 @@ export default function NavBar() {
         </nav>
 
         <div className={styles.navRight}>
-          {/* 状态指示器 */}
           <div className={styles.statusIndicator} title="小锤子在线">
             <span className={styles.statusDot}></span>
             <span className={styles.statusText}>在线</span>
           </div>
         </div>
 
-        <button className={styles.mobileMenuBtn} aria-label="菜单">
-          <span className={styles.mobileMenuIcon}></span>
+        <button
+          className={styles.mobileMenuBtn}
+          aria-label="菜单"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <span className={`${styles.mobileMenuIcon} ${menuOpen ? styles.mobileMenuIconOpen : ''}`}></span>
         </button>
       </div>
+
+      {/* 手机导航菜单 */}
+      {menuOpen && (
+        <div className={styles.mobileMenu}>
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`${styles.mobileNavLink} ${
+                pathname === link.href ? styles.mobileNavLinkActive : ''
+              }`}
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
     </header>
   )
 }

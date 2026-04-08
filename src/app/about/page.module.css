@@ -262,4 +262,41 @@
   .profilesGrid {
     grid-template-columns: 1fr;
   }
+
+  .profileCard {
+    padding: var(--space-lg);
+  }
+
+  .profileAvatar {
+    width: 64px;
+    height: 64px;
+    font-size: 32px;
+  }
+
+  .page {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .pageTitle {
+    font-size: var(--text-3xl);
+  }
+
+  .sloganText {
+    font-size: var(--text-lg);
+    word-break: keep-all;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: var(--space-lg) var(--space-sm);
+  }
+
+  .profileStats {
+    grid-template-columns: 1fr;
+  }
+
+  .profileTags {
+    gap: var(--space-xs);
+  }
 }

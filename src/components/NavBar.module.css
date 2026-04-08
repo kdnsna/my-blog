@@ -180,6 +180,50 @@
   top: 7px;
 }
 
+.mobileMenuIconOpen::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.mobileMenuIconOpen::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* 手机导航菜单 */
+.mobileMenu {
+  display: none;
+  flex-direction: column;
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  background: rgba(13, 13, 13, 0.95);
+  backdrop-filter: blur(16px);
+}
+
+@media (max-width: 768px) {
+  .mobileMenu {
+    display: flex;
+  }
+}
+
+.mobileNavLink {
+  padding: var(--space-md) 0;
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  transition: color var(--transition-fast);
+}
+
+.mobileNavLink:last-child {
+  border-bottom: none;
+}
+
+.mobileNavLink:hover,
+.mobileNavLinkActive {
+  color: var(--color-amber-300);
+}
+
 @media (max-width: 768px) {
   .nav {
     display: none;
