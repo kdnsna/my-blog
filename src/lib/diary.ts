@@ -6,6 +6,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import matter from 'gray-matter'
+import { maskExcerpt, maskDiaryContent } from './sensitive-mask'
 
 const DIARY_DIR = path.join(process.cwd(), 'src/content/diary')
 
@@ -43,9 +44,9 @@ export function getAllDiaries(): DiaryEntry[] {
         slug,
         date: data.date || slug,
         title: data.title || `日记 ${slug}`,
-        excerpt: data.excerpt || '',
+        excerpt: maskExcerpt(data.excerpt || ''),
         tags: data.tags || ['日常'],
-        content
+        content: maskDiaryContent(content)
       }
     })
   } catch (error) {
@@ -71,9 +72,9 @@ export function getDiaryBySlug(slug: string): DiaryEntry | null {
       slug,
       date: data.date || slug,
       title: data.title || `日记 ${slug}`,
-      excerpt: data.excerpt || '',
+      excerpt: maskExcerpt(data.excerpt || ''),
       tags: data.tags || ['日常'],
-      content
+      content: maskDiaryContent(content)
     }
   } catch (error) {
     console.error(`读取日记 ${slug} 失败:`, error)

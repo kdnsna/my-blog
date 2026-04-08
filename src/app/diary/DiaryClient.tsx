@@ -80,7 +80,10 @@ export default function DiaryClient({ diaries, tags, lastSync }: DiaryClientProp
                   ))}
                 </div>
               </div>
-              <p className={styles.timelineCardExcerpt}>{diary.excerpt}</p>
+              <p
+                className={styles.timelineCardExcerpt}
+                dangerouslySetInnerHTML={{ __html: diary.excerpt }}
+              />
               <div className={styles.timelineCardFooter}>
                 <Link href={`/diary/${diary.slug}`} className={styles.timelineCardLink}>
                   阅读全文

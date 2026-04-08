@@ -1,7 +1,5 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import { getDiaryBySlug, getAllDiaries } from '@/lib/diary'
 import styles from './page.module.css'
 
@@ -53,11 +51,10 @@ export default async function DiaryDetailPage({ params }: PageProps) {
           </div>
         </header>
 
-        <div className={styles.articleContent}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {diary.content}
-          </ReactMarkdown>
-        </div>
+        <div
+          className={styles.articleContent}
+          dangerouslySetInnerHTML={{ __html: diary.content }}
+        />
 
         <footer className={styles.articleFooter}>
           <div className={styles.articleNav}>
