@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://my-blog-n7zjp7n3c-kdnsna.vercel.app/sitemap.xml
+Sitemap: https://my-blog-kdnsna.vercel.app/sitemap.xml
