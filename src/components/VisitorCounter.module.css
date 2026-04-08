@@ -2,23 +2,16 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 16px;
-  background: rgba(200, 148, 58, 0.08);
-  border: 1px solid rgba(200, 148, 58, 0.25);
+  padding: 8px 16px;
+  background: rgba(200, 148, 58, 0.12);
+  border: 1px solid rgba(200, 148, 58, 0.35);
   border-radius: var(--radius-full);
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  animation: fadeIn 0.5s ease 0.3s forwards;
-  opacity: 0;
-}
-
-.counterLarge {
-  padding: 8px 20px;
-  font-size: var(--text-base);
 }
 
 .icon {
-  font-size: 0.95em;
+  font-size: 1em;
 }
 
 .label {
@@ -27,7 +20,7 @@
 
 .number {
   font-family: var(--font-mono);
-  font-size: 1.05em;
+  font-size: 1.1em;
   font-weight: 700;
   color: var(--color-amber-300);
   min-width: 2ch;
