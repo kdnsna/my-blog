@@ -29,13 +29,12 @@ export default function Footer() {
             <h3>相关链接</h3>
             <div className={styles.footerContact}>
               <a
-                href="https://github.com/kdnsna"
+                href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 GitHub
               </a>
-              <a href="mailto:kdnsna98@icloud.com">联系邮箱</a>
             </div>
           </div>
         </div>

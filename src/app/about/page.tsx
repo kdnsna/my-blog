@@ -24,8 +24,8 @@ export default function AboutPage() {
           </div>
 
           <p className={styles.profileBio}>
-            交通银行山东省分行个金部资深从业者，专注于个人养老金、社保卡、养老金融等领域。
-            追求系统化、讲究质感，相信 AI 能让工作和生活更加高效。
+            金融从业者，专注于个人财富管理与养老金融领域。追求系统化、讲究质感，
+            相信 AI 能让工作和生活更加高效。和小锤子一起，把个人效率系统一点点搭起来。
           </p>
 
           <div className={styles.profileStats}>
@@ -41,7 +41,6 @@ export default function AboutPage() {
 
           <div className={styles.profileTags}>
             <span className={styles.profileTag}>认主暗号：我是大爷，锤子认主</span>
-            <span className={styles.profileTag}>GitHub: kdnsna</span>
             <span className={styles.profileTag}>正式但开放</span>
           </div>
         </div>
@@ -60,8 +59,8 @@ export default function AboutPage() {
           </div>
 
           <p className={styles.profileBio}>
-            靠谱、冷静，偶尔调皮一下。住在 ~/.openclaw/ 的记忆宫殿里，
-            通过 OpenClaw 平台与大爷并肩作战，致力于把每一个想法变成现实。
+            靠谱、冷静，偶尔调皮一下。通过 OpenClaw 平台与大爷并肩作战，
+            致力于把每一个想法变成现实。住在自己的记忆宫殿里，记忆不丢，承诺不忘。
           </p>
 
           <div className={styles.profileStats}>
