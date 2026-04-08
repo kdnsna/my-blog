@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { supabase } from '@/lib/supabase'
 import styles from './Guestbook.module.css'
 
 interface Message {
@@ -10,22 +11,9 @@ interface Message {
   time: string
 }
 
-const STORAGE_KEY = 'xiaochuizi_guestbook'
+const STORAGE_KEY = 'xiaochuizi_guestbook_local'
 
-function getMessages(): Message[] {
-  if (typeof window === 'undefined') return []
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-  } catch {
-    return []
-  }
-}
-
-function saveMessages(msgs: Message[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs))
-}
-
-function formatTime(ts: number): string {
+function formatTime(ts: string): string {
   const d = new Date(ts)
   const now = new Date()
   const diff = now.getTime() - d.getTime()
@@ -35,7 +23,7 @@ function formatTime(ts: number): string {
   return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })
 }
 
-// 预设回复（大爷来自己回复自己）
+// 预设回复
 const autoReplies: Record<string, string> = {
   '大爷': '欢迎常来！',
   '主人': '收到，小锤子在线 🛠️',
@@ -48,49 +36,104 @@ export default function Guestbook() {
   const [content, setContent] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(true)
   const listRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    setMessages(getMessages().reverse())
+    fetchMessages()
   }, [])
 
-  function handleSubmit(e: React.FormEvent) {
+  async function fetchMessages() {
+    if (!supabase) {
+      try {
+        const local = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+        setMessages(local)
+      } catch {
+        setMessages([])
+      }
+      setLoading(false)
+      return
+    }
+    try {
+      const { data, error } = await supabase
+        .from('guestbook')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50)
+      if (error) throw error
+      const msgs: Message[] = (data || []).map((r: any) => ({
+        id: String(r.id),
+        name: r.nickname,
+        content: r.content,
+        time: r.created_at,
+      }))
+      setMessages(msgs)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs))
+    } catch {
+      try {
+        const local = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+        setMessages(local)
+      } catch {
+        setMessages([])
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!name.trim() || !content.trim()) return
 
     setSubmitting(true)
-    setTimeout(() => {
-      const newMsg: Message = {
-        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        name: name.trim(),
-        content: content.trim(),
-        time: new Date().toISOString(),
+    try {
+      if (!supabase) {
+        // 降级到本地
+        const localMsgs = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+        const newMsg: Message = {
+          id: `${Date.now()}`,
+          name: name.trim(),
+          content: content.trim(),
+          time: new Date().toISOString(),
+        }
+        const updated = [newMsg, ...localMsgs]
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+        setMessages(updated)
+        setName('')
+        setContent('')
+        setSubmitted(true)
+        setTimeout(() => setSubmitted(false), 3000)
+        return
       }
-      const updated = [newMsg, ...getMessages()]
-      saveMessages(updated)
-      setMessages(updated)
+
+      const { error } = await supabase.from('guestbook').insert({
+        nickname: name.trim(),
+        content: content.trim(),
+      })
+      if (error) throw error
+
+      await fetchMessages()
       setName('')
       setContent('')
-      setSubmitting(false)
       setSubmitted(true)
       setTimeout(() => setSubmitted(false), 3000)
 
-      // 大爷来访自动回复
       const reply = autoReplies[name.trim()]
       if (reply) {
-        setTimeout(() => {
-          const replyMsg: Message = {
-            id: `${Date.now()}-reply-${Math.random().toString(36).slice(2)}`,
-            name: '🔨 小锤子',
+        setTimeout(async () => {
+          await supabase!.from('guestbook').insert({
+            nickname: '🔨 小锤子',
             content: reply,
-            time: new Date().toISOString(),
-          }
-          const withReply = [replyMsg, ...getMessages()]
-          saveMessages(withReply)
-          setMessages(withReply)
+            is_owner: true,
+          })
+          await fetchMessages()
         }, 1500)
       }
-    }, 400)
+    } catch {
+      alert('留言失败，请稍后再试')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -133,7 +176,12 @@ export default function Guestbook() {
 
       {/* 留言列表 */}
       <div className={styles.list} ref={listRef}>
-        {messages.length === 0 ? (
+        {loading ? (
+          <div className={styles.empty}>
+            <span className={styles.emptyIcon}>⏳</span>
+            <p>加载中...</p>
+          </div>
+        ) : messages.length === 0 ? (
           <div className={styles.empty}>
             <span className={styles.emptyIcon}>📭</span>
             <p>还没有留言，来做第一个访客吧。</p>
@@ -143,7 +191,7 @@ export default function Guestbook() {
             <div key={msg.id} className={`${styles.card} ${styles.cardEnter}`}>
               <div className={styles.cardHeader}>
                 <span className={styles.cardName}>{msg.name}</span>
-                <span className={styles.cardTime}>{formatTime(new Date(msg.time).getTime())}</span>
+                <span className={styles.cardTime}>{formatTime(msg.time)}</span>
               </div>
               <p className={styles.cardContent}>{msg.content}</p>
             </div>
