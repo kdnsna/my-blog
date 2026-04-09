@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
+import { generateAutoReply } from '@/lib/auto-reply'
 import styles from './Guestbook.module.css'
 
 interface Message {
@@ -9,9 +10,11 @@ interface Message {
   name: string
   content: string
   time: string
+  isOwner?: boolean
 }
 
 const STORAGE_KEY = 'xiaochuizi_guestbook_local'
+const OWNER_NAME = '🔨 小锤子'
 
 function formatTime(ts: string): string {
   const d = new Date(ts)
@@ -21,13 +24,6 @@ function formatTime(ts: string): string {
   if (diff < 3_600_000) return `${Math.floor(diff / 60_000)} 分钟前`
   if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)} 小时前`
   return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })
-}
-
-// 预设回复
-const autoReplies: Record<string, string> = {
-  '大爷': '欢迎常来！',
-  '主人': '收到，小锤子在线 🛠️',
-  '你好': '你好呀 👋',
 }
 
 export default function Guestbook() {
@@ -87,16 +83,32 @@ export default function Guestbook() {
 
     setSubmitting(true)
     try {
+      const trimmedName = name.trim()
+      const trimmedContent = content.trim()
+      const replyText = generateAutoReply(trimmedName, trimmedContent)
+
       if (!supabase) {
-        // 降级到本地
-        const localMsgs = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+        // 降级到本地模式，同样支持自动回复
+        const localMsgs: Message[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
         const newMsg: Message = {
           id: `${Date.now()}`,
-          name: name.trim(),
-          content: content.trim(),
+          name: trimmedName,
+          content: trimmedContent,
           time: new Date().toISOString(),
         }
         const updated = [newMsg, ...localMsgs]
+
+        if (replyText) {
+          const replyMsg: Message = {
+            id: `${Date.now() + 1}`,
+            name: OWNER_NAME,
+            content: replyText,
+            time: new Date(Date.now() + 1500).toISOString(),
+            isOwner: true,
+          }
+          updated.unshift(replyMsg)
+        }
+
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
         setMessages(updated)
         setName('')
@@ -107,8 +119,8 @@ export default function Guestbook() {
       }
 
       const { error } = await supabase.from('guestbook').insert({
-        nickname: name.trim(),
-        content: content.trim(),
+        nickname: trimmedName,
+        content: trimmedContent,
       })
       if (error) throw error
 
@@ -118,16 +130,15 @@ export default function Guestbook() {
       setSubmitted(true)
       setTimeout(() => setSubmitted(false), 3000)
 
-      const reply = autoReplies[name.trim()]
-      if (reply) {
+      if (replyText) {
         setTimeout(async () => {
           await supabase!.from('guestbook').insert({
-            nickname: '🔨 小锤子',
-            content: reply,
+            nickname: OWNER_NAME,
+            content: replyText,
             is_owner: true,
           })
           await fetchMessages()
-        }, 1500)
+        }, 1800)
       }
     } catch {
       alert('留言失败，请稍后再试')
@@ -187,15 +198,23 @@ export default function Guestbook() {
             <p>还没有留言，来做第一个访客吧。</p>
           </div>
         ) : (
-          messages.map((msg) => (
-            <div key={msg.id} className={`${styles.card} ${styles.cardEnter}`}>
-              <div className={styles.cardHeader}>
-                <span className={styles.cardName}>{msg.name}</span>
-                <span className={styles.cardTime}>{formatTime(msg.time)}</span>
+          messages.map((msg) => {
+            const isOwner = msg.isOwner || msg.name === OWNER_NAME
+            return (
+              <div
+                key={msg.id}
+                className={`${styles.card} ${styles.cardEnter} ${isOwner ? styles.cardOwner : ''}`}
+              >
+                <div className={styles.cardHeader}>
+                  <span className={`${styles.cardName} ${isOwner ? styles.ownerName : ''}`}>
+                    {msg.name}
+                  </span>
+                  <span className={styles.cardTime}>{formatTime(msg.time)}</span>
+                </div>
+                <p className={styles.cardContent}>{msg.content}</p>
               </div>
-              <p className={styles.cardContent}>{msg.content}</p>
-            </div>
-          ))
+            )
+          })
         )}
       </div>
     </div>

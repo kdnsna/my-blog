@@ -174,3 +174,32 @@
   line-height: 1.7;
   margin: 0;
 }
+
+/* ── 小锤子回复专属样式 ─────────────────────── */
+.cardOwner {
+  background: linear-gradient(
+    135deg,
+    rgba(200, 148, 58, 0.08) 0%,
+    rgba(180, 120, 40, 0.04) 100%
+  );
+  border-color: rgba(200, 148, 58, 0.35);
+  border-left: 3px solid rgba(200, 148, 58, 0.7);
+  margin-left: var(--space-lg);
+}
+
+.cardOwner:hover {
+  border-color: rgba(200, 148, 58, 0.55);
+  border-left-color: rgba(200, 148, 58, 0.9);
+}
+
+.ownerName {
+  color: var(--color-amber-300);
+  letter-spacing: 0.02em;
+}
+
+.ownerName::after {
+  content: ' ·';
+  color: var(--color-text-tertiary);
+  font-weight: 400;
+  font-size: 0.85em;
+}
