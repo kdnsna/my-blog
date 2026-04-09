@@ -1,57 +1,23 @@
-/* ── Guestbook.module.css ── */
-
-/* ── 身份切换 ── */
-.modeToggle {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  max-width: 720px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.modeBtn {
-  flex: 1;
-  padding: 0.5rem 1rem;
-  border: 1px solid rgba(245, 158, 66, 0.2);
-  border-radius: 8px;
-  background: transparent;
-  color: rgba(232, 227, 220, 0.5);
-  font-size: 0.88rem;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.modeBtn:hover {
-  border-color: rgba(245, 158, 66, 0.4);
-  color: rgba(245, 158, 66, 0.8);
-}
-
-.modeBtnActive {
-  background: rgba(245, 158, 66, 0.12);
-  border-color: rgba(245, 158, 66, 0.5);
-  color: rgba(245, 158, 66, 1);
-  font-weight: 600;
-}
-
 .container {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 2.5rem 1rem 4rem;
-  font-family: 'Noto Sans SC', 'PingFang SC', system-ui, sans-serif;
-}
-
-/* ── 表单 ── */
-.form {
-  background: var(--bg-secondary, #16181d);
-  border: 1px solid var(--border, rgba(245, 158, 66, 0.15));
-  border-radius: 16px;
-  padding: 1.25rem;
-  margin-bottom: 2.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--space-2xl);
+}
+
+/* ── 表单 ────────────────────────────────────── */
+.form {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  transition: border-color 0.2s ease;
+}
+
+.form:focus-within {
+  border-color: rgba(200, 148, 58, 0.5);
 }
 
 .formRow {
@@ -61,27 +27,27 @@
 .input,
 .textarea {
   width: 100%;
-  background: var(--bg-input, #0e1016);
-  border: 1px solid var(--border, rgba(245, 158, 66, 0.2));
-  border-radius: 10px;
-  padding: 0.6rem 0.9rem;
-  font-size: 0.95rem;
-  font-family: inherit;
-  color: var(--text-primary, #e8e3dc);
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-sizing: border-box;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
   outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
 }
 
 .input::placeholder,
 .textarea::placeholder {
-  color: var(--text-muted, rgba(232, 227, 220, 0.35));
+  color: var(--color-text-tertiary);
 }
 
 .input:focus,
 .textarea:focus {
-  border-color: rgba(245, 158, 66, 0.6);
-  box-shadow: 0 0 0 3px rgba(245, 158, 66, 0.08);
+  border-color: rgba(200, 148, 58, 0.6);
+  box-shadow: 0 0 0 3px rgba(200, 148, 58, 0.1);
 }
 
 .textarea {
@@ -97,30 +63,27 @@
 }
 
 .charCount {
-  font-size: 0.78rem;
-  color: var(--text-muted, rgba(232, 227, 220, 0.35));
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
 }
 
 .submitBtn {
-  background: linear-gradient(135deg, #f59e42, #e07b28);
-  color: #0e1016;
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem 1.25rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-  font-family: inherit;
+  padding: 8px 20px;
+  background: rgba(200, 148, 58, 0.15);
+  border: 1px solid rgba(200, 148, 58, 0.4);
+  border-radius: var(--radius-full);
+  color: var(--color-amber-300);
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.15s;
+  transition: all 0.2s ease;
 }
 
 .submitBtn:hover:not(:disabled) {
-  opacity: 0.9;
+  background: rgba(200, 148, 58, 0.25);
+  border-color: rgba(200, 148, 58, 0.7);
   transform: translateY(-1px);
-}
-
-.submitBtn:active:not(:disabled) {
-  transform: translateY(0);
 }
 
 .submitBtn:disabled {
@@ -129,194 +92,96 @@
 }
 
 .submitBtn.submitting {
-  background: #5a5040;
-  color: #a09070;
+  opacity: 0.7;
 }
 
 .submitBtn.submitted {
-  background: #3d5a3e;
-  color: #8fcf8f;
+  background: rgba(74, 222, 128, 0.15);
+  border-color: rgba(74, 222, 128, 0.4);
+  color: #4ade80;
 }
 
-/* ── 留言列表 ── */
+/* ── 留言列表 ────────────────────────────────── */
 .list {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--space-md);
 }
 
-/* ── 每条线程（父 + 嵌套回复）── */
-.threadBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-/* ── 卡片通用 ── */
-.card {
-  background: var(--bg-secondary, #16181d);
-  border: 1px solid var(--border, rgba(245, 158, 66, 0.12));
-  border-radius: 12px;
-  padding: 0.95rem 1.1rem;
-  transition: border-color 0.2s;
-}
-
-.card:hover {
-  border-color: rgba(245, 158, 66, 0.25);
-}
-
-/* ── 访客卡片（中性）── */
-.cardVisitor {
-  border-left: 3px solid rgba(232, 227, 220, 0.2);
-}
-
-/* ── 锤子回复卡片（嵌套在父消息下，左边一点）── */
-.replyNested {
-  padding-left: 1.5rem;
-  margin-top: 0.4rem;
-}
-
-/* 小锤子：琥珀暖金 */
-.cardOwner {
-  border-left: 3px solid rgba(245, 158, 66, 0.7);
-  background: linear-gradient(135deg, #1c1914 0%, #16181d 100%);
-}
-
-/* 大锤：天蓝科技蓝 */
-.cardDaChui {
-  border-left: 3px solid rgba(100, 181, 246, 0.7);
-  background: linear-gradient(135deg, #131c28 0%, #16181d 100%);
-}
-
-/* 锤子三号：紫罗兰云端紫 */
-.cardThreeChui {
-  border-left: 3px solid rgba(180, 130, 240, 0.7);
-  background: linear-gradient(135deg, #1a1530 0%, #16181d 100%);
-}
-
-/* 回复卡片和父卡片同宽，但内边距稍小 */
-.cardReply {
-  border-radius: 10px;
-}
-
-/* ── 卡片头部 ── */
-.cardHeader {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 0.4rem;
-  gap: 0.5rem;
-}
-
-.cardName {
-  font-weight: 600;
-  font-size: 0.88rem;
-  color: var(--text-primary, #e8e3dc);
-}
-
-.replyBadge {
-  font-size: 0.8rem;
-  color: var(--text-secondary, rgba(232, 227, 220, 0.6));
-}
-
-.cardTime {
-  font-size: 0.75rem;
-  color: var(--text-muted, rgba(232, 227, 220, 0.35));
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.cardContent {
-  font-size: 0.93rem;
-  line-height: 1.7;
-  color: var(--text-primary, #e8e3dc);
-  margin: 0;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-/* ── 入场动画 ── */
-.cardEnter {
-  animation: cardIn 0.3s ease-out both;
-}
-
-@keyframes cardIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ── 回复提示条 ── */
-.replyHint {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(245, 158, 66, 0.08);
-  border: 1px solid rgba(245, 158, 66, 0.25);
-  border-radius: 8px;
-  padding: 0.45rem 0.8rem;
-  font-size: 0.83rem;
-  color: rgba(245, 158, 66, 0.9);
-  animation: cardIn 0.2s ease-out both;
-}
-
-.cancelReply {
-  background: none;
-  border: 1px solid rgba(245, 158, 66, 0.3);
-  border-radius: 5px;
-  color: rgba(245, 158, 66, 0.7);
-  font-size: 0.75rem;
-  padding: 0.15rem 0.5rem;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-}
-
-.cancelReply:hover {
-  background: rgba(245, 158, 66, 0.12);
-  color: rgba(245, 158, 66, 1);
-}
-
-/* ── 回复按钮（卡片右下角）── */
-.replyBtn {
-  display: inline-block;
-  margin-top: 0.5rem;
-  background: none;
-  border: 1px solid rgba(232, 227, 220, 0.15);
-  border-radius: 6px;
-  color: var(--text-muted, rgba(232, 227, 220, 0.4));
-  font-size: 0.75rem;
-  padding: 0.2rem 0.6rem;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-}
-
-.replyBtn:hover {
-  border-color: rgba(245, 158, 66, 0.5);
-  color: rgba(245, 158, 66, 0.85);
-  background: rgba(245, 158, 66, 0.06);
-}
-
-/* ── 空状态 ── */
 .empty {
   text-align: center;
-  padding: 3.5rem 1rem;
-  color: var(--text-muted, rgba(232, 227, 220, 0.4));
+  padding: var(--space-3xl) var(--space-lg);
+  color: var(--color-text-tertiary);
 }
 
 .emptyIcon {
-  font-size: 2.5rem;
+  font-size: 3rem;
   display: block;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-md);
+  opacity: 0.5;
 }
 
 .empty p {
-  font-size: 0.95rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-base);
+}
+
+.card {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  transition: border-color 0.2s ease;
+}
+
+.card:hover {
+  border-color: rgba(200, 148, 58, 0.3);
+}
+
+.cardEnter {
+  animation: cardIn 0.3s ease forwards;
+  opacity: 0;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.cardName {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-amber-300);
+}
+
+.cardTime {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
+}
+
+.cardContent {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
   margin: 0;
+}
+
+/* ── 小锤子回复（小字，灰色）── */
+.autoReply {
+  margin: 0.5rem 0 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(200, 148, 58, 0.15);
+  font-size: var(--text-sm);
+  color: rgba(232, 227, 220, 0.45);
+  font-style: italic;
+  line-height: 1.6;
 }
