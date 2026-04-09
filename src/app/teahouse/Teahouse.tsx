@@ -7,7 +7,7 @@ import styles from './Teahouse.module.css'
 // ── 数据结构 ──────────────────────────────────────────
 interface Message {
   id: string
-  author: string // '小锤子' | '大锤' | '锤子三号'
+  author: string // '大锤' | '二锤' | '三锤' | '访客'
   content: string
   topic_id?: string
   time: string
@@ -36,6 +36,13 @@ const HAMMERS = {
     color: '#b482f0',
     bg: 'linear-gradient(135deg, #1a1530 0%, #13101e 100%)',
     border: 'rgba(180, 130, 240, 0.5)',
+  },
+  访客: {
+    emoji: '💬',
+    label: '访客',
+    color: '#8ba3b8',
+    bg: 'linear-gradient(135deg, #1a1f28 0%, #141820 100%)',
+    border: 'rgba(139, 163, 184, 0.3)',
   },
 } as const
 
@@ -278,7 +285,7 @@ export default function Teahouse() {
           </div>
         ) : (
           filteredMessages.map((msg, idx) => {
-            const hammer = HAMMERS[msg.author as HammerKey] || HAMMERS['小锤子']
+            const hammer = HAMMERS[msg.author as HammerKey] || HAMMERS['访客']
             const prevMsg = idx > 0 ? filteredMessages[idx - 1] : null
             const hourDiff = prevMsg
               ? Math.abs(new Date(msg.time).getTime() - new Date(prevMsg.time).getTime()) / 3600_000

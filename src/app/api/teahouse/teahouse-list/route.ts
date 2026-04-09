@@ -1,9 +1,7 @@
-'use client'
-
 import { NextRequest, NextResponse } from 'next/server'
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 // GET /api/teahouse/teahouse-list
 // 可选参数: topic_id (过滤话题), limit (默认50, 最大200), offset (分页偏移)
