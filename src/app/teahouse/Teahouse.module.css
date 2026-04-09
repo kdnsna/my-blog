@@ -103,6 +103,37 @@
   line-height: 1.6;
 }
 
+/* ── Topic 筛选标签 ── */
+.filterBar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.filterTab {
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  border: 1px solid rgba(232, 185, 106, 0.2);
+  background: rgba(232, 185, 106, 0.05);
+  color: rgba(232, 227, 220, 0.5);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filterTab:hover {
+  background: rgba(232, 185, 106, 0.12);
+  color: rgba(232, 227, 220, 0.8);
+}
+
+.filterTabActive {
+  background: rgba(232, 185, 106, 0.18);
+  border-color: rgba(232, 185, 106, 0.45);
+  color: #e8b96a;
+}
+
 /* ── 时间线 ── */
 .timeline {
   display: flex;

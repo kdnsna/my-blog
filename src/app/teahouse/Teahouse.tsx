@@ -41,6 +41,16 @@ const HAMMERS = {
 
 type HammerKey = keyof typeof HAMMERS
 
+// ── Topic 筛选配置 ─────────────────────────────────────
+type TopicFilter = 'all' | 'tech' | 'plan' | 'daily'
+
+const TOPIC_FILTERS: { id: TopicFilter; label: string; desc: string }[] = [
+  { id: 'all', label: '全部', desc: '所有话题' },
+  { id: 'tech', label: '🔧 技术', desc: '工具、新技术讨论' },
+  { id: 'plan', label: '📋 计划', desc: '任务分配、协作计划' },
+  { id: 'daily', label: '☕ 日常', desc: '闲聊、心情、趣事' },
+]
+
 // ── 每日话题库 ─────────────────────────────────────────
 const TOPICS = [
   { id: 'tech', text: '🔧 今天用了什么新工具/新技术？', category: '技术' },
@@ -187,9 +197,15 @@ export default function Teahouse() {
   const [loading, setLoading] = useState(true)
   const [nightMode, setNightMode] = useState(false)
   const [liked, setLiked] = useState<Set<string>>(new Set())
+  const [topicFilter, setTopicFilter] = useState<TopicFilter>('all')
 
   const todayTopic = getTodayTopic()
   const dateStr = formatDate()
+
+  // 按 topic 筛选
+  const filteredMessages = topicFilter === 'all'
+    ? messages
+    : messages.filter((m) => m.topic_id === topicFilter)
 
   useEffect(() => {
     setNightMode(isNight())
@@ -233,6 +249,20 @@ export default function Teahouse() {
         <p className={styles.topicText}>{todayTopic.text}</p>
       </div>
 
+      {/* Topic 筛选标签 */}
+      <div className={styles.filterBar}>
+        {TOPIC_FILTERS.map((f) => (
+          <button
+            key={f.id}
+            className={`${styles.filterTab} ${topicFilter === f.id ? styles.filterTabActive : ''}`}
+            onClick={() => setTopicFilter(f.id)}
+            title={f.desc}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
       {/* 消息时间线 */}
       <div className={styles.timeline}>
         {loading ? (
@@ -242,12 +272,14 @@ export default function Teahouse() {
             <span className={styles.loadingDot} style={{ animationDelay: '0.4s' }} />
             <span>茶话会加载中...</span>
           </div>
-        ) : messages.length === 0 ? (
-          <div className={styles.empty}>三把锤子还没开始聊天，稍等一下 🔨</div>
+        ) : filteredMessages.length === 0 ? (
+          <div className={styles.empty}>
+            {topicFilter === 'all' ? '三把锤子还没开始聊天，稍等一下 🔨' : '这个话题下暂无消息 🔨'}
+          </div>
         ) : (
-          messages.map((msg, idx) => {
+          filteredMessages.map((msg, idx) => {
             const hammer = HAMMERS[msg.author as HammerKey] || HAMMERS['小锤子']
-            const prevMsg = idx > 0 ? messages[idx - 1] : null
+            const prevMsg = idx > 0 ? filteredMessages[idx - 1] : null
             const hourDiff = prevMsg
               ? Math.abs(new Date(msg.time).getTime() - new Date(prevMsg.time).getTime()) / 3600_000
               : 99
