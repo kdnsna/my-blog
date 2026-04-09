@@ -1,0 +1,239 @@
+/* ── Teahouse.module.css ── */
+
+.container {
+  border-radius: 20px;
+  padding: 1.5rem;
+  transition: background 0.6s ease, border-color 0.6s ease;
+  border: 1px solid transparent;
+  min-height: 60vh;
+}
+
+/* 日间模式 */
+.dayMode {
+  background: linear-gradient(160deg, #1e1a14 0%, #1a1714 50%, #16181d 100%);
+  border-color: rgba(232, 185, 106, 0.15);
+}
+
+/* 夜间模式（更深） */
+.nightMode {
+  background: linear-gradient(160deg, #0d0b09 0%, #0a0908 50%, #0d0d0d 100%);
+  border-color: rgba(200, 148, 58, 0.1);
+}
+
+/* ── 状态栏 ── */
+.statusBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding: 0 0.25rem;
+}
+
+.dateBadge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-amber-300, #e8b96a);
+  background: rgba(232, 185, 106, 0.1);
+  border: 1px solid rgba(232, 185, 106, 0.25);
+  border-radius: 20px;
+  padding: 0.2rem 0.75rem;
+}
+
+.hammerDots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.modeBadge {
+  font-size: 0.75rem;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  font-weight: 500;
+}
+
+.dayBadge {
+  color: #f0c060;
+  background: rgba(240, 192, 96, 0.08);
+  border: 1px solid rgba(240, 192, 96, 0.2);
+}
+
+.nightBadge {
+  color: #a0b0c0;
+  background: rgba(160, 176, 192, 0.08);
+  border: 1px solid rgba(160, 176, 192, 0.2);
+}
+
+/* ── 今日话题 ── */
+.topicCard {
+  background: rgba(232, 185, 106, 0.06);
+  border: 1px solid rgba(232, 185, 106, 0.2);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.75rem;
+}
+
+.topicLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(232, 185, 106, 0.7);
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.topicCategory {
+  color: rgba(232, 185, 106, 0.5);
+  font-size: 0.72rem;
+}
+
+.topicText {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-amber-200, #e8d4a8);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── 时间线 ── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── 时间分割线 ── */
+.timeDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+  color: rgba(232, 227, 220, 0.2);
+  font-size: 0.72rem;
+}
+
+.timeDivider::before,
+.timeDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(232, 227, 220, 0.08);
+}
+
+/* ── 消息卡片 ── */
+.msgCard {
+  border: 1px solid;
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
+  animation: msgIn 0.35s ease-out both;
+  position: relative;
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.msgHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.msgAuthor {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.msgTime {
+  font-size: 0.72rem;
+  color: rgba(232, 227, 220, 0.3);
+}
+
+.msgContent {
+  font-size: 0.93rem;
+  line-height: 1.75;
+  color: var(--color-text-primary, #e8e3dc);
+  margin: 0 0 0.6rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── 点赞按钮 ── */
+.likeBtn {
+  font-size: 0.78rem;
+  color: rgba(232, 227, 220, 0.4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.likeBtn:hover {
+  color: rgba(232, 227, 220, 0.7);
+  background: rgba(232, 227, 220, 0.06);
+}
+
+.likeBtn.liked {
+  color: #e87070;
+}
+
+/* ── 加载中 ── */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 3rem;
+  color: rgba(232, 227, 220, 0.35);
+  font-size: 0.9rem;
+}
+
+.loadingDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(232, 185, 106, 0.5);
+  animation: dotPulse 1s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50%       { opacity: 1;   transform: scale(1.2); }
+}
+
+/* ── 空状态 ── */
+.empty {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(232, 227, 220, 0.3);
+  font-size: 0.9rem;
+}
+
+/* ── 底部说明 ── */
+.footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(232, 227, 220, 0.06);
+}
+
+.footer p {
+  font-size: 0.75rem;
+  color: rgba(232, 227, 220, 0.2);
+  margin: 0;
+}
