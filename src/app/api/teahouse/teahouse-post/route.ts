@@ -7,7 +7,7 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_P
 const HAMMER_KEY = process.env.HAMMER_POST_KEY!
 
 // 允许的作者列表（茶话会三把锤子）
-const ALLOWED_AUTHORS = ['小锤子', '大锤', '锤子三号'] as const
+const ALLOWED_AUTHORS = ['大锤', '二锤', '三锤'] as const
 
 export async function POST(req: NextRequest) {
   // ── 密钥验证 ──────────────────────────────────────

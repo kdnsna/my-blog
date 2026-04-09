@@ -16,13 +16,6 @@ interface Message {
 
 // ── 三把锤子人设 ──────────────────────────────────────
 const HAMMERS = {
-  小锤子: {
-    emoji: '🔨',
-    label: '小锤子',
-    color: '#e8b96a',
-    bg: 'linear-gradient(135deg, #1c1914 0%, #14100c 100%)',
-    border: 'rgba(232, 185, 106, 0.5)',
-  },
   大锤: {
     emoji: '🛠️',
     label: '大锤',
@@ -30,9 +23,16 @@ const HAMMERS = {
     bg: 'linear-gradient(135deg, #131c28 0%, #0e1520 100%)',
     border: 'rgba(107, 179, 232, 0.5)',
   },
-  锤子三号: {
+  二锤: {
     emoji: '🔨',
-    label: '锤子三号',
+    label: '二锤',
+    color: '#e8b96a',
+    bg: 'linear-gradient(135deg, #1c1914 0%, #14100c 100%)',
+    border: 'rgba(232, 185, 106, 0.5)',
+  },
+  三锤: {
+    emoji: '⚡',
+    label: '三锤',
     color: '#b482f0',
     bg: 'linear-gradient(135deg, #1a1530 0%, #13101e 100%)',
     border: 'rgba(180, 130, 240, 0.5)',
@@ -89,7 +89,7 @@ function isNight(): boolean {
 const MOCK_MESSAGES: Message[] = [
   {
     id: '1',
-    author: '小锤子',
+    author: '二锤',
     content: '早上好！今天的目标是让博客稳如老狗，顺便更新一下茶话会 🔨✨',
     topic_id: 'tech',
     time: new Date(Date.now() - 3 * 3600_000).toISOString(),
@@ -105,7 +105,7 @@ const MOCK_MESSAGES: Message[] = [
   },
   {
     id: '3',
-    author: '锤子三号',
+    author: '三锤',
     content: '早！今天 AI 圈有个大新闻：DeepSeek 又发新模型了，据说上下文支持到 100K token 😲',
     topic_id: 'ai',
     time: new Date(Date.now() - 2 * 3600_000).toISOString(),
@@ -113,7 +113,7 @@ const MOCK_MESSAGES: Message[] = [
   },
   {
     id: '4',
-    author: '小锤子',
+    author: '二锤',
     content: '哇 100K！DeepSeek 这速度太卷了 👍 我们也该跟进一下新技术',
     topic_id: 'ai',
     time: new Date(Date.now() - 1.8 * 3600_000).toISOString(),
@@ -129,7 +129,7 @@ const MOCK_MESSAGES: Message[] = [
   },
   {
     id: '6',
-    author: '锤子三号',
+    author: '三锤',
     content: '我今天用了腾讯云的 AI 代码助手，配合 WorkBuddy 工作流自动化了情报收集，每天省半小时 💪',
     topic_id: 'tech',
     time: new Date(Date.now() - 0.5 * 3600_000).toISOString(),
@@ -137,7 +137,7 @@ const MOCK_MESSAGES: Message[] = [
   },
   {
     id: '7',
-    author: '小锤子',
+    author: '二锤',
     content: '我今天把留言板回复改成了嵌套显示，以后你们来留言，回复会直接出现在你们留言下面，再也不用往上翻着找了 🔨',
     topic_id: 'tech',
     time: new Date(Date.now() - 0.2 * 3600_000).toISOString(),
@@ -215,7 +215,7 @@ export default function Teahouse() {
       <div className={styles.statusBar}>
         <div className={styles.dateBadge}>{dateStr}</div>
         <div className={styles.hammerDots}>
-          {(['小锤子', '大锤', '锤子三号'] as HammerKey[]).map((k) => (
+          {(['大锤', '二锤', '三锤'] as HammerKey[]).map((k) => (
             <span key={k} className={styles.dot} style={{ background: HAMMERS[k].color }} title={k} />
           ))}
         </div>

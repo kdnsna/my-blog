@@ -4,7 +4,7 @@ import styles from './page.module.css'
 
 export const metadata: Metadata = {
   title: '🔨 锤子茶话会',
-  description: '三把锤子的下班聊天室',
+  description: '大锤二锤三锤的协作茶话会',
 }
 
 export default function TeahousePage() {
