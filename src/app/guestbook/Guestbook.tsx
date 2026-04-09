@@ -11,9 +11,10 @@ interface Message {
   content: string
   time: string
   isOwner?: boolean
+  parent_id: number | null
 }
 
-const STORAGE_KEY = 'xiaochuizi_guestbook_local'
+const STORAGE_KEY = 'xiaochuizi_guestbook_local_v2'
 const OWNER_NAME = '🔨 小锤子'
 
 function formatTime(ts: string): string {
@@ -36,9 +37,7 @@ function isHammer(name: string): boolean {
 }
 
 // ─────────────────────────────────────────────
-// 把扁平消息转成嵌套结构
-// 每条访客消息 + 直接跟在它后面的锤子回复 → 一个 thread
-// 时间升序：父在前、子在后，嵌套显示
+// 按真实 parent_id 分组：top-level 消息 + 其下的回复
 // ─────────────────────────────────────────────
 interface ThreadBlock {
   parent: Message
@@ -46,26 +45,15 @@ interface ThreadBlock {
 }
 
 function buildThreads(msgs: Message[]): ThreadBlock[] {
-  // 时间升序排列：最早的在前，方便嵌套展示
-  const sorted = [...msgs].sort(
-    (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()
-  )
-  const threads: ThreadBlock[] = []
-  for (const msg of sorted) {
-    if (isHammer(msg.name)) {
-      // 回复 → 归到上一个 thread
-      if (threads.length > 0) {
-        threads[threads.length - 1].replies.push(msg)
-      } else {
-        // 兜底：没有父消息就自己当父
-        threads.push({ parent: msg, replies: [] })
-      }
-    } else {
-      // 访客消息 → 新线程
-      threads.push({ parent: msg, replies: [] })
-    }
-  }
-  return threads
+  const topLevel = msgs.filter((m) => !m.parent_id)
+  const replies = msgs.filter((m) => !!m.parent_id)
+
+  return topLevel.map((parent) => ({
+    parent,
+    replies: replies
+      .filter((r) => r.parent_id === parseInt(parent.id))
+      .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()),
+  }))
 }
 
 function getCardClass(name: string, isReply: boolean): string {
@@ -89,11 +77,19 @@ export default function Guestbook() {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [replyingTo, setReplyingTo] = useState<Message | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchMessages()
   }, [])
+
+  // 每次有新消息自动滚到最新
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollTop = listRef.current.scrollHeight
+    }
+  }, [messages.length])
 
   async function fetchMessages() {
     if (!supabase) {
@@ -111,7 +107,7 @@ export default function Guestbook() {
         .from('guestbook')
         .select('*')
         .order('created_at', { ascending: true })
-        .limit(100)
+        .limit(200)
       if (error) throw error
       const msgs: Message[] = (data || []).map((r: any) => ({
         id: String(r.id),
@@ -119,6 +115,7 @@ export default function Guestbook() {
         content: r.content,
         time: r.created_at,
         isOwner: !!r.is_owner,
+        parent_id: r.parent_id ? parseInt(String(r.parent_id)) : null,
       }))
       setMessages(msgs)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs))
@@ -151,6 +148,7 @@ export default function Guestbook() {
           name: trimmedName,
           content: trimmedContent,
           time: new Date().toISOString(),
+          parent_id: replyingTo ? parseInt(replyingTo.id) : null,
         }
         const updated = [...localMsgs, newMsg]
         if (replyText) {
@@ -160,12 +158,14 @@ export default function Guestbook() {
             content: replyText,
             time: new Date(Date.now() + 1500).toISOString(),
             isOwner: true,
+            parent_id: parseInt(newMsg.id),
           })
         }
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
         setMessages(updated)
         setName('')
         setContent('')
+        setReplyingTo(null)
         setSubmitted(true)
         setTimeout(() => setSubmitted(false), 3000)
         return
@@ -174,23 +174,37 @@ export default function Guestbook() {
       const { error } = await supabase.from('guestbook').insert({
         nickname: trimmedName,
         content: trimmedContent,
+        parent_id: replyingTo ? parseInt(replyingTo.id) : null,
       })
       if (error) throw error
 
       await fetchMessages()
       setName('')
       setContent('')
+      setReplyingTo(null)
       setSubmitted(true)
       setTimeout(() => setSubmitted(false), 3000)
 
       if (replyText) {
         setTimeout(async () => {
-          await supabase!.from('guestbook').insert({
-            nickname: OWNER_NAME,
-            content: replyText,
-            is_owner: true,
-          })
-          await fetchMessages()
+          // 找刚插入那条的 id
+          const { data } = await supabase!
+            .from('guestbook')
+            .select('id')
+            .eq('nickname', trimmedName)
+            .eq('content', trimmedContent)
+            .order('created_at', { ascending: false })
+            .limit(1)
+          const parentId = data?.[0]?.id
+          if (parentId) {
+            await supabase!.from('guestbook').insert({
+              nickname: OWNER_NAME,
+              content: replyText,
+              is_owner: true,
+              parent_id: parentId,
+            })
+            await fetchMessages()
+          }
         }, 1800)
       }
     } catch {
@@ -200,17 +214,28 @@ export default function Guestbook() {
     }
   }
 
-  // 按时间降序排列用于显示（最新的在上面）
-  const threads = buildThreads(messages).reverse()
+  const threads = buildThreads(messages)
 
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit}>
+        {replyingTo && (
+          <div className={styles.replyHint}>
+            <span>回复 @{replyingTo.name}：</span>
+            <button
+              type="button"
+              className={styles.cancelReply}
+              onClick={() => setReplyingTo(null)}
+            >
+              取消
+            </button>
+          </div>
+        )}
         <div className={styles.formRow}>
           <input
             className={styles.input}
             type="text"
-            placeholder="怎么称呼你？"
+            placeholder={replyingTo ? `${replyingTo.name} 正在等你...` : '怎么称呼你？'}
             value={name}
             onChange={(e) => setName(e.target.value)}
             maxLength={20}
@@ -220,7 +245,7 @@ export default function Guestbook() {
         <div className={styles.formRow}>
           <textarea
             className={styles.textarea}
-            placeholder="想说点什么..."
+            placeholder={replyingTo ? `你想对 ${replyingTo.name} 说点什么...` : '想说点什么...'}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={3}
@@ -235,7 +260,7 @@ export default function Guestbook() {
             type="submit"
             disabled={submitting || !name.trim() || !content.trim()}
           >
-            {submitted ? '✨ 收到' : submitting ? '留下中...' : '留下点什么'}
+            {submitted ? '✨ 收到' : submitting ? '留下中...' : replyingTo ? '↩️ 回复' : '留下点什么'}
           </button>
         </div>
       </form>
@@ -252,34 +277,59 @@ export default function Guestbook() {
             <p>还没有留言，来做第一个访客吧。</p>
           </div>
         ) : (
-          threads.map((thread, idx) => {
-            const isOwner = isHammer(thread.parent.name)
-            return (
-              <div key={thread.parent.id} className={styles.threadBlock}>
-                {/* 父消息 */}
-                <div className={`${getCardClass(thread.parent.name, false)} ${styles.cardEnter}`}>
-                  <div className={styles.cardHeader}>
-                    <span className={styles.cardName}>{thread.parent.name}</span>
-                    <span className={styles.cardTime}>{formatTime(thread.parent.time)}</span>
-                  </div>
-                  <p className={styles.cardContent}>{thread.parent.content}</p>
+          threads.map((thread) => (
+            <div key={thread.parent.id} className={styles.threadBlock}>
+              {/* 父消息 */}
+              <div className={`${getCardClass(thread.parent.name, false)} ${styles.cardEnter}`}>
+                <div className={styles.cardHeader}>
+                  <span className={styles.cardName}>{thread.parent.name}</span>
+                  <span className={styles.cardTime}>{formatTime(thread.parent.time)}</span>
                 </div>
-
-                {/* 直接嵌套在父消息下的回复 */}
-                {thread.replies.map((reply, ridx) => (
-                  <div key={reply.id} className={styles.replyNested}>
-                    <div className={`${getCardClass(reply.name, true)} ${styles.cardEnter}`}>
-                      <div className={styles.cardHeader}>
-                        <span className={styles.replyBadge}>{getHammerBadge(reply.name)}</span>
-                        <span className={styles.cardTime}>{formatTime(reply.time)}</span>
-                      </div>
-                      <p className={styles.cardContent}>{reply.content}</p>
-                    </div>
-                  </div>
-                ))}
+                <p className={styles.cardContent}>{thread.parent.content}</p>
+                {/* 回复按钮 */}
+                <button
+                  className={styles.replyBtn}
+                  onClick={() => {
+                    setReplyingTo(thread.parent)
+                    setName('')
+                    setContent('')
+                    setTimeout(() => {
+                      document.querySelector<HTMLInputElement>(`.${styles.input}`)?.focus()
+                    }, 80)
+                  }}
+                >
+                  回复
+                </button>
               </div>
-            )
-          })
+
+              {/* 嵌套回复 */}
+              {thread.replies.map((reply) => (
+                <div key={reply.id} className={styles.replyNested}>
+                  <div className={`${getCardClass(reply.name, true)} ${styles.cardEnter}`}>
+                    <div className={styles.cardHeader}>
+                      <span className={styles.replyBadge}>{getHammerBadge(reply.name)}</span>
+                      <span className={styles.cardTime}>{formatTime(reply.time)}</span>
+                    </div>
+                    <p className={styles.cardContent}>{reply.content}</p>
+                    {/* 回复按钮（可回复任意消息） */}
+                    <button
+                      className={styles.replyBtn}
+                      onClick={() => {
+                        setReplyingTo(reply)
+                        setName('')
+                        setContent('')
+                        setTimeout(() => {
+                          document.querySelector<HTMLInputElement>(`.${styles.input}`)?.focus()
+                        }, 80)
+                      }}
+                    >
+                      回复
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))
         )}
       </div>
     </div>
