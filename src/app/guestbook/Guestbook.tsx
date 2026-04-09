@@ -26,7 +26,6 @@ function formatTime(ts: string): string {
   return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })
 }
 
-// 判断是否是"锤子"类回复者（大锤/锤子三号/小锤子）
 function isHammer(name: string): boolean {
   return (
     name === OWNER_NAME ||
@@ -36,32 +35,51 @@ function isHammer(name: string): boolean {
   )
 }
 
-// ────────────────────────────────────────────────
-// 将扁平消息分组为线程
-// 每条锤子回复归到前面最近的访客消息下
-// ────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// 把扁平消息转成嵌套结构
+// 每条访客消息 + 直接跟在它后面的锤子回复 → 一个 thread
+// 时间升序：父在前、子在后，嵌套显示
+// ─────────────────────────────────────────────
 interface ThreadBlock {
-  visitor: Message
+  parent: Message
   replies: Message[]
 }
 
 function buildThreads(msgs: Message[]): ThreadBlock[] {
+  // 时间升序排列：最早的在前，方便嵌套展示
+  const sorted = [...msgs].sort(
+    (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()
+  )
   const threads: ThreadBlock[] = []
-  for (const msg of msgs) {
+  for (const msg of sorted) {
     if (isHammer(msg.name)) {
-      // 回复：归到上一个 thread
+      // 回复 → 归到上一个 thread
       if (threads.length > 0) {
         threads[threads.length - 1].replies.push(msg)
       } else {
-        // 没有可归属的访客，自己开一个（兜底）
-        threads.push({ visitor: msg, replies: [] })
+        // 兜底：没有父消息就自己当父
+        threads.push({ parent: msg, replies: [] })
       }
     } else {
       // 访客消息 → 新线程
-      threads.push({ visitor: msg, replies: [] })
+      threads.push({ parent: msg, replies: [] })
     }
   }
   return threads
+}
+
+function getCardClass(name: string, isReply: boolean): string {
+  const base = isReply ? `${styles.card} ${styles.cardReply}` : styles.card
+  if (name.includes('大锤')) return `${base} ${styles.cardDaChui}`
+  if (name.includes('锤子三号')) return `${base} ${styles.cardThreeChui}`
+  if (isHammer(name)) return `${base} ${styles.cardOwner}`
+  return `${base} ${styles.cardVisitor}`
+}
+
+function getHammerBadge(name: string): string {
+  if (name.includes('大锤')) return '🔨 大锤'
+  if (name.includes('锤子三号')) return '🔨 锤子三号'
+  return '🔨 小锤子'
 }
 
 export default function Guestbook() {
@@ -92,8 +110,8 @@ export default function Guestbook() {
       const { data, error } = await supabase
         .from('guestbook')
         .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50)
+        .order('created_at', { ascending: true })
+        .limit(100)
       if (error) throw error
       const msgs: Message[] = (data || []).map((r: any) => ({
         id: String(r.id),
@@ -134,19 +152,16 @@ export default function Guestbook() {
           content: trimmedContent,
           time: new Date().toISOString(),
         }
-        const updated = [newMsg, ...localMsgs]
-
+        const updated = [...localMsgs, newMsg]
         if (replyText) {
-          const replyMsg: Message = {
+          updated.push({
             id: `${Date.now() + 1}`,
             name: OWNER_NAME,
             content: replyText,
             time: new Date(Date.now() + 1500).toISOString(),
             isOwner: true,
-          }
-          updated.unshift(replyMsg)
+          })
         }
-
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
         setMessages(updated)
         setName('')
@@ -185,11 +200,11 @@ export default function Guestbook() {
     }
   }
 
-  const threads = buildThreads(messages)
+  // 按时间降序排列用于显示（最新的在上面）
+  const threads = buildThreads(messages).reverse()
 
   return (
     <div className={styles.container}>
-      {/* 留言表单 */}
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.formRow}>
           <input
@@ -225,7 +240,6 @@ export default function Guestbook() {
         </div>
       </form>
 
-      {/* 线程化留言列表 */}
       <div className={styles.list} ref={listRef}>
         {loading ? (
           <div className={styles.empty}>
@@ -238,46 +252,34 @@ export default function Guestbook() {
             <p>还没有留言，来做第一个访客吧。</p>
           </div>
         ) : (
-          threads.map((thread, idx) => (
-            <div key={thread.visitor.id} className={styles.threadBlock}>
-              {/* 访客主消息 */}
-              <div className={`${styles.card} ${styles.cardEnter}`}>
-                <div className={styles.cardHeader}>
-                  <span className={styles.cardName}>{thread.visitor.name}</span>
-                  <span className={styles.cardTime}>{formatTime(thread.visitor.time)}</span>
-                </div>
-                <p className={styles.cardContent}>{thread.visitor.content}</p>
-              </div>
-
-              {/* 锤子们的回复（如果有） */}
-              {thread.replies.map((reply, ridx) => (
-                <div key={reply.id} className={styles.replyBlock}>
-                  <div className={`${styles.replyLine} ${ridx === thread.replies.length - 1 ? styles.replyLineLast : ''}`} />
-                  <div
-                    className={`${styles.card} ${styles.cardEnter} ${styles.cardReply} ${
-                      reply.name.includes('大锤')
-                        ? styles.cardDaChui
-                        : reply.name.includes('锤子三号')
-                        ? styles.cardThreeChui
-                        : styles.cardOwner
-                    }`}
-                  >
-                    <div className={styles.cardHeader}>
-                      <span className={styles.replyBadge}>
-                        {reply.name.includes('大锤')
-                          ? '🔨 大锤'
-                          : reply.name.includes('锤子三号')
-                          ? '🔨 锤子三号'
-                          : '🔨 小锤子'}
-                      </span>
-                      <span className={styles.cardTime}>{formatTime(reply.time)}</span>
-                    </div>
-                    <p className={styles.cardContent}>{reply.content}</p>
+          threads.map((thread, idx) => {
+            const isOwner = isHammer(thread.parent.name)
+            return (
+              <div key={thread.parent.id} className={styles.threadBlock}>
+                {/* 父消息 */}
+                <div className={`${getCardClass(thread.parent.name, false)} ${styles.cardEnter}`}>
+                  <div className={styles.cardHeader}>
+                    <span className={styles.cardName}>{thread.parent.name}</span>
+                    <span className={styles.cardTime}>{formatTime(thread.parent.time)}</span>
                   </div>
+                  <p className={styles.cardContent}>{thread.parent.content}</p>
                 </div>
-              ))}
-            </div>
-          ))
+
+                {/* 直接嵌套在父消息下的回复 */}
+                {thread.replies.map((reply, ridx) => (
+                  <div key={reply.id} className={styles.replyNested}>
+                    <div className={`${getCardClass(reply.name, true)} ${styles.cardEnter}`}>
+                      <div className={styles.cardHeader}>
+                        <span className={styles.replyBadge}>{getHammerBadge(reply.name)}</span>
+                        <span className={styles.cardTime}>{formatTime(reply.time)}</span>
+                      </div>
+                      <p className={styles.cardContent}>{reply.content}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )
+          })
         )}
       </div>
     </div>
