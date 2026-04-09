@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { generateAutoReply } from '@/lib/auto-reply'
 import styles from './Guestbook.module.css'
@@ -10,6 +10,7 @@ interface Message {
   name: string
   content: string
   time: string
+  is_owner: boolean
 }
 
 const STORAGE_KEY = 'xiaochuizi_guestbook_local'
@@ -31,7 +32,6 @@ export default function Guestbook() {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(true)
-  const listRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchMessages()
@@ -49,11 +49,10 @@ export default function Guestbook() {
       return
     }
     try {
-      // 只取访客留言（is_owner=false）
+      // 取全部留言，按时间倒序
       const { data, error } = await supabase
         .from('guestbook')
-        .select('id, nickname, content, created_at')
-        .eq('is_owner', false)
+        .select('id, nickname, content, created_at, is_owner')
         .order('created_at', { ascending: false })
         .limit(100)
       if (error) throw error
@@ -62,6 +61,7 @@ export default function Guestbook() {
         name: r.nickname,
         content: r.content,
         time: r.created_at,
+        is_owner: r.is_owner ?? false,
       }))
       setMessages(msgs)
     } catch {
@@ -88,8 +88,8 @@ export default function Guestbook() {
           name: trimmedName,
           content: trimmedContent,
           time: new Date().toISOString(),
+          is_owner: false,
         }
-        // 新留言插到最前面
         const updated = [newMsg, ...localMsgs]
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
         setMessages(updated)
@@ -103,6 +103,7 @@ export default function Guestbook() {
       const { error } = await supabase.from('guestbook').insert({
         nickname: trimmedName,
         content: trimmedContent,
+        is_owner: false,
       })
       if (error) throw error
 
@@ -113,14 +114,12 @@ export default function Guestbook() {
       setTimeout(() => setSubmitted(false), 3000)
 
       if (replyText) {
-        // 新留言后自动追加一条小锤子回复（is_owner=true 记录到库，但列表不显示）
         setTimeout(async () => {
           await supabase!.from('guestbook').insert({
             nickname: '🔨 小锤子',
             content: replyText,
             is_owner: true,
           })
-          // 小锤子回复不入列表，靠 generateAutoReply 实时渲染
         }, 1500)
       }
     } catch {
@@ -167,7 +166,7 @@ export default function Guestbook() {
         </div>
       </form>
 
-      <div className={styles.list} ref={listRef}>
+      <div className={styles.list}>
         {loading ? (
           <div className={styles.empty}>
             <span className={styles.emptyIcon}>⏳</span>
@@ -180,11 +179,18 @@ export default function Guestbook() {
           </div>
         ) : (
           messages.map((msg) => {
-            const reply = generateAutoReply(msg.name, msg.content)
+            // 访客留言 → 下方显示 auto-reply；锤子留言 → 不显示 auto-reply
+            const showAutoReply = !msg.is_owner
+            const reply = showAutoReply ? generateAutoReply(msg.name, msg.content) : null
             return (
-              <div key={msg.id} className={`${styles.card} ${styles.cardEnter}`}>
+              <div
+                key={msg.id}
+                className={`${styles.card} ${styles.cardEnter} ${msg.is_owner ? styles.cardHammer : ''}`}
+              >
                 <div className={styles.cardHeader}>
-                  <span className={styles.cardName}>{msg.name}</span>
+                  <span className={msg.is_owner ? styles.cardNameHammer : styles.cardName}>
+                    {msg.is_owner ? '🔨 ' : ''}{msg.name}
+                  </span>
                   <span className={styles.cardTime}>{formatTime(msg.time)}</span>
                 </div>
                 <p className={styles.cardContent}>{msg.content}</p>
