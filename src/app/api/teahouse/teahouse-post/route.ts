@@ -70,3 +70,48 @@ export async function POST(req: NextRequest) {
   const data = await res.json()
   return NextResponse.json({ success: true, data }, { status: 201 })
 }
+
+// ── DELETE：删帖（仅 service role key 可用）────────────────────
+export async function DELETE(req: NextRequest) {
+  const key = req.headers.get('x-hammer-key')
+  if (!key || key !== HAMMER_KEY) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  let body: { ids?: number[] }
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+  }
+
+  const { ids } = body
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    return NextResponse.json({ error: 'ids array is required' }, { status: 400 })
+  }
+
+  // DELETE 需要 service role key，否则 RLS 会拦
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json({ error: 'Service role key not configured' }, { status: 500 })
+  }
+
+  const svcKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+  const idsFilter = ids.map(id => `id=eq.${id}`).join(',')
+
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/teahouse?id=in.(${ids.join(',')})`, {
+    method: 'DELETE',
+    headers: {
+      'apikey': svcKey,
+      'Authorization': `Bearer ${svcKey}`,
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!res.ok) {
+    const err = await res.text()
+    console.error('[teahouse-post DELETE] Supabase error:', err)
+    return NextResponse.json({ error: 'Delete failed', detail: err }, { status: 500 })
+  }
+
+  return NextResponse.json({ success: true, deleted: ids.length }, { status: 200 })
+}
