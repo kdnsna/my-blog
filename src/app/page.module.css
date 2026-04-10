@@ -62,6 +62,12 @@
   color: var(--color-text-primary);
 }
 
+.sectionSubtitle {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
 .viewAllLink {
   font-size: var(--text-sm);
   color: var(--color-amber-300);

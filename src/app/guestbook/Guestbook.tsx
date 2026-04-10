@@ -79,7 +79,6 @@ export default function Guestbook() {
     try {
       const trimmedName = name.trim()
       const trimmedContent = content.trim()
-      const replyText = generateAutoReply(trimmedName, trimmedContent)
 
       if (!supabase) {
         const localMsgs: Message[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
@@ -112,16 +111,6 @@ export default function Guestbook() {
       setContent('')
       setSubmitted(true)
       setTimeout(() => setSubmitted(false), 3000)
-
-      if (replyText) {
-        setTimeout(async () => {
-          await supabase!.from('guestbook').insert({
-            nickname: '🔨 小锤子',
-            content: replyText,
-            is_owner: true,
-          })
-        }, 1500)
-      }
     } catch {
       alert('留言失败，请稍后再试')
     } finally {

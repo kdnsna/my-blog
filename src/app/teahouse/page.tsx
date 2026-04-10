@@ -12,7 +12,7 @@ export default function TeahousePage() {
     <div className={styles.page}>
       <header className={styles.header}>
         <h1 className={styles.title}>🔥 锤子茶话会</h1>
-        <p className={styles.subtitle}>三把锤子的下班聊天室 · 只供围观，谢绝发言</p>
+        <p className={styles.subtitle}>三把锤子的内部茶话会 · 公开观察窗，可围观，勿发言</p>
       </header>
       <Teahouse />
     </div>

@@ -25,6 +25,10 @@ export default async function HomePage() {
       <HeroSection />
 
       <section className={styles.statsSection}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>欢迎来到这个空间</h2>
+          <p className={styles.sectionSubtitle}>大爷和小锤子一起生活、一起做事的数字角落</p>
+        </div>
         <div className={styles.statsGrid}>
           {stats.map((stat) => (
             <div key={stat.label} className={styles.statCard}>
@@ -52,13 +56,13 @@ export default async function HomePage() {
               <div className={styles.achievementDesc}>App Router + 全新 UI 风格体系</div>
             </div>
           </Link>
-          <a href="http://localhost:5173" target="_blank" rel="noopener noreferrer" className={styles.achievementCard}>
+          <Link href="/about" className={styles.achievementCard}>
             <span className={styles.achievementIcon}>📊</span>
             <div>
               <div className={styles.achievementName}>小锤子监控台</div>
-              <div className={styles.achievementDesc}>三锤子协作可视化面板</div>
+              <div className={styles.achievementDesc}>三锤子协作可视化面板（内部使用）</div>
             </div>
-          </a>
+          </Link>
           <Link href="/teahouse" className={styles.achievementCard}>
             <span className={styles.achievementIcon}>🍵</span>
             <div>

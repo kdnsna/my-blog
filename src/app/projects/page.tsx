@@ -5,14 +5,14 @@ const projects = [
   {
     icon: '🏗️',
     name: '博客重构',
-    badge: '进行中',
+    badge: '已完成',
     accent: '#4A90D9',
     desc: '从 Next.js Pages Router 迁移到 App Router，全面重构 UI 风格、统一设计语言、补全缺失页面。目标是让 blog 从「能看」进化到「好看且好用」。',
     features: [
-      'App Router + TypeScript 重构',
-      '深黑-琥珀暖金配色体系',
-      'Noto Serif/Sans SC 中文字体',
-      '缺失页面补全（留言板、茶话会）',
+      '全新深黑-琥珀暖金配色体系',
+      '缺失页面全部补全',
+      '留言板与茶话会上线',
+      'App Router + TypeScript 架构升级',
     ],
     links: [
       { label: '查看博客', href: '/' },
@@ -21,17 +21,17 @@ const projects = [
   {
     icon: '📊',
     name: '小锤子监控台',
-    badge: '已上线',
+    badge: '内部使用',
     accent: '#34D399',
-    desc: '实时展示三锤子协作状态、自动化任务执行情况、连接服务健康度。用可视化面板替代命令行监控，让大爷随时掌握系统全貌。',
+    desc: '实时展示三锤子协作状态、自动化任务执行情况、连接服务健康度。让大爷随时掌握系统全貌，不再靠命令行猜。',
     features: [
       '自动化任务执行看板',
       '连接服务状态监控',
-      'GitHub 协作热力图',
       '三锤子协作状态展示',
+      '内部部署，外部可围观',
     ],
     links: [
-      { label: '打开监控台', href: 'http://localhost:5173' },
+      { label: '了解更多', href: '/about' },
     ],
   },
   {
@@ -53,14 +53,14 @@ const projects = [
   {
     icon: '📰',
     name: 'AI 情报晨报',
-    badge: '自动化',
+    badge: '每日运行',
     accent: '#FBBF24',
-    desc: '每天 07:30 推送飞书私聊，包含 5 条 GitHub Trending（AI/agent/LLM/MCP 相关）+ 5 条 ClawHub 热门技能。归档同步写入飞书文档，形成情报知识库。',
+    desc: '每天 07:30 自动推送到飞书私聊，包含 AI 行业动态和热门工具追踪。不再错过有价值的信息，所有情报自动归档。',
     features: [
-      '每天 07:30 定时推送',
-      'GitHub Trending AI 榜单',
-      'ClawHub 热门技能追踪',
-      '飞书文档归档链路',
+      '每天 07:30 自动推送',
+      'GitHub AI 热门追踪',
+      '工具情报一手掌握',
+      '飞书文档同步归档',
     ],
     links: [],
   },
@@ -71,7 +71,10 @@ export default function ProjectsPage() {
     <div className={styles.page}>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>成果</h1>
-        <p className={styles.pageSubtitle}>大爷与小锤子一起折腾出来的作品，每一行代码都有故事</p>
+        <p className={styles.pageSubtitle}>大爷与小锤子一起折腾出来的作品</p>
+        <p className={styles.pageSubtitle} style={{ marginTop: '0.5rem', fontSize: 'var(--text-sm)', color: 'var(--color-text-tertiary)' }}>
+          想了解每个成果是怎么做出来的？去 → <Link href="/notes" style={{ color: 'var(--color-amber-300)' }}>知识库</Link>
+        </p>
       </div>
 
       <div className={styles.collaborationNote}>
