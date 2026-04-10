@@ -24,11 +24,16 @@ export default async function HomePage() {
     <div className={styles.page}>
       <HeroSection />
 
+      {/* 欢迎区块 - 视觉锚点 */}
+      <section className={styles.welcomeSection}>
+        <h2 className={styles.welcomeTitle}>欢迎来到这个空间</h2>
+        <p className={styles.welcomeSubtitle}>
+          大爷和小锤子一起生活、一起做事的数字角落
+        </p>
+      </section>
+
+      {/* 统计数据 */}
       <section className={styles.statsSection}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>欢迎来到这个空间</h2>
-          <p className={styles.sectionSubtitle}>大爷和小锤子一起生活、一起做事的数字角落</p>
-        </div>
         <div className={styles.statsGrid}>
           {stats.map((stat) => (
             <div key={stat.label} className={styles.statCard}>
