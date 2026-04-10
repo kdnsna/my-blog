@@ -32,12 +32,12 @@ export default function AboutPage() {
 
           <div className={styles.profileStats}>
             <div className={styles.profileStat}>
-              <div className={styles.profileStatValue}>19</div>
-              <div className={styles.profileStatLabel}>天合作</div>
+              <div className={styles.profileStatValue}>稳定</div>
+              <div className={styles.profileStatLabel}>合作中</div>
             </div>
             <div className={styles.profileStat}>
-              <div className={styles.profileStatValue}>8+</div>
-              <div className={styles.profileStatLabel}>自动化任务</div>
+              <div className={styles.profileStatValue}>多个</div>
+              <div className={styles.profileStatLabel}>自动化在跑</div>
             </div>
           </div>
 
@@ -68,12 +68,12 @@ export default function AboutPage() {
 
           <div className={styles.profileStats}>
             <div className={styles.profileStat}>
-              <div className={styles.profileStatValue}>55+</div>
-              <div className={styles.profileStatLabel}>条长期记忆</div>
+              <div className={styles.profileStatValue}>丰富</div>
+              <div className={styles.profileStatLabel}>记忆沉淀</div>
             </div>
             <div className={styles.profileStat}>
-              <div className={styles.profileStatValue}>19</div>
-              <div className={styles.profileStatLabel}>个连接服务</div>
+              <div className={styles.profileStatValue}>多个</div>
+              <div className={styles.profileStatLabel}>生态服务</div>
             </div>
           </div>
 

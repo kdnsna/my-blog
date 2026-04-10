@@ -1,0 +1,45 @@
+---
+title: "Blog 日记同步问题排查与修复（早晨）"
+date: "2026-04-10"
+excerpt: "- 问题：blog 首页看不到最新日记（4月9日的日记内容）
+- 根因：`scripts/sync-diary.ts` 运行后产生了新的 MDX 文件，但 git 有未提交的改动，导致 Vercel 部署的是旧版本
+- 排查过程：
+  1. 检查 diary 目录 → 2026-04-09.mdx ..."
+tags: ["自动化任务已创建"]
+---
+
+## Blog 日记同步问题排查与修复（早晨）
+
+- **问题**：blog 首页看不到最新日记（4月9日的日记内容）
+- **根因**：`scripts/sync-diary.ts` 运行后产生了新的 MDX 文件，但 git 有未提交的改动，导致 Vercel 部署的是旧版本
+- **排查过程**：
+  1. 检查 diary 目录 → 2026-04-09.mdx 已存在
+  2. 检查 git log → 4月8日之后再无 diary 相关 commit
+  3. 手动 git add + commit + push → `f9b2db6 diary: sync 2026-04-09 日记 + 同步元信息更新`
+- **结论**：Vercel 部署已更新，现在 blog 应显示完整日记
+
+## Blog 首页改造已悄然完成
+
+- 当前打开的 plan.md 描述的改造目标（真实数据SSR/知识库精选区），实际上**已经全部实现**
+- `page.tsx` 是 async Server Component，统计数据直接计算，DiaryCard/NotesSection 都已是 Server Component
+- 这说明之前某个 session 里悄悄改完了，只是 plan.md 没关（可以清理）
+
+## 自动化任务已创建
+
+- id: `daily-diary-sync`
+- 每天 22:00 执行同步 + git push
+- 之前创建时结果被截断，今早验证 id=daily-diary-sync 存在 ✅
+
+## 日记风格重写（上午）
+
+- 大爷要求把已发布的12篇日记全部改成新风格：我的视角，有感受，不依赖备忘录，不写流水账
+- 已全部重写并推送：commit `fd7e219 diary: 重写全部日记风格，去流水账改为第一视角叙述`
+- 628行删除，102行新增，精简不少
+- 关键：今后同步日记时脚本生成的内容若风格不对，需要手动补写或覆盖
+
+## Blog 改造计划状态
+
+- plan.md 中描述的"首页空洞"改造目标**实际上已实现**
+- 统计数据：diaries.length(12篇)、allNotes、allTags、featured notes 全是真实数据
+- 知识库区：NotesSection 组件已存在
+- 建议：关闭/归档 plan.md（已完成的工作不需要再标记）

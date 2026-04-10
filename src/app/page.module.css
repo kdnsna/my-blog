@@ -47,8 +47,81 @@
   color: var(--color-text-secondary);
 }
 
+/* 最近成果区块 */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.viewAllLink {
+  font-size: var(--text-sm);
+  color: var(--color-amber-300);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.viewAllLink:hover {
+  color: var(--color-amber-200);
+}
+
+.achievementsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-3xl);
+}
+
+.achievementCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.achievementCard:hover {
+  border-color: var(--color-amber-400);
+  transform: translateY(-2px);
+}
+
+.achievementIcon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.achievementName {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.achievementDesc {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
 @media (max-width: 768px) {
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .achievementsGrid {
+    grid-template-columns: 1fr;
   }
 }
