@@ -2,9 +2,28 @@
   animation: fadeIn 0.5s ease;
 }
 
-.statsSection {
-  padding: var(--space-2xl) var(--space-lg);
-  max-width: 1200px;
+/* 首屏欢迎区块 */
+.welcomeSection {
+  padding: var(--space-4xl) var(--space-lg);
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.welcomeTitle {
+  font-family: var(--font-serif);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+  letter-spacing: -0.02em;
+}
+
+.welcomeSubtitle {
+  font-size: var(--text-xl);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -22,11 +41,32 @@
   padding: var(--space-xl);
   text-align: center;
   transition: all var(--transition-base);
+  overflow: hidden;
+}
+
+/* 卡片顶部装饰线 */
+.statCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-amber-400), var(--color-amber-300));
+  border-radius: var(--radius-full);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
 }
 
 .statCard:hover {
   border-color: var(--color-border-gold);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(200, 148, 58, 0.1);
+}
+
+.statCard:hover::before {
+  opacity: 1;
 }
 
 .statIcon {
@@ -50,22 +90,31 @@
 /* 最近成果区块 */
 .sectionHeader {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   margin-bottom: var(--space-lg);
+  gap: var(--space-md);
 }
 
 .sectionTitle {
   font-family: var(--font-serif);
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   font-weight: 600;
   color: var(--color-text-primary);
+  letter-spacing: -0.01em;
 }
 
 .sectionSubtitle {
   font-size: var(--text-base);
   color: var(--color-text-secondary);
   margin-top: var(--space-xs);
+}
+
+/* 区块间距加大 */
+.statsSection {
+  padding: var(--space-3xl) var(--space-lg);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .viewAllLink {
@@ -98,11 +147,31 @@
   cursor: pointer;
   text-decoration: none;
   color: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 左侧装饰条 */
+.achievementCard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--color-amber-400), var(--color-amber-300));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
 }
 
 .achievementCard:hover {
   border-color: var(--color-amber-400);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(200, 148, 58, 0.1);
+}
+
+.achievementCard:hover::before {
+  opacity: 1;
 }
 
 .achievementIcon {
