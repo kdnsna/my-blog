@@ -99,17 +99,6 @@
   margin-bottom: var(--space-xl);
 }
 
-.profileQuote {
-  font-family: var(--font-serif);
-  font-size: var(--text-lg);
-  color: var(--color-text-primary);
-  font-style: italic;
-  margin-bottom: var(--space-lg);
-  padding-left: var(--space-md);
-  border-left: 3px solid var(--profile-accent);
-  opacity: 0.9;
-}
-
 .profileStats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
