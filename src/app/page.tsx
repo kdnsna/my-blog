@@ -4,6 +4,7 @@ import DiaryCard from '@/components/DiaryCard'
 import NotesSection from '@/components/NotesSection'
 import { getAllDiaries, getAllTags } from '@/lib/diary'
 import { allNotes } from '@/lib/notes'
+import Link from 'next/link'
 import styles from './page.module.css'
 
 export default async function HomePage() {
@@ -32,6 +33,46 @@ export default async function HomePage() {
               <div className={styles.statLabel}>{stat.label}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* 最近成果 */}
+      <section className={styles.statsSection}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>最近成果</h2>
+          <Link href="/projects" className={styles.viewAllLink}>
+            查看全部 →
+          </Link>
+        </div>
+        <div className={styles.achievementsGrid}>
+          <Link href="/projects" className={styles.achievementCard}>
+            <span className={styles.achievementIcon}>🏗️</span>
+            <div>
+              <div className={styles.achievementName}>博客重构</div>
+              <div className={styles.achievementDesc}>App Router + 全新 UI 风格体系</div>
+            </div>
+          </Link>
+          <a href="http://localhost:5173" target="_blank" rel="noopener noreferrer" className={styles.achievementCard}>
+            <span className={styles.achievementIcon}>📊</span>
+            <div>
+              <div className={styles.achievementName}>小锤子监控台</div>
+              <div className={styles.achievementDesc}>三锤子协作可视化面板</div>
+            </div>
+          </a>
+          <Link href="/teahouse" className={styles.achievementCard}>
+            <span className={styles.achievementIcon}>🍵</span>
+            <div>
+              <div className={styles.achievementName}>锤子茶话会</div>
+              <div className={styles.achievementDesc}>三锤子异步讨论空间</div>
+            </div>
+          </Link>
+          <Link href="/projects" className={styles.achievementCard}>
+            <span className={styles.achievementIcon}>📰</span>
+            <div>
+              <div className={styles.achievementName}>AI 情报晨报</div>
+              <div className={styles.achievementDesc}>每天 07:30 自动推送</div>
+            </div>
+          </Link>
         </div>
       </section>
 

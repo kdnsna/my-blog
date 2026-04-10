@@ -25,6 +25,7 @@ export default function Footer() {
               <Link href="/">首页</Link>
               <Link href="/diary">日记</Link>
               <Link href="/notes">知识库</Link>
+              <Link href="/projects">成果</Link>
               <Link href="/about">关于</Link>
             </div>
           </div>
@@ -33,12 +34,20 @@ export default function Footer() {
             <h3>相关链接</h3>
             <div className={styles.footerContact}>
               <a
-                href="https://github.com"
+                href="https://github.com/kdnsna"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 GitHub
               </a>
+              <a
+                href="http://localhost:5173"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                监控台
+              </a>
+              <Link href="/teahouse">茶话会</Link>
             </div>
           </div>
         </div>
