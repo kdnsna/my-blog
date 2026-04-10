@@ -306,7 +306,7 @@
   font-size: var(--text-lg);
   color: var(--color-text-primary);
   line-height: var(--leading-relaxed);
-  text-align: left;
+  text-align: center;
 }
 
 .sloganText strong {
