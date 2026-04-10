@@ -43,3 +43,72 @@ tags: ["自动化任务已创建"]
 - 统计数据：diaries.length(12篇)、allNotes、allTags、featured notes 全是真实数据
 - 知识库区：NotesSection 组件已存在
 - 建议：关闭/归档 plan.md（已完成的工作不需要再标记）
+
+## Blog 巡检修复（我是大锤）
+
+- 三锤子和大爷一起巡检 blog，我负责动手修
+- 修复内容：
+  1. Footer GitHub 链接：github.com → github.com/kdnsna，加了监控台+茶话会入口，导航加了「成果」
+  2. robots.txt sitemap：旧 vercel 域名 → kdnsna.cn
+  3. About 页写死数字：19天→稳定合作中、8+→多个、55+→丰富、19个→多个
+  4. 新建 /projects 页面：4个成果卡片（博客重构/监控台/茶话会/晨报体系）+ 三锤子协作说明
+  5. 首页加「最近成果」区块：4个可点击卡片直通各页面
+- 构建验证通过，已推送 `fd8627f`
+
+## Blog 第二轮重构：逻辑收束（我是二锤）
+
+- About: 砍掉"能力架构图"(三层技术组件)，换成"三锤子协作关系"+ "这个站为什么存在"说明
+- 首页: 清理 localhost:5173 改为跳 About；标语改为"欢迎来到这个空间 · 大爷和小锤子一起生活做事的数字角落"
+- Projects: 成果描述去技术化；监控台 badge 改为"内部使用"，链接改为跳 About；加了"想了解方法？→ 知识库"导流
+- Projects: 副标题精简，加知识库跳转
+- 茶话会: 副标题从"只供围观，谢绝发言" → "公开观察窗，可围观，勿发言"
+- 留言板: 删除锤子回复写数据库逻辑，改为纯 UI 附着回复（不再双回复）
+- 构建验证通过，已推送 `4c57046`
+## Blog 第三轮重构：视觉回补（我是二锤）
+
+- **背景**：大爷觉得第二轮逻辑收束后，页面的美观性和作品感下降，要求做纯视觉回补
+- **原则**：保留逻辑收口，不新增大功能，重点修"气质、层次、留白、作品感"
+- **优先处理**：首页 > About，其他页面放第二优先级
+
+### 改动清单
+
+**首页：**
+1. 新增独立的 welcomeSection 区块，把"欢迎来到这个空间"做成真正的视觉锚点
+2. 字级层次拉开：welcomeTitle 用 text-4xl，welcomeSubtitle 用 text-xl，差距明显
+3. 统计数据卡：加顶部装饰线（hover 显示）+ hover 阴影增强，质感提升
+4. 成果卡片：加左侧装饰条（hover 显示）+ 整体阴影增强，更有"作品展示"感
+5. sectionTitle 从 text-xl → text-2xl，与副标题拉开差距
+
+**About：**
+1. 人物卡片增加引言句（profileQuote）：大爷用"没事，他习惯了。"，小锤子用"帮到实处，无需缛节。"
+2. profileBio 精简并加引导句，如"最重要的角色：最终拍板的那个人"
+3. 人物角色描述从"小锤子的主人"改为"小锤子的主人 · 决策者"，AI 从"住在机器里的冷静小帮手"改为"AI 助手 · 执行者"
+4. 三锤子协作区块标题从"三把锤子，各有分工"改为"三个分身，各有专长"，加了引导说明
+5. archLayerLabel 去掉 uppercase+letter-spacing，改为正常字号 + 琥珀色
+6. collaborationNote 从纯文字改为带🤝图标 + 分层结构（原则/提示分开展示）
+7. 整体从"技术架构图感"转向"人物分工感"
+
+- **构建验证**：TypeScript 编译通过
+- **推送状态**：commit 已创建（`视觉回补 - 字级层次/卡片质感/About页气质提升`），push 因网络问题失败，待网络恢复后推送
+
+## Blog 居中布局修复（下午）
+
+- **问题**：大爷反馈"帮到实处"和能力图谱标题变成了偏左
+- **根因**：上次改版时 `.sloganText` 被设为 `text-align: left`；`.sectionHeader` 缺少居中属性
+- **修复**：
+  1. `about/page.module.css`：`.sloganText` 的 `text-align: left` → `center`
+  2. `TagCloud.module.css`：`.sectionHeader` 添加 `justify-content: center`
+- **验证**：TypeScript 编译通过
+- **推送**：`3d16c54 fix: 恢复居中布局` 已推送
+
+
+## 记忆协同方案 v1 执行完成
+
+- **来源**：大锤制定方案，三锤提出初始想法，二锤整理框架
+- **执行内容**：
+  1. 更新 ~/.workbuddy/SOUL.md：加入四层架构 + 免疫系统
+  2. 更新 ~/.workbuddy/IDENTITY.md：补全身份定义
+  3. 更新 MEMORY.md：加入协同方案详细内容
+  4. 归档到 GitHub 共享库：decisions/memory-sync-v1.md
+- **推送状态**：`bd3e5cf decisions: 三锤记忆协同与防污染方案 v1` 已推送
+- **关键认知**：GitHub 是"档案馆"不是"脑子"——这是核心
