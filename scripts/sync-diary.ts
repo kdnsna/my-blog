@@ -103,9 +103,15 @@ ${data.content}
 }
 
 // 同步单个日记文件
-function syncDiary(filePath: string): boolean {
+function syncDiary(filePath: string, protectedDates: Set<string>): boolean {
   const parsed = parseMemoryFile(filePath)
   if (!parsed) {
+    return false
+  }
+
+  // 保护名单：手动重写过的日期，跳过自动同步
+  if (protectedDates.has(parsed.date)) {
+    console.log(`[保护] ${parsed.date} - 已手动重写，跳过自动同步`)
     return false
   }
 
@@ -135,6 +141,21 @@ function syncAll(): { synced: number; skipped: number } {
     fs.mkdirSync(BLOG_CONTENT_DIR, { recursive: true })
   }
 
+  // 读取保护名单（手动重写过的日期，跳过自动同步）
+  const metaPath = path.join(BLOG_CONTENT_DIR, '.sync-meta.json')
+  let protectedDates: Set<string> = new Set()
+  if (fs.existsSync(metaPath)) {
+    try {
+      const meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'))
+      protectedDates = new Set(meta.protectedDates || [])
+      if (protectedDates.size > 0) {
+        console.log(`🛡️  保护名单：${[...protectedDates].join(', ')}\n`)
+      }
+    } catch (e) {
+      // 忽略解析错误
+    }
+  }
+
   let synced = 0
   let skipped = 0
 
@@ -146,7 +167,7 @@ function syncAll(): { synced: number; skipped: number } {
 
   for (const file of files) {
     const filePath = path.join(MEMORY_DIR, file)
-    if (syncDiary(filePath)) {
+    if (syncDiary(filePath, protectedDates)) {
       synced++
     } else {
       skipped++
@@ -155,11 +176,11 @@ function syncAll(): { synced: number; skipped: number } {
 
   console.log(`\n✨ 同步完成！新增/更新: ${synced}, 跳过: ${skipped}`)
 
-  // 生成同步元信息
-  const metaPath = path.join(BLOG_CONTENT_DIR, '.sync-meta.json')
+  // 生成同步元信息（保留原有 protectedDates）
   fs.writeFileSync(metaPath, JSON.stringify({
     lastSync: new Date().toISOString(),
-    totalFiles: synced + skipped
+    totalFiles: synced + skipped,
+    protectedDates: [...protectedDates]
   }, null, 2))
 
   return { synced, skipped }
