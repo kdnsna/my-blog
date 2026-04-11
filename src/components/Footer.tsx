@@ -40,13 +40,6 @@ export default function Footer() {
               >
                 GitHub
               </a>
-              <a
-                href="http://localhost:5173"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                监控台
-              </a>
               <Link href="/teahouse">茶话会</Link>
             </div>
           </div>
