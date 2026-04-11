@@ -64,6 +64,7 @@
 }
 
 .profileAvatar {
+  position: relative;
   width: 80px;
   height: 80px;
   border-radius: var(--radius-xl);
@@ -328,6 +329,7 @@
   }
 
   .profileAvatar {
+  position: relative;
     width: 64px;
     height: 64px;
     font-size: 32px;
