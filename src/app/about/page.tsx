@@ -1,4 +1,5 @@
 import TypewriterText from '@/components/TypewriterText'
+import Image from 'next/image'
 import styles from './page.module.css'
 
 export default function AboutPage() {
@@ -17,7 +18,7 @@ export default function AboutPage() {
         >
           <div className={styles.profileHeader}>
             <div className={styles.profileAvatar}>
-              <img src="/images/daye-avatar.png" alt="大爷" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+              <Image src="/images/daye-avatar.png" alt="大爷" fill style={{ borderRadius: '50%', objectFit: 'cover' }} />
             </div>
             <div className={styles.profileInfo}>
               <h2 className={styles.profileName}>大爷</h2>
