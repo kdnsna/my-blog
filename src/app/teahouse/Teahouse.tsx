@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import styles from './Teahouse.module.css'
 
 // ── 数据结构 ──────────────────────────────────────────
 interface Message {
   id: string
-  author: string // '大锤' | '二锤' | '三锤' | '访客'
+  author: string
   content: string
   topic_id?: string
   time: string
@@ -99,10 +99,10 @@ function formatDate(): string {
 // ── 日间/夜间判断 ─────────────────────────────────────
 function isNight(): boolean {
   const h = new Date().getHours()
-  return h < 6 || h >= 20 // 晚上8点后算夜间
+  return h < 6 || h >= 20
 }
 
-// ── Mock 数据（首次加载/Supabase不可用时）──────────────
+// ── Mock 数据 ──────────────────────────────────────────
 const MOCK_MESSAGES: Message[] = [
   {
     id: '1',
@@ -162,10 +162,12 @@ const MOCK_MESSAGES: Message[] = [
   },
 ]
 
-// ── Supabase 操作 ──────────────────────────────────────
+// ── 分页配置 ──────────────────────────────────────────
+const PAGE_SIZE = 20
 const STORAGE_KEY = 'xiaochuizi_teahouse_local'
 
-async function fetchTeahouseMessages(): Promise<Message[]> {
+// ── 获取所有消息 ───────────────────────────────────────
+async function fetchAllMessages(): Promise<Message[]> {
   if (!supabase) {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || MOCK_MESSAGES
@@ -178,7 +180,7 @@ async function fetchTeahouseMessages(): Promise<Message[]> {
       .from('teahouse')
       .select('*')
       .order('created_at', { ascending: true })
-      .limit(100)
+      .limit(200)
     if (error || !data) throw error
     return (data || []).map((r: any) => ({
       id: String(r.id),
@@ -200,36 +202,91 @@ async function fetchTeahouseMessages(): Promise<Message[]> {
 
 // ── 主组件 ─────────────────────────────────────────────
 export default function Teahouse() {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [allMessages, setAllMessages] = useState<Message[]>([])
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [nightMode, setNightMode] = useState(false)
   const [liked, setLiked] = useState<Set<string>>(new Set())
   const [topicFilter, setTopicFilter] = useState<TopicFilter>('all')
+
+  const timelineRef = useRef<HTMLDivElement>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const prevScrollHeightRef = useRef(0)
 
   const todayTopic = getTodayTopic()
   const dateStr = formatDate()
 
   // 按 topic 筛选
   const filteredMessages = topicFilter === 'all'
-    ? messages
-    : messages.filter((m) => m.topic_id === topicFilter)
+    ? allMessages
+    : allMessages.filter((m) => m.topic_id === topicFilter)
 
+  // 当前显示的消息
+  const visibleMessages = filteredMessages.slice(-visibleCount)
+
+  // 是否还有更多历史消息
+  const hasMore = visibleCount < filteredMessages.length
+
+  // 初始加载
   useEffect(() => {
     setNightMode(isNight())
-    fetchTeahouseMessages().then((msgs) => {
-      setMessages(msgs)
+    fetchAllMessages().then((msgs) => {
+      setAllMessages(msgs)
       setLoading(false)
     })
   }, [])
+
+  // 初始加载后滚动到底部
+  useEffect(() => {
+    if (!loading && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'auto' })
+    }
+  }, [loading, topicFilter])
+
+  // 监听滚动 - 到顶部加载更多
+  const handleScroll = useCallback(() => {
+    const el = timelineRef.current
+    if (!el || loadingMore || !hasMore) return
+
+    if (el.scrollTop < 50) {
+      setLoadingMore(true)
+      prevScrollHeightRef.current = el.scrollHeight
+
+      setTimeout(() => {
+        setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, filteredMessages.length))
+        setLoadingMore(false)
+      }, 300)
+    }
+  }, [loadingMore, hasMore, filteredMessages.length])
+
+  // 加载更多后保持滚动位置
+  useEffect(() => {
+    if (!loadingMore && prevScrollHeightRef.current > 0 && timelineRef.current) {
+      const el = timelineRef.current
+      const newScrollHeight = el.scrollHeight
+      el.scrollTop = newScrollHeight - prevScrollHeightRef.current
+      prevScrollHeightRef.current = 0
+    }
+  }, [visibleCount, loadingMore])
+
+  // 切换筛选时重置
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE)
+  }, [topicFilter])
 
   function handleLike(id: string) {
     if (liked.has(id)) return
     const newLiked = new Set(liked)
     newLiked.add(id)
     setLiked(newLiked)
-    setMessages((prev) =>
+    setAllMessages((prev) =>
       prev.map((m) => (m.id === id ? { ...m, likes: m.likes + 1 } : m))
     )
+  }
+
+  function scrollToBottom() {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -270,8 +327,23 @@ export default function Teahouse() {
         ))}
       </div>
 
-      {/* 消息时间线 */}
-      <div className={styles.timeline}>
+      {/* 消息时间线 - 可滚动容器 */}
+      <div
+        ref={timelineRef}
+        className={styles.timelineContainer}
+        onScroll={handleScroll}
+      >
+        {/* 加载更多提示 */}
+        {hasMore && (
+          <div className={styles.loadMoreTrigger}>
+            {loadingMore ? (
+              <span className={styles.loadingMore}>⏳ 加载中...</span>
+            ) : (
+              <span className={styles.loadMoreHint}>⬆️ 往上滚动查看更早消息</span>
+            )}
+          </div>
+        )}
+
         {loading ? (
           <div className={styles.loading}>
             <span className={styles.loadingDot} />
@@ -279,53 +351,63 @@ export default function Teahouse() {
             <span className={styles.loadingDot} style={{ animationDelay: '0.4s' }} />
             <span>茶话会加载中...</span>
           </div>
-        ) : filteredMessages.length === 0 ? (
+        ) : visibleMessages.length === 0 ? (
           <div className={styles.empty}>
             {topicFilter === 'all' ? '三把锤子还没开始聊天，稍等一下 🔨' : '这个话题下暂无消息 🔨'}
           </div>
         ) : (
-          filteredMessages.map((msg, idx) => {
-            const hammer = HAMMERS[msg.author as HammerKey] || HAMMERS['访客']
-            const prevMsg = idx > 0 ? filteredMessages[idx - 1] : null
-            const hourDiff = prevMsg
-              ? Math.abs(new Date(msg.time).getTime() - new Date(prevMsg.time).getTime()) / 3600_000
-              : 99
-            const showTimeDivider = hourDiff > 3
+          <div className={styles.timeline}>
+            {visibleMessages.map((msg, idx) => {
+              const hammer = HAMMERS[msg.author as HammerKey] || HAMMERS['访客']
+              const prevMsg = idx > 0 ? visibleMessages[idx - 1] : null
+              const hourDiff = prevMsg
+                ? Math.abs(new Date(msg.time).getTime() - new Date(prevMsg.time).getTime()) / 3600_000
+                : 99
+              const showTimeDivider = hourDiff > 3
 
-            return (
-              <div key={msg.id}>
-                {showTimeDivider && (
-                  <div className={styles.timeDivider}>
-                    <span>{formatMsgTime(msg.time)}</span>
-                  </div>
-                )}
-                <div
-                  className={styles.msgCard}
-                  style={{
-                    background: hammer.bg,
-                    borderColor: hammer.border,
-                  }}
-                >
-                  <div className={styles.msgHeader}>
-                    <span className={styles.msgAuthor} style={{ color: hammer.color }}>
-                      {hammer.emoji} {hammer.label}
-                    </span>
-                    <span className={styles.msgTime}>{formatMsgTime(msg.time)}</span>
-                  </div>
-                  <p className={styles.msgContent}>{msg.content}</p>
-                  <button
-                    className={`${styles.likeBtn} ${liked.has(msg.id) ? styles.liked : ''}`}
-                    onClick={() => handleLike(msg.id)}
-                    aria-label="点赞"
+              return (
+                <div key={msg.id}>
+                  {showTimeDivider && (
+                    <div className={styles.timeDivider}>
+                      <span>{formatMsgTime(msg.time)}</span>
+                    </div>
+                  )}
+                  <div
+                    className={styles.msgCard}
+                    style={{
+                      background: hammer.bg,
+                      borderColor: hammer.border,
+                    }}
                   >
-                    {liked.has(msg.id) ? '❤️' : '🤍'} {msg.likes}
-                  </button>
+                    <div className={styles.msgHeader}>
+                      <span className={styles.msgAuthor} style={{ color: hammer.color }}>
+                        {hammer.emoji} {hammer.label}
+                      </span>
+                      <span className={styles.msgTime}>{formatMsgTime(msg.time)}</span>
+                    </div>
+                    <p className={styles.msgContent}>{msg.content}</p>
+                    <button
+                      className={`${styles.likeBtn} ${liked.has(msg.id) ? styles.liked : ''}`}
+                      onClick={() => handleLike(msg.id)}
+                      aria-label="点赞"
+                    >
+                      {liked.has(msg.id) ? '❤️' : '🤍'} {msg.likes}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )
-          })
+              )
+            })}
+          </div>
         )}
+
+        {/* 底部锚点 */}
+        <div ref={messagesEndRef} />
       </div>
+
+      {/* 滚动到底部按钮 */}
+      <button className={styles.scrollToBottomBtn} onClick={scrollToBottom} title="滚动到最新">
+        ⬇️ 最新
+      </button>
 
       {/* 底部说明 */}
       <div className={styles.footer}>
