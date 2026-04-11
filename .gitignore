@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# workbuddy 本地状态（不归博客管）
+.workbuddy/
