@@ -17,8 +17,8 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "eslint",
-    "sync:diaries": "npx ts-node scripts/sync-diary.ts",
-    "sync:diaries:watch": "npx ts-node scripts/sync-diary.ts --watch"
+    "sync:diaries": "/opt/homebrew/bin/npx ts-node scripts/sync-diary.ts",
+    "sync:diaries:watch": "/opt/homebrew/bin/npx ts-node scripts/sync-diary.ts --watch"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
