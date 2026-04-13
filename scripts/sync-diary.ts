@@ -18,6 +18,44 @@ const __dirname = path.dirname(__filename)
 const MEMORY_DIR = path.join(__dirname, '../../.workbuddy/memory')
 const BLOG_CONTENT_DIR = path.join(__dirname, '../src/content/diary')
 
+// ============================================================
+// 敏感信息过滤器 - 同步到公开博客前必过这层
+// ============================================================
+const SENSITIVE_PATTERNS: Array<{ pattern: RegExp; replacement: string }> = [
+  // API Key / Token（sk-, Bearer token，长串key等）
+  { pattern: /sk-[A-Za-z0-9]{20,}/g, replacement: '[API_KEY]' },
+  { pattern: /Bearer\s+[A-Za-z0-9_\-]{20,}/g, replacement: 'Bearer [TOKEN]' },
+  { pattern: /token[=:\s]+[A-Za-z0-9_\-]{20,}/gi, replacement: 'token=[TOKEN]' },
+  // AppID / AppSecret（数字型长串）
+  { pattern: /AppID[=:\s]+[\d]{10,}/gi, replacement: 'AppID=[APP_ID]' },
+  { pattern: /AppSecret[=:\s]+[A-Za-z0-9_\-]{20,}/gi, replacement: 'AppSecret=[APP_SECRET]' },
+  // 微博 uid
+  { pattern: /uid[=:\s]*[\d]{8,}/gi, replacement: 'uid=[UID]' },
+  // tag_id（微博超话版块ID）
+  { pattern: /tag_id[=:\s]*[\d]{16,}/gi, replacement: 'tag_id=[TAG_ID]' },
+  // mid（微博帖子ID）
+  { pattern: /mid[=:\s]*[\d]{14,}/gi, replacement: 'mid=[POST_ID]' },
+  // open_id（飞书）
+  { pattern: /ou_[a-z0-9]{20,}/gi, replacement: 'ou_[OPEN_ID]' },
+  // 完整 URL 暴露 token 的（ws://...?token= 或 api.?token=）
+  { pattern: /[?&]token=[A-Za-z0-9_\-]{10,}/gi, replacement: '?token=[TOKEN]' },
+  { pattern: /[?&]app_id=[0-9]{10,}/gi, replacement: '?app_id=[APP_ID]' },
+  // 本地 token 缓存路径
+  { pattern: /token-cache\.json/g, replacement: 'token-cache.json（凭证已脱敏）' },
+  // config\.json 里明文 key
+  { pattern: /"key"\s*:\s*"[A-Za-z0-9_\-]{20,}"/g, replacement: '"key": "[REDACTED]"' },
+  // Cookie / session
+  { pattern: /[Cc]ookie[=:\s]+[^\s,;]{20,}/g, replacement: 'cookie=[COOKIE]' },
+]
+
+function sanitizeForBlog(content: string): string {
+  let result = content
+  for (const { pattern, replacement } of SENSITIVE_PATTERNS) {
+    result = result.replace(pattern, replacement)
+  }
+  return result
+}
+
 // 解析记忆文件，提取日记内容
 function parseMemoryFile(filePath: string): {
   date: string
@@ -41,7 +79,7 @@ function parseMemoryFile(filePath: string): {
     const sections = sectionMatches.map(m => m.replace(/^##\s+/, '').trim())
 
     // 标题：第一个二级标题或文件名
-    const title = sections[0] || `日记 ${filename}`
+    const title = sanitizeForBlog(sections[0] || `日记 ${filename}`)
 
     // 标签：从二级标题中提取前 3 个
     const tags = sections.slice(0, 3).filter(s =>
@@ -61,7 +99,7 @@ function parseMemoryFile(filePath: string): {
       .replace(/\*\*(.+?)\*\*/g, '$1') // 移除粗体
       .trim()
 
-    const excerpt = bodyContent.slice(0, 150) + (bodyContent.length > 150 ? '...' : '')
+    const excerpt = sanitizeForBlog(bodyContent).slice(0, 150) + (bodyContent.length > 150 ? '...' : '')
 
     // 生成完整内容（移除文件头的 # 标题行，保留 ## 二级标题和正文）
     const lines = content.split('\n')
@@ -70,12 +108,15 @@ function parseMemoryFile(filePath: string): {
       .join('\n')
       .trim()
 
+    // 同步到公开博客前，必须过敏感信息过滤
+    const sanitizedContent = sanitizeForBlog(fullContent)
+
     return {
       date: filename,
       title,
       excerpt,
       tags,
-      content: fullContent
+      content: sanitizedContent
     }
   } catch (error) {
     console.error(`解析文件失败: ${filePath}`, error)
