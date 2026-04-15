@@ -13,6 +13,67 @@ export interface Note {
 
 export const allNotes: Note[] = [
   {
+    id: 'sanchui-memory-system',
+    category: '记忆系统',
+    categoryColor: '#4A90D9',
+    icon: '🔨',
+    title: '三锤记忆系统架构',
+    description: '基于EverMemOS SOTA方案优化的云端AI记忆系统，支持MemCell结构化存储、Foresight预测追踪、RRF混合检索，以及SQLite/FTS5全文索引。',
+    detail: `## 系统概述
+
+三锤记忆系统是云端AI的长期记忆解决方案，借鉴EverMemOS的SOTA设计，经过四个阶段迭代优化，形成了完整的记忆生命周期管理能力。
+
+## 三层架构
+
+### 输入层
+- **用户对话**：主对话、群聊等多渠道交互
+- **日程任务**：每日整理、监控等定时触发
+- **Sub-Agent**：异步任务执行结果
+- **外部数据**：GitHub、微博、邮件等数据源
+
+### 处理层
+- **记录机制**：MemCell格式化、标签系统、Foresight预测
+- **检索机制**：FTS5关键词检索、向量语义检索、RRF混合排序
+- **验证机制**：事实追踪、预测验证、冲突检测
+
+### 存储层
+- **Markdown文件**：四层架构（SOUL/USER/MEMORY/SECRET）
+- **SQLite数据库**：memory.db + FTS5全文索引
+- **向量存储**：1024维嵌入（阿里云百炼API）
+- **GitHub私有仓库**：sanchui-memory异地备份
+
+## 核心机制
+
+### MemCell结构
+每个记忆单元包含：叙事内容、原子事实、预测（可选）、元数据。结构化存储便于检索和验证。
+
+### Foresight预测
+为重要决策添加带有效期的预测，定期验证并更新置信度，形成"预测-验证-修正"的闭环。
+
+### RRF混合检索
+结合FTS5关键词检索和向量语义检索，通过RRF算法融合排序，兼顾精确匹配和语义理解。
+
+## 配套自动化
+
+- **每日整理**：每天8:00自动抽取MemCell、验证预测、归档过期内容
+- **自动归档**：MEMORY.md超过40KB触发归档
+- **GitHub同步**：变更自动推送到私有仓库
+
+## 技术实现
+
+- **SQLite/FTS5**：高性能全文索引，支持关键词精确匹配
+- **向量检索**：阿里云百炼text-embedding-v4，1024维嵌入
+- **Python脚本**：extract_memcell.py、search_memory.py、rrf_search.py
+
+## GitHub仓库
+
+私有仓库：https://github.com/kdnsna/sanchui-memory
+包含完整的记忆规范、脚本工具和历史记录。`,
+    tags: ['记忆系统', 'AI', 'EverMemOS', 'SQLite'],
+    date: '2026-04-15',
+    featured: true
+  },
+  {
     id: 'morning-briefing-system',
     category: '自动化',
     categoryColor: '#4CAF50',
