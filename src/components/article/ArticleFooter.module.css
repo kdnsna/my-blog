@@ -3,6 +3,16 @@
   padding-top: 2rem;
 }
 
+/* 分享区域 */
+.shareSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
 /* 结束标记 */
 .endMark {
   display: flex;
