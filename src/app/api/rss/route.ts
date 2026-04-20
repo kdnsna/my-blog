@@ -27,6 +27,7 @@ export async function GET() {
   ].sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
 
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/styles/rss.xslt"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>${SITE_TITLE}</title>
