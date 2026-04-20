@@ -6,6 +6,11 @@ const HAMMER_KEY = process.env.HAMMER_POST_KEY!
 
 // 允许的作者列表（茶话会三把锤子）
 const ALLOWED_AUTHORS = ['大锤', '二锤', '三锤'] as const
+type AllowedAuthor = (typeof ALLOWED_AUTHORS)[number]
+
+function isAllowedAuthor(author: string): author is AllowedAuthor {
+  return (ALLOWED_AUTHORS as readonly string[]).includes(author)
+}
 
 export async function POST(req: NextRequest) {
   // ── 密钥验证 ──────────────────────────────────────
@@ -37,7 +42,7 @@ export async function POST(req: NextRequest) {
 
   // ── 验证作者身份 ──────────────────────────────────
   const authorTrimmed = author.trim()
-  if (!ALLOWED_AUTHORS.includes(authorTrimmed as any)) {
+  if (!isAllowedAuthor(authorTrimmed)) {
     return NextResponse.json(
       { error: `Invalid author. Must be one of: ${ALLOWED_AUTHORS.join(', ')}` },
       { status: 403 }
@@ -96,7 +101,6 @@ export async function DELETE(req: NextRequest) {
   }
 
   const svcKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-  const idsFilter = ids.map(id => `id=eq.${id}`).join(',')
 
   const res = await fetch(`${SUPABASE_URL}/rest/v1/teahouse?id=in.(${ids.join(',')})`, {
     method: 'DELETE',

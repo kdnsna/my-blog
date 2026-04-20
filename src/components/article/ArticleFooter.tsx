@@ -42,8 +42,6 @@ export default function ArticleFooter({
   series,
   nextArticle
 }: ArticleFooterProps) {
-  const config = TYPE_CONFIG[type]
-
   return (
     <footer className={styles.footer}>
       {/* 结束标记 */}

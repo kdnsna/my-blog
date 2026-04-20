@@ -110,8 +110,6 @@ export function getProjectAchievements(): ProjectAchievement[] {
  * 具体问题的解决过程
  */
 export function getCaseAchievements(): CaseAchievement[] {
-  const diaries = getAllDiaries()
-  
   const cases: CaseAchievement[] = [
     {
       id: 'moonshot-flow-fix',
@@ -154,8 +152,6 @@ export function getCaseAchievements(): CaseAchievement[] {
  * 从项目进展中提取
  */
 export function getChangelog(): ChangelogEntry[] {
-  const diaries = getAllDiaries()
-  
   // 从最近日记中提取更新内容
   const recentUpdates: ChangelogEntry[] = [
     {
