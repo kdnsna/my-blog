@@ -61,6 +61,12 @@
   margin-bottom: var(--space-md);
 }
 
+.lastUpdated {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
 .visitorCounterWrapper {
   margin-top: var(--space-md);
 }

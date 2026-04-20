@@ -12,7 +12,6 @@ export default function PortalSection({ portals }: PortalSectionProps) {
     <section className={styles.section}>
       <div className={styles.container}>
         <SectionHeader
-          icon="🚀"
           title="从这里开始"
           subtitle="选择你感兴趣的方向"
         />

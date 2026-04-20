@@ -16,7 +16,7 @@ export default function NotesSection() {
           <span className={styles.sectionIcon}>📚</span>
           <h2 className={styles.sectionTitle}>知识库精选</h2>
         </div>
-        <Link href="/notes" className={styles.viewAllLink}>
+        <Link href="/method" className={styles.viewAllLink}>
           查看全部
           <span>→</span>
         </Link>

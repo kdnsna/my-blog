@@ -41,6 +41,19 @@ export default function NavBar() {
         </nav>
 
         <div className={styles.navRight}>
+          {/* 快捷入口 */}
+          <div className={styles.quickLinks}>
+            <a href="/teahouse" className={styles.quickLink} title="茶话会" aria-label="茶话会">
+              <span aria-hidden="true">🍵</span>
+            </a>
+            <a href="/guestbook" className={styles.quickLink} title="留言板" aria-label="留言板">
+              <span aria-hidden="true">💬</span>
+            </a>
+            <a href="/rss.xml" className={styles.quickLink} title="RSS 订阅" aria-label="RSS 订阅">
+              <span aria-hidden="true">📡</span>
+            </a>
+          </div>
+          
           <div className={styles.statusIndicator} title="小锤子在线" role="img" aria-label="在线状态">
             <span className={styles.statusDot} aria-hidden="true"></span>
             <span className={styles.statusText}>在线</span>
