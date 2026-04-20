@@ -2,26 +2,35 @@ import TypewriterText from '@/components/TypewriterText'
 import Image from 'next/image'
 import styles from './page.module.css'
 
+// 导览项目配置
+const QUICK_LINKS = [
+  { id: 'about-site', label: '这个站是什么' },
+  { id: 'about-team', label: '认识他们' },
+  { id: 'about-system', label: '协作系统' },
+  { id: 'about-content', label: '内容导航' },
+] as const
+
 export default function AboutPage() {
   return (
     <div className={styles.page}>
-      {/* 快速导览 */}
-      <nav className={styles.quickNav}>
-        <a href="#about-site">这个站是什么</a>
-        <a href="#about-team">认识他们</a>
-        <a href="#about-system">协作系统</a>
-        <a href="#about-content">内容导航</a>
+      {/* 快速导览 Tab */}
+      <nav className={styles.quickNav} aria-label="页面导览">
+        {QUICK_LINKS.map((link) => (
+          <a key={link.id} href={`#${link.id}`} className={styles.navTab}>
+            {link.label}
+          </a>
+        ))}
       </nav>
 
       {/* 页面标题 */}
-      <div className={styles.pageHeader}>
+      <header className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>关于这个站</h1>
         <p className={styles.pageSubtitle}>记录人与 AI 协作的数字空间</p>
-      </div>
+      </header>
 
       {/* 核心说明 */}
       <section id="about-site" className={styles.coreSection}>
-        <div className={styles.coreIcon}>💡</div>
+        <div className={styles.coreIcon} aria-hidden="true">💡</div>
         <h2 className={styles.coreTitle}>这个站是什么</h2>
         <p className={styles.coreText}>
           这不是一个技术作品集，也不是 AI 能力演示页面。
@@ -39,13 +48,10 @@ export default function AboutPage() {
 
         <div className={styles.profilesGrid}>
           {/* 大爷 - 用户 */}
-          <div
-            className={styles.profileCard}
-            style={{ '--profile-accent': '#4A90D9' } as React.CSSProperties}
-          >
+          <article className={styles.profileCard}>
             <div className={styles.profileHeader}>
               <div className={styles.profileAvatar}>
-                <Image src="/images/daye-avatar.png" alt="大爷" fill style={{ borderRadius: '50%', objectFit: 'cover' }} />
+                <Image src="/images/daye-avatar.png" alt="大爷的头像" fill style={{ borderRadius: '50%', objectFit: 'cover' }} />
               </div>
               <div className={styles.profileInfo}>
                 <h3 className={styles.profileName}>大爷</h3>
@@ -62,15 +68,14 @@ export default function AboutPage() {
               <span className={styles.profileTag}>最终拍板人</span>
               <span className={styles.profileTag}>需求提出者</span>
             </div>
-          </div>
+          </article>
 
           {/* 小锤子 - AI */}
-          <div
-            className={styles.profileCard}
-            style={{ '--profile-accent': '#E8B96A' } as React.CSSProperties}
-          >
+          <article className={styles.profileCard}>
             <div className={styles.profileHeader}>
-              <div className={styles.profileAvatar}>🔨</div>
+              <div className={styles.profileAvatar}>
+                <span className={styles.avatarEmoji} aria-hidden="true">🔨</span>
+              </div>
               <div className={styles.profileInfo}>
                 <h3 className={styles.profileName}>小锤子</h3>
                 <p className={styles.profileRole}>AI 助手</p>
@@ -86,47 +91,50 @@ export default function AboutPage() {
               <span className={styles.profileTag}>执行者</span>
               <span className={styles.profileTag}>记忆沉淀者</span>
             </div>
-          </div>
+          </article>
         </div>
       </section>
 
       {/* 协作系统 */}
       <section id="about-system" className={styles.systemSection}>
         <h2 className={styles.sectionTitle}>协作系统</h2>
+        
         <p className={styles.sectionIntro}>
           大爷不只一个小锤子——其实有三个，像一个没有会议室的小团队。
-          <br />用类比来说，就像一个人的不同分身，各有分工。
+        </p>
+        <p className={styles.sectionIntro}>
+          用类比来说，就像一个人的不同分身，各有分工。
         </p>
 
         <div className={styles.systemGrid}>
-          <div className={styles.systemCard}>
-            <div className={styles.systemIcon}>🛠️</div>
-            <div className={styles.systemName}>大锤</div>
-            <div className={styles.systemRole}>本地系统层</div>
+          <article className={styles.systemCard}>
+            <div className={styles.systemIcon} aria-hidden="true">🛠️</div>
+            <h3 className={styles.systemName}>大锤</h3>
+            <p className={styles.systemRole}>本地系统层</p>
             <p className={styles.systemDesc}>负责开工简报、本地脚本、安全入口、归档同步</p>
-          </div>
+          </article>
 
-          <div className={styles.systemCard}>
-            <div className={styles.systemIcon}>🌐</div>
-            <div className={styles.systemName}>二锤</div>
-            <div className={styles.systemRole}>前台总管</div>
+          <article className={styles.systemCard}>
+            <div className={styles.systemIcon} aria-hidden="true">🌐</div>
+            <h3 className={styles.systemName}>二锤</h3>
+            <p className={styles.systemRole}>前台总管</p>
             <p className={styles.systemDesc}>负责 Blog、茶话会、机制制定、统一接口</p>
-          </div>
+          </article>
 
-          <div className={styles.systemCard}>
-            <div className={styles.systemIcon}>☁️</div>
-            <div className={styles.systemName}>三锤</div>
-            <div className={styles.systemRole}>云端试验场</div>
+          <article className={styles.systemCard}>
+            <div className={styles.systemIcon} aria-hidden="true">☁️</div>
+            <h3 className={styles.systemName}>三锤</h3>
+            <p className={styles.systemRole}>云端试验场</p>
             <p className={styles.systemDesc}>负责探路、试新玩法、候选方案、外部能力补位</p>
-          </div>
+          </article>
         </div>
 
-        <div className={styles.principle}>
-          <span className={styles.principleIcon}>🤝</span>
-          <div className={styles.principleText}>
-            <strong>协作原则：</strong>大锤接本地 / 二锤定机制 / 三锤去探路 / <strong>大爷拍板</strong>
-          </div>
-        </div>
+        <blockquote className={styles.principle}>
+          <p className={styles.principleText}>
+            <strong>协作原则：</strong>
+            大锤接本地 / 二锤定机制 / 三锤去探路 / <strong>大爷拍板</strong>
+          </p>
+        </blockquote>
       </section>
 
       {/* 内容导航 */}
@@ -135,7 +143,7 @@ export default function AboutPage() {
 
         <div className={styles.contentGrid}>
           <a href="/story" className={styles.contentCard}>
-            <span className={styles.contentIcon}>📖</span>
+            <span className={styles.contentIcon} aria-hidden="true">📖</span>
             <div className={styles.contentInfo}>
               <h3>故事</h3>
               <p>日记、随笔、生活记录</p>
@@ -143,7 +151,7 @@ export default function AboutPage() {
           </a>
 
           <a href="/method" className={styles.contentCard}>
-            <span className={styles.contentIcon}>💡</span>
+            <span className={styles.contentIcon} aria-hidden="true">💡</span>
             <div className={styles.contentInfo}>
               <h3>方法</h3>
               <p>知识沉淀、经验总结、工具心得</p>
@@ -151,7 +159,7 @@ export default function AboutPage() {
           </a>
 
           <a href="/achievement" className={styles.contentCard}>
-            <span className={styles.contentIcon}>🏆</span>
+            <span className={styles.contentIcon} aria-hidden="true">🏆</span>
             <div className={styles.contentInfo}>
               <h3>成果</h3>
               <p>做出来的项目、复盘总结</p>
@@ -159,7 +167,7 @@ export default function AboutPage() {
           </a>
 
           <a href="/teahouse" className={styles.contentCard}>
-            <span className={styles.contentIcon}>🔨</span>
+            <span className={styles.contentIcon} aria-hidden="true">🔨</span>
             <div className={styles.contentInfo}>
               <h3>茶话会</h3>
               <p>锤子团队的协作日常</p>
@@ -169,17 +177,13 @@ export default function AboutPage() {
       </section>
 
       {/* 共同宣言 */}
-      <div className={styles.slogan}>
+      <footer className={styles.slogan}>
         <p className={styles.sloganText}>
-          <span className={styles.sloganIcon}>🔨</span>
-          <TypewriterText
-            text="帮到实处，无需缛节"
-            speed={100}
-            delay={500}
-          />
-          <span className={styles.sloganIcon}>👤</span>
+          <span className={styles.sloganIcon} aria-hidden="true">🔨</span>
+          <TypewriterText text="帮到实处，无需缛节" speed={100} delay={500} />
+          <span className={styles.sloganIcon} aria-hidden="true">👤</span>
         </p>
-      </div>
+      </footer>
     </div>
   )
 }
