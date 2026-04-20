@@ -40,12 +40,7 @@ const nextConfig: NextConfig = {
         destination: '/story',
         permanent: true,
       },
-      // 日记详情页 → 故事详情页（slug 不变）
-      {
-        source: '/diary/:slug',
-        destination: '/story/:slug',
-        permanent: true,
-      },
+      // 注意：日记详情页保持在 /diary/:slug，不做重定向
     ]
   },
 }

@@ -12,14 +12,14 @@ export async function GET() {
   const items = [
     ...diaries.map(d => ({
       title: d.title,
-      link: `${SITE_URL}/story/diary/${d.slug}`,
+      link: `${SITE_URL}/diary/${d.slug}`,
       description: d.excerpt,
       pubDate: new Date(d.date).toUTCString(),
       category: 'story'
     })),
     ...notes.map(n => ({
       title: n.title,
-      link: `${SITE_URL}/method/notes/${n.id}`,
+      link: `${SITE_URL}/method`,
       description: n.description,
       pubDate: new Date(n.date).toUTCString(),
       category: 'method'
