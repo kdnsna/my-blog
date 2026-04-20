@@ -1,4 +1,4 @@
-import { ActionButton } from '@/components/shared'
+import Link from 'next/link'
 import styles from './HomeHero.module.css'
 
 export default function HomeHero() {
@@ -16,17 +16,20 @@ export default function HomeHero() {
           一个人类和他可靠的 AI 助手，一起生活、一起做事的地方
         </p>
 
-        <div className={styles.actions}>
-          <ActionButton href="/story" variant="primary" size="lg" icon="📖">
-            看故事
-          </ActionButton>
-          <ActionButton href="/method" variant="secondary" size="lg" icon="🧭">
-            看方法
-          </ActionButton>
-          <ActionButton href="/achievement" variant="secondary" size="lg" icon="🏆">
-            看成果
-          </ActionButton>
-        </div>
+        <nav className={styles.actions}>
+          <Link href="/story" className={styles.navLink}>
+            <span className={styles.navIcon}>📖</span>
+            <span className={styles.navLabel}>看故事</span>
+          </Link>
+          <Link href="/method" className={styles.navLink}>
+            <span className={styles.navIcon}>🧭</span>
+            <span className={styles.navLabel}>看方法</span>
+          </Link>
+          <Link href="/achievement" className={styles.navLink}>
+            <span className={styles.navIcon}>🏆</span>
+            <span className={styles.navLabel}>看成果</span>
+          </Link>
+        </nav>
       </div>
     </section>
   )
