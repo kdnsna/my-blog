@@ -1,13 +1,61 @@
 /**
  * 方法页数据层
  * 从笔记数据中提取方法页需要的内容
+ * 
+ * 分类体系（收束后5个主类）：
+ * - 记忆系统：AI 的核心资产
+ * - 自动化：让系统自动运转的机制
+ * - 工作台：本地能力与项目管理
+ * - 成长：学习追踪与自我复盘
+ * - 安全：系统健康与规范守护
  */
 
 import { allNotes } from './notes'
 import type { NoteCategory, MethodNoteItem } from './types'
 
 /**
- * 获取笔记分类统计
+ * 主类配置（5个分类）
+ */
+const CATEGORY_CONFIG: Record<string, { 
+  icon: string
+  color: string
+  description: string
+  subtitle: string
+}> = {
+  '记忆系统': {
+    icon: '🧠',
+    color: '#4A90D9',
+    subtitle: 'AI 的核心资产',
+    description: 'MemCell 结构化存储、Foresight 预测、GitHub 记忆库'
+  },
+  '自动化': {
+    icon: '⚡',
+    color: '#4CAF50',
+    subtitle: '让系统自动运转',
+    description: 'AI 情报晨报、备份链路、定时任务'
+  },
+  '工作台': {
+    icon: '🍎',
+    color: '#E85C5C',
+    subtitle: '本地能力集成',
+    description: '苹果生态、监控面板、项目管理'
+  },
+  '成长': {
+    icon: '📈',
+    color: '#E8B96A',
+    subtitle: '学习与自我复盘',
+    description: '晨报追踪器、日记升级、实验卡片'
+  },
+  '安全': {
+    icon: '🔒',
+    color: '#9C27B0',
+    subtitle: '系统健康守护',
+    description: '夜间安全巡检、插件基线、权限审计'
+  }
+}
+
+/**
+ * 获取笔记分类统计（按新的5个主类）
  */
 export function getNoteCategories(): NoteCategory[] {
   const categoryMap = new Map<string, { count: number; description: string }>()
@@ -19,61 +67,33 @@ export function getNoteCategories(): NoteCategory[] {
     } else {
       categoryMap.set(note.category, {
         count: 1,
-        description: note.description.slice(0, 50) + '...'
+        description: note.description.slice(0, 60) + '...'
       })
     }
   })
   
-  // 分类配置
-  const categoryConfig: Record<string, { icon: string; color: string; description: string }> = {
-    '记忆系统': {
-      icon: '🔨',
-      color: '#4A90D9',
-      description: 'AI 记忆方案、MemCell、Foresight 预测等'
-    },
-    '自动化': {
-      icon: '⚡',
-      color: '#4CAF50',
-      description: '工作流与调度、晨晚间任务'
-    },
-    '苹果生态': {
-      icon: '🍎',
-      color: '#E85C5C',
-      description: '本地能力集成、快捷指令'
-    },
-    '学习': {
-      icon: '📚',
-      color: '#E8B96A',
-      description: '知识积累方法、晨报追踪'
-    },
-    '安全': {
-      icon: '🔒',
-      color: '#9C27B0',
-      description: '系统安全巡检、审计机制'
-    },
-    '日记': {
-      icon: '📔',
-      color: '#795548',
-      description: '记录方法论、复盘机制'
-    },
-    '项目': {
-      icon: '📋',
-      color: '#607D8B',
-      description: '项目管理系统、任务追踪'
-    }
-  }
-  
-  return Array.from(categoryMap.entries()).map(([name, data]) => {
-    const config = categoryConfig[name] || { icon: '📁', color: '#9E9E9E', description: data.description }
-    return {
-      id: name.toLowerCase().replace(/\s+/g, '-'),
-      name,
-      icon: config.icon,
-      color: config.color,
-      count: data.count,
-      description: config.description
-    }
-  }).sort((a, b) => b.count - a.count)
+  return Array.from(categoryMap.entries())
+    .map(([name, data]) => {
+      const config = CATEGORY_CONFIG[name] || { 
+        icon: '📁', 
+        color: '#9E9E9E', 
+        description: data.description,
+        subtitle: ''
+      }
+      return {
+        id: name.toLowerCase().replace(/\s+/g, '-'),
+        name,
+        icon: config.icon,
+        color: config.color,
+        count: data.count,
+        description: config.description,
+        subtitle: config.subtitle
+      }
+    })
+    .sort((a, b) => {
+      // 按内容量排序，多的在前
+      return b.count - a.count
+    })
 }
 
 /**
@@ -104,7 +124,11 @@ export function getFeaturedMethods(): MethodNoteItem[] {
 /**
  * 获取方法页统计数据
  */
-export function getMethodStats(): { totalNotes: number; totalCategories: number; latestDate: string } {
+export function getMethodStats(): { 
+  totalNotes: number
+  totalCategories: number
+  latestDate: string
+} {
   return {
     totalNotes: allNotes.length,
     totalCategories: getNoteCategories().length,

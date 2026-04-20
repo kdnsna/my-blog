@@ -27,33 +27,62 @@ export default function MethodContent({
 
   return (
     <div className={styles.container}>
-      {/* 分类导航 */}
+      {/* 分类导航 - 紧凑标签式 */}
       <section className={styles.section}>
         <SectionHeader
           icon="📂"
           title="分类导航"
           subtitle="按主题找到你需要的内容"
         />
-        <div className={styles.categoryGrid}>
+        
+        {/* 标签式筛选器 */}
+        <div className={styles.filterTabs}>
+          <button
+            className={`${styles.filterTab} ${selectedCategory === null ? styles.filterTabActive : ''}`}
+            onClick={() => setSelectedCategory(null)}
+          >
+            全部
+            <span className={styles.filterCount}>{stats.totalNotes}</span>
+          </button>
           {categories.map(cat => (
             <button
               key={cat.id}
-              className={`${styles.categoryCard} ${selectedCategory === cat.name ? styles.categoryActive : ''}`}
+              className={`${styles.filterTab} ${selectedCategory === cat.name ? styles.filterTabActive : ''}`}
               onClick={() => setSelectedCategory(selectedCategory === cat.name ? null : cat.name)}
-              style={{ '--cat-color': cat.color } as React.CSSProperties}
+              style={{ '--tab-color': cat.color } as React.CSSProperties}
             >
-              <div className={styles.categoryIcon}>{cat.icon}</div>
-              <div className={styles.categoryContent}>
-                <h3 className={styles.categoryName}>{cat.name}</h3>
-                <p className={styles.categoryDesc}>{cat.description}</p>
-              </div>
-              <span className={styles.categoryCount}>{cat.count}</span>
+              {cat.icon} {cat.name}
+              <span className={styles.filterCount}>{cat.count}</span>
             </button>
           ))}
         </div>
+
+        {/* 选中分类说明 */}
+        {selectedCategory && (
+          <div className={styles.categoryIntro}>
+            {(() => {
+              const cat = categories.find(c => c.name === selectedCategory)
+              return cat ? (
+                <>
+                  <span className={styles.categoryIntroIcon}>{cat.icon}</span>
+                  <div className={styles.categoryIntroText}>
+                    <h3 className={styles.categoryIntroTitle}>{selectedCategory}</h3>
+                    <p className={styles.categoryIntroDesc}>{cat.description}</p>
+                  </div>
+                  <button 
+                    className={styles.categoryIntroBack}
+                    onClick={() => setSelectedCategory(null)}
+                  >
+                    ← 返回全部
+                  </button>
+                </>
+              ) : null
+            })()}
+          </div>
+        )}
       </section>
 
-      {/* 精选方法 */}
+      {/* 精选方法 - 仅全部时显示 */}
       {featuredNotes.length > 0 && !selectedCategory && (
         <section className={styles.section}>
           <SectionHeader
@@ -98,18 +127,11 @@ export default function MethodContent({
         <SectionHeader
           icon="📝"
           title={selectedCategory ? `${selectedCategory}笔记` : '全部笔记'}
-          subtitle={selectedCategory ? '' : `${stats.totalNotes} 篇笔记，${stats.totalCategories} 个分类`}
-          action={selectedCategory ? { label: '查看全部', href: '/method' } : undefined}
+          subtitle={selectedCategory 
+            ? `${filteredNotes.length} 篇` 
+            : `${stats.totalNotes} 篇笔记，${stats.totalCategories} 个分类`
+          }
         />
-        
-        {selectedCategory && (
-          <button 
-            className={styles.backBtn}
-            onClick={() => setSelectedCategory(null)}
-          >
-            ← 返回分类
-          </button>
-        )}
 
         <div className={styles.notesList}>
           {filteredNotes.map(note => (

@@ -1,252 +1,305 @@
+/* Guestbook.module.css */
+
+/* ── 容器 ──────────────────────────────────── */
 .container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+  min-height: 100vh;
+}
+
+/* ── 欢迎卡片 ───────────────────────────────── */
+.hero {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-xl);
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
 }
 
-/* ── 引导卡片 ────────────────────────────────── */
-.guide {
-  text-align: center;
-  padding: var(--space-lg);
-  background: var(--color-bg-elevated);
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-lg);
-}
-
-.guideIcon {
+.heroIcon {
   font-size: 2rem;
-  display: block;
-  margin-bottom: var(--space-sm);
+  flex-shrink: 0;
+  line-height: 1;
 }
 
-.guideText {
-  font-size: var(--text-sm);
-  color: var(--color-text-tertiary);
-  font-style: italic;
+.heroContent {
+  flex: 1;
+}
+
+.heroTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e8e4dd;
+  margin: 0 0 0.375rem;
+}
+
+.heroDesc {
+  font-size: 0.875rem;
+  color: rgba(232, 228, 221, 0.65);
   margin: 0;
+  line-height: 1.6;
 }
 
-/* ── 表单 ────────────────────────────────────── */
+/* ── 表单 ──────────────────────────────────── */
 .form {
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-lg);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-  transition: border-color 0.2s ease;
-}
-
-.form:focus-within {
-  border-color: rgba(200, 148, 58, 0.5);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
 }
 
 .formRow {
-  width: 100%;
+  margin-bottom: 0.875rem;
 }
 
 .input,
 .textarea {
   width: 100%;
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-sm) var(--space-md);
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  color: var(--color-text-primary);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  color: #e8e4dd;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
 }
 
 .input::placeholder,
 .textarea::placeholder {
-  color: var(--color-text-tertiary);
+  color: rgba(232, 228, 221, 0.4);
 }
 
 .input:focus,
 .textarea:focus {
-  border-color: rgba(200, 148, 58, 0.6);
-  box-shadow: 0 0 0 3px rgba(200, 148, 58, 0.1);
+  border-color: rgba(107, 179, 232, 0.6);
+  box-shadow: 0 0 0 3px rgba(107, 179, 232, 0.1);
 }
 
 .textarea {
   resize: vertical;
   min-height: 80px;
-  line-height: 1.6;
+  font-family: inherit;
+  line-height: 1.5;
 }
 
 .formFooter {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 
 .charCount {
-  font-size: var(--text-xs);
-  color: var(--color-text-tertiary);
-  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: rgba(232, 228, 221, 0.45);
 }
 
 .submitBtn {
-  padding: 8px 20px;
-  background: rgba(200, 148, 58, 0.15);
-  border: 1px solid rgba(200, 148, 58, 0.4);
-  border-radius: var(--radius-full);
-  color: var(--color-amber-300);
-  font-size: var(--text-sm);
-  font-family: var(--font-sans);
+  background: linear-gradient(135deg, #3a8fd9 0%, #2563a8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
+  font-family: inherit;
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: rgba(200, 148, 58, 0.25);
-  border-color: rgba(200, 148, 58, 0.7);
+  background: linear-gradient(135deg, #4a9fe9 0%, #3573b8 100%);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(58, 143, 217, 0.35);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .submitBtn:disabled {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-.submitBtn.submitting {
-  opacity: 0.7;
+.submitting {
+  background: linear-gradient(135deg, #4a8ec9 0%, #2a5398 100%);
 }
 
-.submitBtn.submitted {
-  background: rgba(74, 222, 128, 0.15);
-  border-color: rgba(74, 222, 128, 0.4);
-  color: #4ade80;
+.submitted {
+  background: linear-gradient(135deg, #2ea868 0%, #1a8850 100%);
 }
 
-/* ── 留言列表 ────────────────────────────────── */
+/* ── 留言列表 ──────────────────────────────── */
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: 0.875rem;
 }
 
-.empty {
+.listLoading {
+  min-height: 300px;
+}
+
+.sampleLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.sampleLabel::before,
+.sampleLabel::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sampleLabel span {
+  font-size: 0.8125rem;
+  color: rgba(232, 228, 221, 0.4);
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+}
+
+.sampleHint {
+  font-size: 0.8125rem;
+  color: rgba(232, 228, 221, 0.4);
   text-align: center;
-  padding: var(--space-3xl) var(--space-lg);
-  color: var(--color-text-tertiary);
+  margin-top: 0.5rem;
+}
+
+/* ── 骨架屏 ────────────────────────────────── */
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.skeletonCard {
+  height: 100px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeletonCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ── 空状态 ────────────────────────────────── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
 }
 
 .emptyIcon {
   font-size: 3rem;
-  display: block;
-  margin-bottom: var(--space-md);
-  opacity: 0.5;
+  margin-bottom: 1rem;
+  opacity: 0.6;
 }
 
-.empty p {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: var(--text-base);
-  margin: 0 0 var(--space-xs) 0;
+.emptyTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(232, 228, 221, 0.7);
+  margin: 0 0 0.375rem;
 }
 
 .emptyHint {
-  color: var(--color-text-tertiary);
-  font-size: var(--text-sm) !important;
+  font-size: 0.875rem;
+  color: rgba(232, 228, 221, 0.45);
+  margin: 0;
 }
 
+/* ── 留言卡片 ───────────────────────────────── */
 .card {
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-md) var(--space-lg);
-  transition: border-color 0.2s ease;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1rem 1.125rem;
+  transition: background 0.2s;
 }
 
 .card:hover {
-  border-color: rgba(200, 148, 58, 0.3);
+  background: rgba(255, 255, 255, 0.06);
 }
 
-.cardEnter {
-  animation: cardIn 0.3s ease forwards;
-  opacity: 0;
+.cardHammer {
+  border-color: rgba(232, 185, 106, 0.25);
+  background: rgba(232, 185, 106, 0.05);
 }
 
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+.cardHammer:hover {
+  background: rgba(232, 185, 106, 0.08);
 }
 
 .cardHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-sm);
+  margin-bottom: 0.5rem;
 }
 
 .cardName {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--color-amber-300);
-}
-
-.cardTime {
-  font-size: var(--text-xs);
-  color: var(--color-text-tertiary);
-  font-family: var(--font-mono);
-}
-
-.cardContent {
-  font-size: var(--text-base);
-  color: var(--color-text-secondary);
-  line-height: 1.7;
-  margin: 0;
-}
-
-/* ── 锤子留言卡片（左侧金色竖线）── */
-.cardHammer {
-  border-left: 3px solid rgba(200, 148, 58, 0.5);
-  background: rgba(200, 148, 58, 0.04);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(232, 228, 221, 0.8);
 }
 
 .cardNameHammer {
-  font-size: var(--text-sm);
+  font-size: 0.875rem;
   font-weight: 600;
-  color: rgba(245, 158, 66, 0.9);
+  color: #e8b96a;
 }
 
-/* ── 小锤子回复（小字，灰色）── */
-.autoReply {
-  margin: 0.5rem 0 0 0;
-  padding-top: 0.5rem;
-  border-top: 1px dashed rgba(200, 148, 58, 0.15);
-  font-size: var(--text-sm);
-  color: rgba(232, 227, 220, 0.45);
-  font-style: italic;
+.cardTime {
+  font-size: 0.75rem;
+  color: rgba(232, 228, 221, 0.35);
+}
+
+.cardContent {
+  font-size: 0.9375rem;
+  color: #e8e4dd;
   line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-/* ── 骨架屏加载状态 ────────────────────────────────── */
-.skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-
-.skeletonCard {
-  height: 80px;
-  background: linear-gradient(
-    90deg,
-    var(--color-bg-elevated) 25%,
-    rgba(200, 148, 58, 0.08) 50%,
-    var(--color-bg-elevated) 75%
-  );
-  background-size: 200% 100%;
-  border-radius: var(--radius-lg);
-  animation: shimmer 1.5s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.autoReply {
+  margin: 0.625rem 0 0;
+  padding-top: 0.625rem;
+  border-top: 1px dashed rgba(232, 185, 106, 0.25);
+  font-size: 0.875rem;
+  color: rgba(232, 185, 106, 0.75);
+  line-height: 1.5;
 }

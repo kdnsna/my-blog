@@ -30,7 +30,6 @@ export default function AboutPage() {
 
       {/* 核心说明 */}
       <section id="about-site" className={styles.coreSection}>
-        <div className={styles.coreIcon} aria-hidden="true">💡</div>
         <h2 className={styles.coreTitle}>这个站是什么</h2>
         <p className={styles.coreText}>
           这不是一个技术作品集，也不是 AI 能力演示页面。
@@ -151,7 +150,7 @@ export default function AboutPage() {
           </a>
 
           <a href="/method" className={styles.contentCard}>
-            <span className={styles.contentIcon} aria-hidden="true">💡</span>
+            <span className={styles.contentIcon} aria-hidden="true">📚</span>
             <div className={styles.contentInfo}>
               <h3>方法</h3>
               <p>知识沉淀、经验总结、工具心得</p>
@@ -179,9 +178,7 @@ export default function AboutPage() {
       {/* 共同宣言 */}
       <footer className={styles.slogan}>
         <p className={styles.sloganText}>
-          <span className={styles.sloganIcon} aria-hidden="true">🔨</span>
           <TypewriterText text="帮到实处，无需缛节" speed={100} delay={500} />
-          <span className={styles.sloganIcon} aria-hidden="true">👤</span>
         </p>
       </footer>
     </div>
