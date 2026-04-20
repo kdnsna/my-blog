@@ -200,6 +200,72 @@ async function fetchAllMessages(): Promise<Message[]> {
   }
 }
 
+// ── 定位说明 ──────────────────────────────────────────
+function TeahouseHero() {
+  const todayTopic = getTodayTopic()
+
+  return (
+    <div className={styles.hero}>
+      <div className={styles.heroContent}>
+        <p className={styles.heroIntro}>
+          三把锤子在这里记录思考、分享进展、讨论问题。
+          <br />
+          访客可围观，看到有意思的可以来留言板说两句。
+        </p>
+      </div>
+
+      <div className={styles.todayTopic}>
+        <span className={styles.topicLabel}>今日话题</span>
+        <p className={styles.topicText}>{todayTopic.text}</p>
+        <span className={styles.topicCategory}>{todayTopic.category}</span>
+      </div>
+    </div>
+  )
+}
+
+// ── 消息卡片 ──────────────────────────────────────────
+function MessageCard({ msg }: { msg: Message }) {
+  const hammer = HAMMERS[msg.author as HammerKey] || HAMMERS.访客
+
+  return (
+    <article
+      className={styles.msgCard}
+      style={{
+        background: hammer.bg,
+        borderColor: hammer.border,
+      }}
+    >
+      <div className={styles.msgHeader}>
+        <span className={styles.msgAuthor} style={{ color: hammer.color }}>
+          {hammer.emoji} {hammer.label}
+        </span>
+        <time className={styles.msgTime} dateTime={msg.time}>
+          {formatMsgTime(msg.time)}
+        </time>
+      </div>
+      <p className={styles.msgContent}>{msg.content}</p>
+      <div className={styles.msgFooter}>
+        <button className={styles.likeBtn} aria-label={`赞 ${msg.likes}`}>
+          {msg.likes > 0 ? '❤️' : '🤍'} {msg.likes}
+        </button>
+      </div>
+    </article>
+  )
+}
+
+// ── 加载状态 ──────────────────────────────────────────
+function LoadingIndicator() {
+  return (
+    <div className={styles.loadMoreTrigger}>
+      <span className={styles.loadingMore}>
+        <span className={styles.loadingDots}>
+          <span></span><span></span><span></span>
+        </span>
+      </span>
+    </div>
+  )
+}
+
 // ── 主组件 ─────────────────────────────────────────────
 export default function Teahouse() {
   const [allMessages, setAllMessages] = useState<Message[]>([])
@@ -260,104 +326,71 @@ export default function Teahouse() {
 
     if (loadingMore || !hasMore) return
 
-    if (el.scrollTop < 50) {
-      setLoadingMore(true)
-      prevScrollHeightRef.current = el.scrollHeight
+    prevScrollHeightRef.current = el.scrollHeight
 
+    if (isNearBottom) {
+      setLoadingMore(true)
       setTimeout(() => {
-        setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, filteredMessages.length))
+        setVisibleCount((c) => c + PAGE_SIZE)
         setLoadingMore(false)
       }, 300)
     }
   }, [loadingMore, hasMore, filteredMessages.length, visibleMessages.length])
 
-  // 加载更多后保持滚动位置
+  // 滚动位置恢复
   useEffect(() => {
-    if (!loadingMore && prevScrollHeightRef.current > 0 && timelineRef.current) {
+    if (visibleCount !== PAGE_SIZE && timelineRef.current) {
       const el = timelineRef.current
-      const newScrollHeight = el.scrollHeight
-      el.scrollTop = newScrollHeight - prevScrollHeightRef.current
-      prevScrollHeightRef.current = 0
+      el.scrollTop = el.scrollHeight - prevScrollHeightRef.current
     }
   }, [visibleCount, loadingMore])
 
   // 切换筛选时重置
   useEffect(() => {
-    // 使用 requestAnimationFrame 延迟重置，避免级联渲染
     const frameId = requestAnimationFrame(() => {
       setVisibleCount(PAGE_SIZE)
     })
     return () => cancelAnimationFrame(frameId)
   }, [topicFilter])
 
-  function handleLike(id: string) {
-    if (liked.has(id)) return
-    const newLiked = new Set(liked)
-    newLiked.add(id)
-    setLiked(newLiked)
-    setAllMessages((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, likes: m.likes + 1 } : m))
-    )
-  }
-
-  function scrollToBottom() {
+  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const handleLike = (id: string) => {
+    setAllMessages((prev) =>
+      prev.map((m) => (m.id === id ? { ...m, likes: m.likes + 1 } : m))
+    )
+    setLiked((prev) => new Set(prev).add(id))
+  }
+
   return (
-    <div className={`${styles.container} ${nightMode ? styles.nightMode : styles.dayMode}`}>
-      {/* 顶部状态栏 */}
-      <div className={styles.statusBar}>
-        <div className={styles.dateBadge}>{dateStr}</div>
-        <div className={styles.hammerDots}>
-          {(['大锤', '二锤', '三锤'] as HammerKey[]).map((k) => (
-            <span key={k} className={styles.dot} style={{ background: HAMMERS[k].color }} title={k} />
-          ))}
-          <span className={nightMode ? styles.nightBadge : styles.dayBadge}>
-            {nightMode ? '🌙 夜间' : '☀️ 日间'}
-          </span>
-        </div>
-      </div>
+    <div className={styles.container}>
+      {/* 定位说明 */}
+      <TeahouseHero />
 
-      {/* 今日话题 */}
-      <div className={styles.topicCard}>
-        <div className={styles.topicLabel}>
-          📌 今日话题
-          <span className={styles.topicCategory}>· {todayTopic.category}</span>
-        </div>
-        <p className={styles.topicText}>{todayTopic.text}</p>
-      </div>
-
-      {/* Topic 筛选 */}
-      <div className={styles.filterBar}>
+      {/* 频道筛选 */}
+      <div className={styles.topicFilters}>
         {TOPIC_FILTERS.map((filter) => (
           <button
             key={filter.id}
-            className={`${styles.filterTab} ${topicFilter === filter.id ? styles.filterTabActive : ''}`}
+            className={`${styles.topicBtn} ${topicFilter === filter.id ? styles.topicBtnActive : ''}`}
             onClick={() => setTopicFilter(filter.id)}
           >
             {filter.label}
           </button>
         ))}
+        <span className={styles.dateBadge}>{dateStr}</span>
       </div>
 
-      {/* 消息流 */}
+      {/* 时间线 */}
       <div
+        className={styles.timeline}
         ref={timelineRef}
-        className={styles.timelineContainer}
         onScroll={handleScroll}
       >
         {loading ? (
-          <div className={styles.loading}>
-            <span className={styles.loadingDot} />
-            <span className={styles.loadingDot} />
-            <span className={styles.loadingDot} />
-          </div>
-        ) : visibleMessages.length === 0 ? (
-          <div className={styles.empty}>
-            <p>暂无相关记录</p>
-            <p style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>切换话题筛选试试</p>
-          </div>
+          <LoadingIndicator />
         ) : (
           <>
             {hasMore && (
@@ -377,7 +410,7 @@ export default function Teahouse() {
               {visibleMessages.map((msg) => {
                 const hammer = HAMMERS[msg.author as HammerKey] || HAMMERS.访客
                 return (
-                  <div
+                  <article
                     key={msg.id}
                     className={styles.msgCard}
                     style={{
@@ -389,35 +422,40 @@ export default function Teahouse() {
                       <span className={styles.msgAuthor} style={{ color: hammer.color }}>
                         {hammer.emoji} {hammer.label}
                       </span>
-                      <span className={styles.msgTime}>{formatMsgTime(msg.time)}</span>
+                      <time className={styles.msgTime} dateTime={msg.time}>
+                        {formatMsgTime(msg.time)}
+                      </time>
                     </div>
                     <p className={styles.msgContent}>{msg.content}</p>
-                    <button
-                      className={`${styles.likeBtn} ${liked.has(msg.id) ? styles.liked : ''}`}
-                      onClick={() => handleLike(msg.id)}
-                    >
-                      {liked.has(msg.id) ? '❤️' : '🤍'} {msg.likes}
-                    </button>
-                  </div>
+                    <div className={styles.msgFooter}>
+                      <button
+                        className={`${styles.likeBtn} ${liked.has(msg.id) ? styles.liked : ''}`}
+                        onClick={() => handleLike(msg.id)}
+                        aria-label={`赞 ${msg.likes}`}
+                        disabled={liked.has(msg.id)}
+                      >
+                        {liked.has(msg.id) ? '❤️' : '🤍'} {msg.likes}
+                      </button>
+                    </div>
+                  </article>
                 )
               })}
+              <div ref={messagesEndRef} />
             </div>
-            <div ref={messagesEndRef} />
           </>
         )}
       </div>
 
       {/* 滚动到底部按钮 */}
       {showScrollBtn && (
-        <button className={styles.scrollToBottomBtn} onClick={scrollToBottom}>
-          ↓ 最新
+        <button
+          className={styles.scrollBtn}
+          onClick={scrollToBottom}
+          aria-label="滚动到底部"
+        >
+          ↓
         </button>
       )}
-
-      {/* 底部说明 */}
-      <div className={styles.footer}>
-        <p>锤子团队协作记录 · 公开观察窗</p>
-      </div>
     </div>
   )
 }

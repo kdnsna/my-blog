@@ -115,13 +115,14 @@ export function getEngageItems(): EngageItem[] {
       href: '/teahouse',
       variant: 'secondary'
     },
-    {
-      icon: '📧',
-      title: 'RSS 订阅',
-      description: '不想错过更新',
-      href: '/feed.xml',
-      variant: 'ghost'
-    }
+    // TODO: RSS 订阅功能待补齐，暂不开放
+    // {
+    //   icon: '📧',
+    //   title: 'RSS 订阅',
+    //   description: '不想错过更新',
+    //   href: '/feed.xml',
+    //   variant: 'ghost'
+    // }
   ]
 }
 

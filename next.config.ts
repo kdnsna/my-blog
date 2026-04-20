@@ -24,15 +24,26 @@ const nextConfig: NextConfig = {
   // 301 永久重定向配置
   async redirects() {
     return [
+      // 旧命名体系 → 新命名体系
       {
         source: '/projects',
         destination: '/achievement',
-        permanent: true, // 301 永久重定向
+        permanent: true,
       },
-      // 旧命名体系重定向
       {
         source: '/notes',
         destination: '/method',
+        permanent: true,
+      },
+      {
+        source: '/diary',
+        destination: '/story',
+        permanent: true,
+      },
+      // 日记详情页 → 故事详情页（slug 不变）
+      {
+        source: '/diary/:slug',
+        destination: '/story/:slug',
         permanent: true,
       },
     ]
