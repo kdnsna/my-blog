@@ -59,7 +59,7 @@ export default function NavBar() {
 
       {/* 手机导航菜单 */}
       <div
-        className={styles.mobileMenu}
+        className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`}
         role="navigation"
         aria-label="移动端导航"
         aria-hidden={!menuOpen}
