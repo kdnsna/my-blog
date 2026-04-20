@@ -182,13 +182,13 @@ async function fetchAllMessages(): Promise<Message[]> {
       .order('created_at', { ascending: true })
       .limit(200)
     if (error || !data) throw error
-    return (data || []).map((r: any) => ({
+    return (data || []).map((r: Record<string, unknown>) => ({
       id: String(r.id),
-      author: r.author,
-      content: r.content,
-      topic_id: r.topic_id || undefined,
-      time: r.created_at,
-      likes: r.likes || 0,
+      author: r.author as string,
+      content: r.content as string,
+      topic_id: r.topic_id !== undefined ? String(r.topic_id) : undefined,
+      time: r.created_at as string,
+      likes: r.likes as number || 0,
     }))
   } catch {
     try {
@@ -231,11 +231,15 @@ export default function Teahouse() {
 
   // 初始加载
   useEffect(() => {
-    setNightMode(isNight())
+    let mounted = true
     fetchAllMessages().then((msgs) => {
-      setAllMessages(msgs)
-      setLoading(false)
+      if (mounted) {
+        setAllMessages(msgs)
+        setNightMode(isNight())
+        setLoading(false)
+      }
     })
+    return () => { mounted = false }
   }, [])
 
   // 初始加载后滚动到底部
@@ -279,7 +283,11 @@ export default function Teahouse() {
 
   // 切换筛选时重置
   useEffect(() => {
-    setVisibleCount(PAGE_SIZE)
+    // 使用 requestAnimationFrame 延迟重置，避免级联渲染
+    const frameId = requestAnimationFrame(() => {
+      setVisibleCount(PAGE_SIZE)
+    })
+    return () => cancelAnimationFrame(frameId)
   }, [topicFilter])
 
   function handleLike(id: string) {

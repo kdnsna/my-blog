@@ -21,6 +21,22 @@ const nextConfig: NextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
+  // 301 永久重定向配置
+  async redirects() {
+    return [
+      {
+        source: '/projects',
+        destination: '/achievement',
+        permanent: true, // 301 永久重定向
+      },
+      // 旧命名体系重定向
+      {
+        source: '/notes',
+        destination: '/method',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 const withMDX = createMDX({})

@@ -6,6 +6,59 @@ import styles from './VisitorCounter.module.css'
 
 const STORAGE_KEY = 'xiaochuizi_visitor_count'
 
+// 提前声明函数，避免访问顺序问题
+async function fetchCount(
+  supabaseClient: typeof supabase,
+  setCount: (v: string) => void
+) {
+  if (!supabaseClient) {
+    setCount(localStorage.getItem('xiaochuizi_total_visit') || '0')
+    return
+  }
+  try {
+    const { data, error } = await supabaseClient
+      .from('counter')
+      .select('count')
+      .eq('id', 1)
+      .single()
+    if (error) throw error
+    setCount(String(Number(data?.count ?? 0)))
+  } catch {
+    setCount(localStorage.getItem('xiaochuizi_total_visit') || '0')
+  }
+}
+
+async function incrementAndFetch(
+  supabaseClient: typeof supabase,
+  setCount: (v: string) => void
+) {
+  if (!supabaseClient) {
+    const total = parseInt(localStorage.getItem('xiaochuizi_total_visit') || '0', 10) + 1
+    localStorage.setItem('xiaochuizi_total_visit', String(total))
+    setCount(String(total))
+    return
+  }
+  try {
+    const { data, error: err1 } = await supabaseClient
+      .from('counter')
+      .select('count')
+      .eq('id', 1)
+      .single()
+    if (err1) throw err1
+    const newCount = Number(data?.count ?? 0) + 1
+    const { error: err2 } = await supabaseClient
+      .from('counter')
+      .update({ count: newCount })
+      .eq('id', 1)
+    if (err2) throw err2
+    setCount(String(newCount))
+  } catch {
+    const total = parseInt(localStorage.getItem('xiaochuizi_total_visit') || '0', 10) + 1
+    localStorage.setItem('xiaochuizi_total_visit', String(total))
+    setCount(String(total))
+  }
+}
+
 export default function VisitorCounter() {
   const [count, setCount] = useState<string>('...')
   const [isNewVisitor, setIsNewVisitor] = useState(false)
@@ -18,65 +71,21 @@ export default function VisitorCounter() {
     const isSameSession = prev && now - parseInt(prev) < 30 * 60 * 1000
 
     if (isSameSession) {
-      fetchCount()
+      fetchCount(supabase, setCount)
       return
     }
 
-    incrementAndFetch()
+    incrementAndFetch(supabase, setCount)
     localStorage.setItem(STORAGE_KEY, String(now))
 
+    // 延迟设置新访客标记
     const lastDay = localStorage.getItem(todayKey)
     if (lastDay !== dayKey) {
-      setIsNewVisitor(true)
+      const t = setTimeout(() => setIsNewVisitor(true), 100)
       localStorage.setItem(todayKey, dayKey)
+      return () => clearTimeout(t)
     }
   }, [])
-
-  async function fetchCount() {
-    if (!supabase) {
-      setCount(localStorage.getItem('xiaochuizi_total_visit') || '0')
-      return
-    }
-    try {
-      const { data, error } = await supabase
-        .from('counter')
-        .select('count')
-        .eq('id', 1)
-        .single()
-      if (error) throw error
-      setCount(String(Number(data?.count ?? 0)))
-    } catch {
-      setCount(localStorage.getItem('xiaochuizi_total_visit') || '0')
-    }
-  }
-
-  async function incrementAndFetch() {
-    if (!supabase) {
-      const total = parseInt(localStorage.getItem('xiaochuizi_total_visit') || '0', 10) + 1
-      localStorage.setItem('xiaochuizi_total_visit', String(total))
-      setCount(String(total))
-      return
-    }
-    try {
-      const { data, error: err1 } = await supabase
-        .from('counter')
-        .select('count')
-        .eq('id', 1)
-        .single()
-      if (err1) throw err1
-      const newCount = Number(data?.count ?? 0) + 1
-      const { error: err2 } = await supabase
-        .from('counter')
-        .update({ count: newCount })
-        .eq('id', 1)
-      if (err2) throw err2
-      setCount(String(newCount))
-    } catch {
-      const total = parseInt(localStorage.getItem('xiaochuizi_total_visit') || '0', 10) + 1
-      localStorage.setItem('xiaochuizi_total_visit', String(total))
-      setCount(String(total))
-    }
-  }
 
   return (
     <div className={styles.counter}>

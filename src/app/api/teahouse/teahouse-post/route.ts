@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 
   // ── 验证作者身份 ──────────────────────────────────
   const authorTrimmed = author.trim()
-  if (!ALLOWED_AUTHORS.includes(authorTrimmed as any)) {
+  if (!ALLOWED_AUTHORS.includes(authorTrimmed as (typeof ALLOWED_AUTHORS)[number])) {
     return NextResponse.json(
       { error: `Invalid author. Must be one of: ${ALLOWED_AUTHORS.join(', ')}` },
       { status: 403 }

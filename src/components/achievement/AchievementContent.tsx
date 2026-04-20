@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import SectionHeader from '@/components/shared/SectionHeader'
-import type { ProjectAchievement, CaseAchievement, ChangelogEntry } from '@/lib/types'
+import type { ProjectAchievement, CaseAchievement, ChangelogEntry, ProjectStatus } from '@/lib/types'
+import { PROJECT_STATUS_INFO } from '@/lib/types'
 import styles from './AchievementContent.module.css'
 
 interface AchievementContentProps {
@@ -20,7 +21,7 @@ export default function AchievementContent({
   stats
 }: AchievementContentProps) {
   const [typeFilter, setTypeFilter] = useState<'all' | 'project' | 'case'>('all')
-  const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'in-progress'>('all')
+  const [statusFilter, setStatusFilter] = useState<'all' | ProjectStatus>('all')
 
   const filteredProjects = projects.filter(p => {
     if (statusFilter === 'all') return true
@@ -29,6 +30,9 @@ export default function AchievementContent({
 
   const displayProjects = typeFilter === 'case' ? [] : filteredProjects
   const displayCases = typeFilter === 'project' ? [] : cases.slice(0, typeFilter === 'all' ? 4 : 8)
+
+  // 可用的状态选项（根据实际数据动态生成）
+  const availableStatuses: ('all' | ProjectStatus)[] = ['all', 'active', 'completed', 'stopped', 'archived']
 
   return (
     <div className={styles.container}>
@@ -57,24 +61,18 @@ export default function AchievementContent({
         
         {typeFilter !== 'case' && (
           <div className={styles.statusFilter}>
-            <button
-              className={`${styles.statusBtn} ${statusFilter === 'all' ? styles.statusBtnActive : ''}`}
-              onClick={() => setStatusFilter('all')}
-            >
-              全部
-            </button>
-            <button
-              className={`${styles.statusBtn} ${statusFilter === 'completed' ? styles.statusBtnActive : ''}`}
-              onClick={() => setStatusFilter('completed')}
-            >
-              已完成
-            </button>
-            <button
-              className={`${styles.statusBtn} ${statusFilter === 'in-progress' ? styles.statusBtnActive : ''}`}
-              onClick={() => setStatusFilter('in-progress')}
-            >
-              进行中
-            </button>
+            {availableStatuses.map(status => {
+              const info = status === 'all' ? null : PROJECT_STATUS_INFO[status]
+              return (
+                <button
+                  key={status}
+                  className={`${styles.statusBtn} ${statusFilter === status ? styles.statusBtnActive : ''}`}
+                  onClick={() => setStatusFilter(status)}
+                >
+                  {status === 'all' ? '全部' : `${info?.statusIcon || ''} ${info?.statusLabel || status}`}
+                </button>
+              )
+            })}
           </div>
         )}
       </div>

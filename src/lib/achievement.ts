@@ -5,16 +5,8 @@
 
 import { getAllDiaries } from './diary'
 import { allNotes } from './notes'
+import { PROJECT_STATUS_INFO } from './types'
 import type { ProjectAchievement, CaseAchievement, ChangelogEntry } from './types'
-
-/**
- * 状态信息映射
- */
-const STATUS_INFO = {
-  'completed': { statusLabel: '已完成', statusColor: '#4CAF50', statusIcon: '✅' },
-  'in-progress': { statusLabel: '进行中', statusColor: '#2196F3', statusIcon: '🔄' },
-  'paused': { statusLabel: '已暂停', statusColor: '#9E9E9E', statusIcon: '⏸️' }
-} as const
 
 /**
  * 获取项目型成果
@@ -32,7 +24,7 @@ export function getProjectAchievements(): ProjectAchievement[] {
       background: '原来的博客功能残缺（留言板404、知识库不完整）、UI 风格陈旧、代码架构混乱，维护困难。',
       goal: '从 Pages Router 迁移到 App Router，升级到 Next.js 16 + React 19，统一设计语言，补全所有缺失页面。',
       status: 'completed',
-      ...STATUS_INFO['completed'],
+      ...PROJECT_STATUS_INFO['completed'],
       result: '全新 UI 界面、统一的组件设计语言、完整的日记/知识库/项目/茶馆页面、真实数据 SSR 渲染。',
       tags: ['建站', 'Next.js', 'React', 'UI'],
       updatedAt: '2026-04-15',
@@ -48,8 +40,8 @@ export function getProjectAchievements(): ProjectAchievement[] {
       icon: '📊',
       background: 'AI 助手运行在后台，想直观看到运行状态、Token 用量、成本消耗和任务日志。',
       goal: '打造一个端口 3210 的独立监控面板，能实时展示各项指标，并与博客系统打通。',
-      status: 'in-progress',
-      ...STATUS_INFO['in-progress'],
+      status: 'active',
+      ...PROJECT_STATUS_INFO['active'],
       result: '独立的监控面板，支持 Token 统计、成本追踪、任务日志查看，已与博客系统数据同步。',
       tags: ['监控', 'OpenClaw', 'React'],
       updatedAt: '2026-04-14',
@@ -69,7 +61,7 @@ export function getProjectAchievements(): ProjectAchievement[] {
       background: 'AI 助手需要长期记忆能力，原方案过于简单，需要更系统的记忆管理机制。',
       goal: '构建基于 EverMemOS SOTA 方案的云端记忆系统，支持 MemCell 结构化存储、Foresight 预测、RRF 混合检索。',
       status: 'completed',
-      ...STATUS_INFO['completed'],
+      ...PROJECT_STATUS_INFO['completed'],
       result: '完整的记忆系统架构，支持三层存储（Markdown/SQLite/向量）、每日自动整理、GitHub 异地备份。',
       tags: ['记忆系统', 'AI', 'SQLite', '架构'],
       updatedAt: '2026-04-15',
@@ -87,11 +79,11 @@ export function getProjectAchievements(): ProjectAchievement[] {
       icon: '📰',
       background: '想每天早上了解 AI 行业最新动态，但手动搜索太费时间。',
       goal: '每天 07:30 自动推送 AI 行业热门资讯，包括 GitHub Trending 和 ClawHub 技能榜单。',
-      status: 'completed',
-      ...STATUS_INFO['completed'],
-      result: '每天 07:30 自动推送 10 条精选内容（5条 GitHub + 5条 ClawHub），自动归档到飞书文档。',
+      status: 'stopped',
+      ...PROJECT_STATUS_INFO['stopped'],
+      result: '每天 07:30 自动推送 10 条精选内容（5条 GitHub + 5条 ClawHub），自动归档到飞书文档。2026年4月15日起停用。',
       tags: ['自动化', 'AI', '信息流'],
-      updatedAt: '2026-04-10',
+      updatedAt: '2026-04-15',
       relatedDiaries: diaries
         .filter(d => d.title.includes('晨报') || d.title.includes('情报'))
         .slice(0, 2)
