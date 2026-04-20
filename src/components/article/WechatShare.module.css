@@ -1,0 +1,179 @@
+.shareButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(135deg, #07C160, #06ad56);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(7, 193, 96, 0.25);
+}
+
+.shareButton:hover {
+  background: linear-gradient(135deg, #08c268, #07C160);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(7, 193, 96, 0.35);
+}
+
+.shareButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(7, 193, 96, 0.2);
+}
+
+.wechatIcon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* 模态框 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  position: relative;
+  background: var(--bg-surface, #141414);
+  border: 1px solid var(--border-color, #2A2A2E);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary, #A8A8A8);
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: var(--bg-hover, #222225);
+  color: var(--text-primary, #F0EDE6);
+}
+
+.modalHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.wechatIconLarge {
+  width: 3rem;
+  height: 3rem;
+}
+
+.modalTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary, #F0EDE6);
+  margin: 0;
+}
+
+.qrCodeWrapper {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.qrCode {
+  display: block;
+  width: 180px;
+  height: 180px;
+}
+
+.hint {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #A8A8A8);
+  margin: 0 0 1.25rem 0;
+}
+
+.linkSection {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.linkInput {
+  flex: 1;
+  padding: 0.625rem 0.875rem;
+  background: var(--bg-base, #0D0D0D);
+  border: 1px solid var(--border-color, #2A2A2E);
+  border-radius: 8px;
+  color: var(--text-secondary, #A8A8A8);
+  font-size: 0.8125rem;
+  font-family: monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.linkInput:focus {
+  outline: none;
+  border-color: var(--blue, #4A90D9);
+}
+
+.copyButton {
+  padding: 0.625rem 1rem;
+  background: var(--blue, #4A90D9);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.copyButton:hover {
+  background: #5a9de9;
+}
+
+/* 移动端适配 */
+@media (max-width: 640px) {
+  .modal {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .qrCode {
+    width: 150px;
+    height: 150px;
+  }
+
+  .linkSection {
+    flex-direction: column;
+  }
+}

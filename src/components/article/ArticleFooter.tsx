@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import WeiboShare from './WeiboShare'
+import WechatShare from './WechatShare'
 import styles from './ArticleFooter.module.css'
 
 interface RelatedArticle {
@@ -49,9 +50,12 @@ export default function ArticleFooter({
 }: ArticleFooterProps) {
   return (
     <footer className={styles.footer}>
-      {/* 微博分享按钮 */}
+      {/* 分享区域 */}
       {title && url && (
-        <WeiboShare title={title} url={url} />
+        <div className={styles.shareSection}>
+          <WeiboShare title={title} url={url} />
+          <WechatShare url={url} />
+        </div>
       )}
 
       {/* 结束标记 */}
