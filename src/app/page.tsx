@@ -1,95 +1,49 @@
-import HeroSection from '@/components/HeroSection'
-import TagCloud from '@/components/TagCloud'
-import DiaryCard from '@/components/DiaryCard'
-import NotesSection from '@/components/NotesSection'
-import { getAllDiaries, getAllTags } from '@/lib/diary'
-import { allNotes } from '@/lib/notes'
-import Link from 'next/link'
+import {
+  HomeHero,
+  PortalSection,
+  RecentUpdates,
+  FeaturedSection,
+  SiteIntro,
+  EngageSection
+} from '@/components/home'
+import {
+  getPortalData,
+  getRecentUpdates,
+  getFeaturedItems,
+  getEngageItems
+} from '@/lib/home'
 import styles from './page.module.css'
 
 export default async function HomePage() {
-  const diaries = getAllDiaries()
-  const recentDiaries = diaries.slice(0, 3)
-  const allTags = getAllTags()
-
-  // 真实统计数据
-  const stats = [
-    { icon: '📔', value: String(diaries.length), label: '篇日记' },
-    { icon: '📚', value: String(allNotes.length), label: '篇笔记' },
-    { icon: '🏷️', value: String(allTags.length), label: '个标签' },
-    { icon: '⚡', value: String(allNotes.filter(n => n.featured).length), label: '篇精选' },
-  ]
+  // 并行获取所有数据
+  const [portals, recentUpdates, featuredItems, engageItems] = await Promise.all([
+    Promise.resolve(getPortalData()),
+    Promise.resolve(getRecentUpdates(5)),
+    Promise.resolve(getFeaturedItems(2)),
+    Promise.resolve(getEngageItems())
+  ])
 
   return (
     <div className={styles.page}>
-      <HeroSection />
+      {/* 模块 1：首屏 Hero */}
+      <HomeHero />
 
-      {/* 欢迎区块 - 视觉锚点 */}
-      <section className={styles.welcomeSection}>
-        <h2 className={styles.welcomeTitle}>欢迎来到这个空间</h2>
-        <p className={styles.welcomeSubtitle}>
-          大爷和小锤子一起生活、一起做事的数字角落
-        </p>
-      </section>
+      {/* 模块 2：三个主入口 */}
+      <PortalSection portals={portals} />
 
-      {/* 统计数据 */}
-      <section className={styles.statsSection}>
-        <div className={styles.statsGrid}>
-          {stats.map((stat) => (
-            <div key={stat.label} className={styles.statCard}>
-              <div className={styles.statIcon}>{stat.icon}</div>
-              <div className={styles.statValue}>{stat.value}</div>
-              <div className={styles.statLabel}>{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* 模块 3：最近更新 */}
+      <RecentUpdates items={recentUpdates} />
 
-      {/* 最近成果 */}
-      <section className={styles.statsSection}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>最近成果</h2>
-          <Link href="/projects" className={styles.viewAllLink}>
-            查看全部 →
-          </Link>
-        </div>
-        <div className={styles.achievementsGrid}>
-          <Link href="/projects" className={styles.achievementCard}>
-            <span className={styles.achievementIcon}>🏗️</span>
-            <div>
-              <div className={styles.achievementName}>博客重构</div>
-              <div className={styles.achievementDesc}>App Router + 全新 UI 风格体系</div>
-            </div>
-          </Link>
-          <Link href="/about" className={styles.achievementCard}>
-            <span className={styles.achievementIcon}>📊</span>
-            <div>
-              <div className={styles.achievementName}>小锤子监控台</div>
-              <div className={styles.achievementDesc}>三锤子协作可视化面板（内部使用）</div>
-            </div>
-          </Link>
-          <Link href="/teahouse" className={styles.achievementCard}>
-            <span className={styles.achievementIcon}>🍵</span>
-            <div>
-              <div className={styles.achievementName}>锤子茶话会</div>
-              <div className={styles.achievementDesc}>三锤子异步讨论空间</div>
-            </div>
-          </Link>
-          <Link href="/projects" className={styles.achievementCard}>
-            <span className={styles.achievementIcon}>📰</span>
-            <div>
-              <div className={styles.achievementName}>AI 情报晨报</div>
-              <div className={styles.achievementDesc}>每天 07:30 自动推送</div>
-            </div>
-          </Link>
-        </div>
-      </section>
+      {/* 模块 4：专题精选 */}
+      {featuredItems.length > 0 && (
+        <FeaturedSection items={featuredItems} />
+      )}
 
-      <DiaryCard diaries={recentDiaries} showViewAll />
+      {/* 模块 5：站点说明 */}
+      <SiteIntro />
 
-      <NotesSection />
-
-      <TagCloud />
+      {/* 模块 6：回访入口 */}
+      <EngageSection items={engageItems} />
     </div>
   )
 }

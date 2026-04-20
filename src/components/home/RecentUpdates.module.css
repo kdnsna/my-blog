@@ -1,0 +1,22 @@
+.section {
+  padding: var(--space-3xl) var(--space-lg);
+  background: var(--color-bg-base);
+}
+
+.container {
+  max-width: var(--space-max-width, 1000px);
+  margin: 0 auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* 移动端 */
+@media (max-width: 640px) {
+  .section {
+    padding: var(--space-2xl) var(--space-md);
+  }
+}

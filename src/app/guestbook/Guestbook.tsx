@@ -15,6 +15,18 @@ interface Message {
 
 const STORAGE_KEY = 'xiaochuizi_guestbook_local'
 
+// 引导语示例
+const GUIDE_EXAMPLES = [
+  '第一次来这里，随手留个「你好」也挺好的',
+  '对站点有什么建议，欢迎提出',
+  '有问题想问？留言区也是个好地方',
+  '看到有意思的内容？来打个招呼吧',
+]
+
+function getRandomGuide(): string {
+  return GUIDE_EXAMPLES[Math.floor(Math.random() * GUIDE_EXAMPLES.length)]
+}
+
 function formatTime(ts: string): string {
   const d = new Date(ts)
   const now = new Date()
@@ -32,6 +44,7 @@ export default function Guestbook() {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [randomGuide] = useState(getRandomGuide)
 
   useEffect(() => {
     fetchMessages()
@@ -49,7 +62,6 @@ export default function Guestbook() {
       return
     }
     try {
-      // 取全部留言，按时间倒序
       const { data, error } = await supabase
         .from('guestbook')
         .select('id, nickname, content, created_at, is_owner')
@@ -120,9 +132,20 @@ export default function Guestbook() {
 
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={handleSubmit}>
+      {/* 引导卡片 */}
+      <div className={styles.guide} role="note" aria-label="留言引导">
+        <span className={styles.guideIcon} role="img" aria-hidden="true">💬</span>
+        <p className={styles.guideText}>
+          {randomGuide}
+        </p>
+      </div>
+
+      {/* 表单 */}
+      <form className={styles.form} onSubmit={handleSubmit} aria-label="留言表单">
         <div className={styles.formRow}>
+          <label htmlFor="guestbook-name" className="sr-only">名字</label>
           <input
+            id="guestbook-name"
             className={styles.input}
             type="text"
             placeholder="怎么称呼你？"
@@ -130,10 +153,14 @@ export default function Guestbook() {
             onChange={(e) => setName(e.target.value)}
             maxLength={20}
             required
+            aria-describedby="name-hint"
           />
+          <span id="name-hint" className="sr-only">最多20个字符</span>
         </div>
         <div className={styles.formRow}>
+          <label htmlFor="guestbook-content" className="sr-only">留言内容</label>
           <textarea
+            id="guestbook-content"
             className={styles.textarea}
             placeholder="想说点什么..."
             value={content}
@@ -141,20 +168,24 @@ export default function Guestbook() {
             rows={3}
             maxLength={500}
             required
+            aria-describedby="content-hint"
           />
+          <span id="content-hint" className="sr-only">最多500个字符</span>
         </div>
         <div className={styles.formFooter}>
-          <span className={styles.charCount}>{content.length}/500</span>
+          <span className={styles.charCount} aria-live="polite">{content.length}/500</span>
           <button
             className={`${styles.submitBtn} ${submitting ? styles.submitting : ''} ${submitted ? styles.submitted : ''}`}
             type="submit"
             disabled={submitting || !name.trim() || !content.trim()}
+            aria-busy={submitting}
           >
             {submitted ? '✨ 收到' : submitting ? '留下中...' : '留下点什么'}
           </button>
         </div>
       </form>
 
+      {/* 留言列表 */}
       <div className={styles.list}>
         {loading ? (
           <div className={styles.empty}>
@@ -164,11 +195,11 @@ export default function Guestbook() {
         ) : messages.length === 0 ? (
           <div className={styles.empty}>
             <span className={styles.emptyIcon}>📭</span>
-            <p>还没有留言，来做第一个访客吧。</p>
+            <p>还没有留言。</p>
+            <p className={styles.emptyHint}>做第一个访客，留下点什么吧。</p>
           </div>
         ) : (
           messages.map((msg) => {
-            // 访客留言 → 下方显示 auto-reply；锤子留言 → 不显示 auto-reply
             const showAutoReply = !msg.is_owner
             const reply = showAutoReply ? generateAutoReply(msg.name, msg.content) : null
             return (

@@ -1,0 +1,88 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 尺寸变体 */
+.sm {
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-sm);
+}
+
+.md {
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--text-base);
+}
+
+.lg {
+  padding: var(--space-lg) var(--space-xl);
+  font-size: var(--text-lg);
+}
+
+/* 类型变体 */
+.primary {
+  background: linear-gradient(135deg, var(--color-amber-400), var(--color-amber-300));
+  color: var(--color-bg-base);
+  border: none;
+  box-shadow: var(--shadow-gold);
+}
+
+.primary:hover {
+  background: linear-gradient(135deg, var(--color-amber-300), var(--color-amber-200));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold-hover);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--color-amber-300);
+  border: 1px solid var(--color-amber-400);
+}
+
+.secondary:hover {
+  background: rgba(200, 148, 58, 0.1);
+  border-color: var(--color-amber-300);
+  transform: translateY(-2px);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: none;
+}
+
+.ghost:hover {
+  color: var(--color-amber-300);
+}
+
+/* 全宽 */
+.fullWidth {
+  width: 100%;
+}
+
+/* 图标 */
+.icon {
+  font-size: 1.1em;
+  flex-shrink: 0;
+}
+
+.label {
+  line-height: 1;
+}
+
+/* 移动端 */
+@media (max-width: 640px) {
+  .lg {
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--text-base);
+  }
+}

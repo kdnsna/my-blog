@@ -1,0 +1,322 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+/* 连载精选 */
+.seriesGrid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.seriesCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+.seriesCard:hover {
+  border-color: var(--amber);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.seriesIcon {
+  font-size: 2rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--amber-light) 0%, var(--amber) 100%);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.seriesContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.seriesTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+}
+
+.seriesDesc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.seriesMeta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.seriesCount {
+  color: var(--amber);
+  font-weight: 500;
+}
+
+.seriesArrow {
+  font-size: 1.25rem;
+  color: var(--text-tertiary);
+  transition: transform 0.2s ease;
+}
+
+.seriesCard:hover .seriesArrow {
+  transform: translateX(4px);
+  color: var(--amber);
+}
+
+/* 时间浏览 */
+.tagFilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.tagBtn {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tagBtn:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.tagActive {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: #fff;
+}
+
+/* 时间线 */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.monthGroup {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.monthHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.monthHeader:hover {
+  background: var(--hover-bg);
+}
+
+.monthLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.monthCount {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  margin-left: auto;
+}
+
+.monthArrow {
+  font-size: 0.625rem;
+  color: var(--text-tertiary);
+  transition: transform 0.2s ease;
+}
+
+.monthArrowUp {
+  transform: rotate(180deg);
+}
+
+.monthDiaries {
+  border-top: 1px solid var(--border-color);
+}
+
+.diaryItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease;
+}
+
+.diaryItem:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.diaryItem:hover {
+  background: var(--hover-bg);
+}
+
+.diaryDate {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  min-width: 50px;
+}
+
+.diaryTitle {
+  flex: 1;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.diaryMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.diaryTime {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.diaryTag {
+  font-size: 0.6875rem;
+  padding: 0.125rem 0.5rem;
+  background: var(--tag-bg);
+  color: var(--text-tertiary);
+  border-radius: 4px;
+}
+
+/* 最新日记预览 */
+.featuredList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.featuredItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+.featuredItem:hover {
+  border-color: var(--amber);
+  transform: translateX(4px);
+}
+
+.featuredDate {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  min-width: 80px;
+}
+
+.featuredTitle {
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .seriesCard {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .seriesIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+
+  .seriesArrow {
+    display: none;
+  }
+
+  .diaryItem {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .diaryTitle {
+    order: 1;
+    flex-basis: 100%;
+    white-space: normal;
+    line-height: 1.4;
+  }
+
+  .diaryDate {
+    order: 0;
+  }
+
+  .diaryMeta {
+    order: 2;
+  }
+
+  .tagFilter {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.5rem;
+    margin: 1rem -1rem 1.5rem -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .tagBtn {
+    flex-shrink: 0;
+  }
+}

@@ -7,10 +7,9 @@ import styles from './NavBar.module.css'
 
 const navLinks = [
   { href: '/', label: '首页' },
-  { href: '/diary', label: '日记' },
-  { href: '/notes', label: '知识库' },
-  { href: '/guestbook', label: '留言' },
-  { href: '/teahouse', label: '🔥 茶话会' },
+  { href: '/story', label: '故事' },
+  { href: '/method', label: '方法' },
+  { href: '/achievement', label: '成果' },
   { href: '/about', label: '关于' },
 ]
 
@@ -19,14 +18,14 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className={styles.navbar}>
+    <header className={styles.navbar} role="banner">
       <div className={styles.navbarInner}>
         <Link href="/" className={styles.logo} onClick={() => setMenuOpen(false)}>
-          <span className={styles.logoIcon}>🔨</span>
+          <span className={styles.logoIcon} role="img" aria-label="锤子">🔨</span>
           <span>小锤子</span>
         </Link>
 
-        <nav className={styles.nav}>
+        <nav className={styles.nav} aria-label="主导航">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -34,6 +33,7 @@ export default function NavBar() {
               className={`${styles.navLink} ${
                 pathname === link.href ? styles.navLinkActive : ''
               }`}
+              aria-current={pathname === link.href ? 'page' : undefined}
             >
               {link.label}
             </Link>
@@ -41,38 +41,43 @@ export default function NavBar() {
         </nav>
 
         <div className={styles.navRight}>
-          <div className={styles.statusIndicator} title="小锤子在线">
-            <span className={styles.statusDot}></span>
+          <div className={styles.statusIndicator} title="小锤子在线" role="img" aria-label="在线状态">
+            <span className={styles.statusDot} aria-hidden="true"></span>
             <span className={styles.statusText}>在线</span>
           </div>
         </div>
 
         <button
           className={styles.mobileMenuBtn}
-          aria-label="菜单"
+          aria-label={menuOpen ? '关闭菜单' : '打开菜单'}
+          aria-expanded={menuOpen}
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          <span className={`${styles.mobileMenuIcon} ${menuOpen ? styles.mobileMenuIconOpen : ''}`}></span>
+          <span className={`${styles.mobileMenuIcon} ${menuOpen ? styles.mobileMenuIconOpen : ''}`} aria-hidden="true"></span>
         </button>
       </div>
 
       {/* 手机导航菜单 */}
-      {menuOpen && (
-        <div className={styles.mobileMenu}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`${styles.mobileNavLink} ${
-                pathname === link.href ? styles.mobileNavLinkActive : ''
-              }`}
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      )}
+      <div
+        className={styles.mobileMenu}
+        role="navigation"
+        aria-label="移动端导航"
+        aria-hidden={!menuOpen}
+      >
+        {navLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={`${styles.mobileNavLink} ${
+              pathname === link.href ? styles.mobileNavLinkActive : ''
+            }`}
+            onClick={() => setMenuOpen(false)}
+            tabIndex={menuOpen ? 0 : -1}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
     </header>
   )
 }

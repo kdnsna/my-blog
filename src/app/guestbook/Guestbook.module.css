@@ -1,7 +1,29 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2xl);
+  gap: var(--space-xl);
+}
+
+/* ── 引导卡片 ────────────────────────────────── */
+.guide {
+  text-align: center;
+  padding: var(--space-lg);
+  background: var(--color-bg-elevated);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.guideIcon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+.guideText {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  margin: 0;
 }
 
 /* ── 表单 ────────────────────────────────────── */
@@ -125,6 +147,12 @@
   font-family: var(--font-serif);
   font-style: italic;
   font-size: var(--text-base);
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.emptyHint {
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm) !important;
 }
 
 .card {

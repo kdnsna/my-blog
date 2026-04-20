@@ -1,5 +1,17 @@
+# *
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /teahouse
 
-# Sitemap
+# Googlebot
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /teahouse
+
+# Host
+Host: https://kdnsna.cn
+
+# Sitemaps
 Sitemap: https://kdnsna.cn/sitemap.xml

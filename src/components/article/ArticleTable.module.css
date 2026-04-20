@@ -1,0 +1,54 @@
+.wrapper {
+  overflow-x: auto;
+  margin: 1.5em 0;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.thead {
+  background: var(--bg-hover);
+}
+
+.th {
+  padding: 0.875em 1em;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.tbody .row:hover .td {
+  background: color-mix(in srgb, var(--amber) 5%, transparent);
+}
+
+.td {
+  padding: 0.75em 1em;
+  text-align: left;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.row:last-child .td {
+  border-bottom: none;
+}
+
+/* 移动端 */
+@media (max-width: 640px) {
+  .table {
+    font-size: 0.875rem;
+  }
+
+  .th,
+  .td {
+    padding: 0.625em 0.75em;
+  }
+}

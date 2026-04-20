@@ -1,13 +1,65 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { getNoteById } from '@/lib/notes'
-import styles from '../../notes/page.module.css'
-import noteStyles from './page.module.css'
+import { getNoteById, allNotes } from '@/lib/notes'
+import { ArticleHeader, ArticleFooter } from '@/components/article'
+import Breadcrumb from '@/components/Breadcrumb'
+import styles from './page.module.css'
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://kdnsna.cn'
 
 interface PageProps {
   params: Promise<{ id: string }>
+}
+
+// 动态生成文章页 metadata
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params
+  const note = getNoteById(id)
+
+  if (!note) {
+    return {
+      title: '笔记未找到',
+    }
+  }
+
+  return {
+    title: note.title,
+    description: note.description,
+    keywords: note.tags,
+    authors: [{ name: '小锤子' }],
+    alternates: {
+      canonical: `${SITE_URL}/notes/${id}`,
+    },
+    openGraph: {
+      title: note.title,
+      description: note.description,
+      type: 'article',
+      publishedTime: note.date,
+      authors: ['小锤子'],
+      url: `${SITE_URL}/notes/${id}`,
+    },
+    twitter: {
+      card: 'summary',
+      title: note.title,
+      description: note.description,
+    },
+  }
+}
+
+// 估算阅读时长
+function estimateReadingTime(content: string): number {
+  const words = content.length / 2
+  return Math.max(1, Math.ceil(words / 400))
+}
+
+// 难度映射
+const DIFFICULTY_MAP: Record<string, string> = {
+  basic: '基础',
+  intermediate: '进阶',
+  advanced: '高级'
 }
 
 export default async function NoteDetailPage({ params }: PageProps) {
@@ -18,45 +70,95 @@ export default async function NoteDetailPage({ params }: PageProps) {
     notFound()
   }
 
+  // 获取相关推荐（同分类笔记）
+  const relatedNotes = allNotes
+    .filter(n => 
+      n.id !== id && 
+      (n.category === note.category || n.tags.some(tag => note.tags.includes(tag)))
+    )
+    .slice(0, 3)
+
+  const readingTime = estimateReadingTime(note.detail)
+
   return (
     <div className={styles.page}>
-      <Link href="/notes" className={noteStyles.backLink}>
-        <span>←</span>
-        返回知识库
-      </Link>
-
-      <article className={noteStyles.article}>
-        <header className={noteStyles.articleHeader} style={{ '--note-accent': note.categoryColor } as React.CSSProperties}>
-          <div className={noteStyles.articleMeta}>
-            <span className={noteStyles.articleIcon}>{note.icon}</span>
-            <span className={noteStyles.articleCategory} style={{ color: note.categoryColor }}>{note.category}</span>
-            <span className={noteStyles.articleDate}>{note.date}</span>
+      {/* 文章结构化数据 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: note.title,
+            description: note.description,
+            datePublished: note.date,
+            author: {
+              '@type': 'Person',
+              name: '小锤子'
+            },
+            publisher: {
+              '@type': 'Person',
+              name: '小锤子'
+            },
+            url: `${SITE_URL}/notes/${id}`,
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': `${SITE_URL}/notes/${id}`
+            }
+          })
+        }}
+      />
+      
+      <div className={styles.container}>
+        {/* 侧边栏 */}
+        <aside className={styles.sidebar}>
+          <div className={styles.backLinkWrapper}>
+            <Breadcrumb items={[
+              { label: '首页', href: '/' },
+              { label: '方法', href: '/method' },
+              { label: note.title }
+            ]} />
           </div>
-          <h1 className={noteStyles.articleTitle}>{note.title}</h1>
-          <p className={noteStyles.articleDescription}>{note.description}</p>
+        </aside>
 
-          <div className={noteStyles.articleTags}>
-            {note.tags.map((tag) => (
-              <span key={tag} className={noteStyles.articleTag}>
-                {tag}
-              </span>
-            ))}
-          </div>
-        </header>
+        {/* 主内容 */}
+        <main className={styles.main}>
+          <article className={styles.article}>
+            <ArticleHeader
+              type="method"
+              title={note.title}
+              excerpt={note.description}
+              date={note.date}
+              readingTime={readingTime}
+              tags={note.tags}
+              author={{ name: '小锤子', avatar: note.icon }}
+              category={note.category}
+              categoryColor={note.categoryColor}
+              difficulty="进阶"
+            />
 
-        <div className={noteStyles.articleContent}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {note.detail}
-          </ReactMarkdown>
-        </div>
+            <div className={styles.articleContent}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {note.detail}
+              </ReactMarkdown>
+            </div>
 
-        <footer className={noteStyles.articleFooter}>
-          <Link href="/notes" className={noteStyles.backToNotes}>
-            <span>←</span>
-            返回知识库
-          </Link>
-        </footer>
-      </article>
+            <ArticleFooter
+              type="method"
+              relatedArticles={relatedNotes.map(n => ({
+                id: n.id,
+                title: n.title,
+                excerpt: n.description,
+                date: n.date,
+                readingTime: estimateReadingTime(n.detail),
+                href: `/notes/${n.id}`,
+                type: 'method' as const,
+                tags: n.tags
+              }))}
+            />
+          </article>
+        </main>
+      </div>
     </div>
   )
 }
