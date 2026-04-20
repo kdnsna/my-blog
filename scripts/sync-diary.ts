@@ -192,7 +192,7 @@ function syncAll(): { synced: number; skipped: number } {
       if (protectedDates.size > 0) {
         console.log(`🛡️  保护名单：${[...protectedDates].join(', ')}\n`)
       }
-    } catch (e) {
+    } catch {
       // 忽略解析错误
     }
   }
