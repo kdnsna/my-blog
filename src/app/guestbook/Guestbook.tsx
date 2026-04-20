@@ -180,7 +180,7 @@ export default function Guestbook() {
             disabled={submitting || !name.trim() || !content.trim()}
             aria-busy={submitting}
           >
-            {submitted ? '✨ 收到' : submitting ? '留下中...' : '留下点什么'}
+            {submitted ? '✨ 收到' : submitting ? '提交中...' : '留下点什么'}
           </button>
         </div>
       </form>
@@ -189,8 +189,11 @@ export default function Guestbook() {
       <div className={styles.list}>
         {loading ? (
           <div className={styles.empty}>
-            <span className={styles.emptyIcon}>⏳</span>
-            <p>加载中...</p>
+            <div className={styles.skeleton}>
+              <div className={styles.skeletonCard}></div>
+              <div className={styles.skeletonCard}></div>
+              <div className={styles.skeletonCard}></div>
+            </div>
           </div>
         ) : messages.length === 0 ? (
           <div className={styles.empty}>

@@ -9,10 +9,11 @@ const STORAGE_KEY = 'xiaochuizi_visitor_count'
 // 提前声明函数，避免访问顺序问题
 async function fetchCount(
   supabaseClient: typeof supabase,
-  setCount: (v: string) => void
+  setCount: (v: string | null) => void
 ) {
   if (!supabaseClient) {
-    setCount(localStorage.getItem('xiaochuizi_total_visit') || '0')
+    const stored = localStorage.getItem('xiaochuizi_total_visit')
+    setCount(stored || '0')
     return
   }
   try {
@@ -24,13 +25,14 @@ async function fetchCount(
     if (error) throw error
     setCount(String(Number(data?.count ?? 0)))
   } catch {
-    setCount(localStorage.getItem('xiaochuizi_total_visit') || '0')
+    const stored = localStorage.getItem('xiaochuizi_total_visit')
+    setCount(stored || '0')
   }
 }
 
 async function incrementAndFetch(
   supabaseClient: typeof supabase,
-  setCount: (v: string) => void
+  setCount: (v: string | null) => void
 ) {
   if (!supabaseClient) {
     const total = parseInt(localStorage.getItem('xiaochuizi_total_visit') || '0', 10) + 1
@@ -60,7 +62,8 @@ async function incrementAndFetch(
 }
 
 export default function VisitorCounter() {
-  const [count, setCount] = useState<string>('...')
+  // null 表示未加载，不显示任何占位
+  const [count, setCount] = useState<string | null>(null)
   const [isNewVisitor, setIsNewVisitor] = useState(false)
 
   useEffect(() => {
@@ -86,6 +89,11 @@ export default function VisitorCounter() {
       return () => clearTimeout(t)
     }
   }, [])
+
+  // 加载完成前不渲染组件
+  if (count === null) {
+    return null
+  }
 
   return (
     <div className={styles.counter}>
