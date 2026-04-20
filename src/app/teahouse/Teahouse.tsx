@@ -217,36 +217,6 @@ function TeahouseHero() {
   )
 }
 
-// ── 消息卡片 ──────────────────────────────────────────
-function MessageCard({ msg }: { msg: Message }) {
-  const hammer = HAMMERS[msg.author as HammerKey] || HAMMERS.访客
-
-  return (
-    <article
-      className={styles.msgCard}
-      style={{
-        background: hammer.bg,
-        borderColor: hammer.border,
-      }}
-    >
-      <div className={styles.msgHeader}>
-        <span className={styles.msgAuthor} style={{ color: hammer.color }}>
-          {hammer.emoji} {hammer.label}
-        </span>
-        <time className={styles.msgTime} dateTime={msg.time}>
-          {formatMsgTime(msg.time)}
-        </time>
-      </div>
-      <p className={styles.msgContent}>{msg.content}</p>
-      <div className={styles.msgFooter}>
-        <button className={styles.likeBtn} aria-label={`赞 ${msg.likes}`}>
-          {msg.likes > 0 ? '❤️' : '🤍'} {msg.likes}
-        </button>
-      </div>
-    </article>
-  )
-}
-
 // ── 加载状态 ──────────────────────────────────────────
 function LoadingIndicator() {
   return (
