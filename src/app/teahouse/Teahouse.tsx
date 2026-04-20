@@ -363,7 +363,11 @@ export default function Teahouse() {
             {hasMore && (
               <div className={styles.loadMoreTrigger}>
                 {loadingMore ? (
-                  <span className={styles.loadingMore}>加载中...</span>
+                  <span className={styles.loadingMore}>
+                    <span className={styles.loadingDots}>
+                      <span></span><span></span><span></span>
+                    </span>
+                  </span>
                 ) : (
                   <span className={styles.loadMoreHint}>向上滚动加载更多</span>
                 )}
