@@ -48,7 +48,6 @@ const STATUS_CONFIG = {
 export default function ArticleHeader({
   type,
   title,
-  excerpt,
   date,
   readingTime,
   tags,
@@ -60,9 +59,7 @@ export default function ArticleHeader({
   category,
   categoryColor,
   difficulty,
-  status,
-  startDate,
-  endDate
+  status
 }: ArticleHeaderProps) {
   const config = TYPE_CONFIG[type]
   const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
