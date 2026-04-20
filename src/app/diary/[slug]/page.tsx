@@ -184,6 +184,8 @@ export default async function DiaryDetailPage({ params }: PageProps) {
 
             <ArticleFooter
               type="diary"
+              title={diary.title}
+              url={`${SITE_URL}/diary/${slug}`}
               relatedArticles={relatedDiaries.map(d => ({
                 id: d.slug,
                 title: d.title,

@@ -137,6 +137,8 @@ export default async function NoteDetailPage({ params }: PageProps) {
 
             <ArticleFooter
               type="method"
+              title={note.title}
+              url={`${SITE_URL}/notes/${id}`}
               relatedArticles={relatedNotes.map(n => ({
                 id: n.id,
                 title: n.title,
