@@ -1,7 +1,7 @@
 {
   "name": "my-blog",
   "version": "0.1.0",
-  "description": "基于 Next.js + MDX 的个人博客系统，支持日记、笔记、关于页面，具备定时日记同步自动化能力",
+  "description": "大爷和小锤子的数字空间 - 一个人类和可靠的AI助手，一起生活、一起做事的地方",
   "private": false,
   "homepage": "https://github.com/kdnsna/my-blog",
   "repository": {
