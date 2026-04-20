@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import WeiboShare from './WeiboShare'
 import styles from './ArticleFooter.module.css'
 
 interface RelatedArticle {
@@ -14,6 +15,8 @@ interface RelatedArticle {
 
 interface ArticleFooterProps {
   type: 'diary' | 'method' | 'project'
+  title?: string
+  url?: string
   relatedArticles?: RelatedArticle[]
   series?: {
     id: string
@@ -38,12 +41,19 @@ const TYPE_CONFIG = {
 
 export default function ArticleFooter({
   type,
+  title,
+  url,
   relatedArticles = [],
   series,
   nextArticle
 }: ArticleFooterProps) {
   return (
     <footer className={styles.footer}>
+      {/* 微博分享按钮 */}
+      {title && url && (
+        <WeiboShare title={title} url={url} />
+      )}
+
       {/* 结束标记 */}
       <div className={styles.endMark}>
         <span>─</span>

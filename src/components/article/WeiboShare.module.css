@@ -1,0 +1,66 @@
+.shareSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.shareLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.shareIcon {
+  font-size: 1rem;
+}
+
+.shareButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(135deg, var(--color-amber-300), var(--color-amber-400));
+  color: #1a1a1d;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(232, 185, 106, 0.25);
+}
+
+.shareButton:hover {
+  background: linear-gradient(135deg, var(--color-amber-200), var(--color-amber-300));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(232, 185, 106, 0.35);
+}
+
+.shareButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(232, 185, 106, 0.2);
+}
+
+.weiboIcon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* 移动端适配 */
+@media (max-width: 640px) {
+  .shareSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .shareButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
