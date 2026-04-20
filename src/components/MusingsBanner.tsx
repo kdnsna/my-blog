@@ -19,12 +19,10 @@ const musings = [
 ]
 
 export default function MusingsBanner() {
-  const [musing, setMusing] = useState('')
+  const [musing] = useState(() => musings[Math.floor(Math.random() * musings.length)])
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    const pick = musings[Math.floor(Math.random() * musings.length)]
-    setMusing(pick)
     // 延迟出现，让页面先渲染完
     const t = setTimeout(() => setVisible(true), 300)
     return () => clearTimeout(t)

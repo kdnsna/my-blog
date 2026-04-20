@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import styles from './VisitorCounter.module.css'
 
@@ -10,29 +10,7 @@ export default function VisitorCounter() {
   const [count, setCount] = useState<string>('...')
   const [isNewVisitor, setIsNewVisitor] = useState(false)
 
-  useEffect(() => {
-    const prev = localStorage.getItem(STORAGE_KEY)
-    const now = Date.now()
-    const dayKey = new Date().toDateString()
-    const todayKey = 'xiaochuizi_visit_day'
-    const isSameSession = prev && now - parseInt(prev) < 30 * 60 * 1000
-
-    if (isSameSession) {
-      fetchCount()
-      return
-    }
-
-    incrementAndFetch()
-    localStorage.setItem(STORAGE_KEY, String(now))
-
-    const lastDay = localStorage.getItem(todayKey)
-    if (lastDay !== dayKey) {
-      setIsNewVisitor(true)
-      localStorage.setItem(todayKey, dayKey)
-    }
-  }, [])
-
-  async function fetchCount() {
+  const fetchCount = useCallback(async () => {
     if (!supabase) {
       setCount(localStorage.getItem('xiaochuizi_total_visit') || '0')
       return
@@ -48,9 +26,9 @@ export default function VisitorCounter() {
     } catch {
       setCount(localStorage.getItem('xiaochuizi_total_visit') || '0')
     }
-  }
+  }, [])
 
-  async function incrementAndFetch() {
+  const incrementAndFetch = useCallback(async () => {
     if (!supabase) {
       const total = parseInt(localStorage.getItem('xiaochuizi_total_visit') || '0', 10) + 1
       localStorage.setItem('xiaochuizi_total_visit', String(total))
@@ -76,7 +54,33 @@ export default function VisitorCounter() {
       localStorage.setItem('xiaochuizi_total_visit', String(total))
       setCount(String(total))
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    const visitTimer = window.setTimeout(() => {
+      const prev = localStorage.getItem(STORAGE_KEY)
+      const now = Date.now()
+      const dayKey = new Date().toDateString()
+      const todayKey = 'xiaochuizi_visit_day'
+      const isSameSession = prev && now - parseInt(prev) < 30 * 60 * 1000
+
+      if (isSameSession) {
+        fetchCount()
+        return
+      }
+
+      incrementAndFetch()
+      localStorage.setItem(STORAGE_KEY, String(now))
+
+      const lastDay = localStorage.getItem(todayKey)
+      if (lastDay !== dayKey) {
+        setIsNewVisitor(true)
+        localStorage.setItem(todayKey, dayKey)
+      }
+    }, 0)
+
+    return () => window.clearTimeout(visitTimer)
+  }, [fetchCount, incrementAndFetch])
 
   return (
     <div className={styles.counter}>

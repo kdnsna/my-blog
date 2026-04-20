@@ -43,8 +43,9 @@ export async function GET(req: NextRequest) {
       data,
       count: Array.isArray(data) ? data.length : 0,
     })
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[teahouse-list] Error:', err)
-    return NextResponse.json({ error: 'Internal error', detail: err.message }, { status: 500 })
+    const detail = err instanceof Error ? err.message : String(err)
+    return NextResponse.json({ error: 'Internal error', detail }, { status: 500 })
   }
 }

@@ -16,8 +16,7 @@ interface AchievementContentProps {
 export default function AchievementContent({
   projects,
   cases,
-  changelog,
-  stats
+  changelog
 }: AchievementContentProps) {
   const [typeFilter, setTypeFilter] = useState<'all' | 'project' | 'case'>('all')
   const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'in-progress'>('all')

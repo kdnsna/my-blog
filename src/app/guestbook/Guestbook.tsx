@@ -13,6 +13,14 @@ interface Message {
   is_owner: boolean
 }
 
+interface GuestbookRow {
+  id: string | number
+  nickname: string
+  content: string
+  created_at: string
+  is_owner: boolean | null
+}
+
 const STORAGE_KEY = 'xiaochuizi_guestbook_local'
 
 // 引导语示例
@@ -68,7 +76,7 @@ export default function Guestbook() {
         .order('created_at', { ascending: false })
         .limit(100)
       if (error) throw error
-      const msgs: Message[] = (data || []).map((r: any) => ({
+      const msgs: Message[] = ((data || []) as GuestbookRow[]).map((r) => ({
         id: String(r.id),
         name: r.nickname,
         content: r.content,

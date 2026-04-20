@@ -14,6 +14,15 @@ interface Message {
   likes: number
 }
 
+interface TeahouseRow {
+  id: string | number
+  author: string
+  content: string
+  topic_id: string | null
+  created_at: string
+  likes: number | null
+}
+
 // ── 三把锤子人设 ──────────────────────────────────────
 const HAMMERS = {
   大锤: {
@@ -182,7 +191,7 @@ async function fetchAllMessages(): Promise<Message[]> {
       .order('created_at', { ascending: true })
       .limit(200)
     if (error || !data) throw error
-    return (data || []).map((r: any) => ({
+    return ((data || []) as TeahouseRow[]).map((r) => ({
       id: String(r.id),
       author: r.author,
       content: r.content,
@@ -206,7 +215,7 @@ export default function Teahouse() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
-  const [nightMode, setNightMode] = useState(false)
+  const [nightMode] = useState(isNight)
   const [liked, setLiked] = useState<Set<string>>(new Set())
   const [topicFilter, setTopicFilter] = useState<TopicFilter>('all')
   const [showScrollBtn, setShowScrollBtn] = useState(false)
@@ -231,7 +240,6 @@ export default function Teahouse() {
 
   // 初始加载
   useEffect(() => {
-    setNightMode(isNight())
     fetchAllMessages().then((msgs) => {
       setAllMessages(msgs)
       setLoading(false)
@@ -277,10 +285,10 @@ export default function Teahouse() {
     }
   }, [visibleCount, loadingMore])
 
-  // 切换筛选时重置
-  useEffect(() => {
+  function handleTopicFilterChange(filter: TopicFilter) {
+    setTopicFilter(filter)
     setVisibleCount(PAGE_SIZE)
-  }, [topicFilter])
+  }
 
   function handleLike(id: string) {
     if (liked.has(id)) return
@@ -326,7 +334,7 @@ export default function Teahouse() {
           <button
             key={filter.id}
             className={`${styles.filterTab} ${topicFilter === filter.id ? styles.filterTabActive : ''}`}
-            onClick={() => setTopicFilter(filter.id)}
+            onClick={() => handleTopicFilterChange(filter.id)}
           >
             {filter.label}
           </button>

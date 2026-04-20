@@ -47,7 +47,6 @@ const STATUS_CONFIG = {
 export default function ArticleHeader({
   type,
   title,
-  excerpt,
   date,
   readingTime,
   tags,

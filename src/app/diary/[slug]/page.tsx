@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getDiaryBySlug, getAllDiaries } from '@/lib/diary'
 import { ArticleHeader, ArticleFooter } from '@/components/article'
