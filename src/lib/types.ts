@@ -181,6 +181,21 @@ export interface MethodNoteItem {
 // 成果页类型定义
 // ============================================
 
+// 项目状态枚举（唯一真源）
+export type ProjectStatus = 'active' | 'completed' | 'stopped' | 'archived'
+
+// 状态信息映射
+export const PROJECT_STATUS_INFO: Record<ProjectStatus, {
+  statusLabel: string
+  statusColor: string
+  statusIcon: string
+}> = {
+  'active': { statusLabel: '进行中', statusColor: '#2196F3', statusIcon: '🔄' },
+  'completed': { statusLabel: '已完成', statusColor: '#4CAF50', statusIcon: '✅' },
+  'stopped': { statusLabel: '已停用', statusColor: '#FBBF24', statusIcon: '⏸️' },
+  'archived': { statusLabel: '已归档', statusColor: '#9E9E9E', statusIcon: '📦' }
+}
+
 // 项目成果
 export interface ProjectAchievement {
   id: string
@@ -188,7 +203,7 @@ export interface ProjectAchievement {
   icon: string
   background: string
   goal: string
-  status: 'completed' | 'in-progress' | 'paused'
+  status: ProjectStatus
   statusLabel: string
   statusColor: string
   statusIcon: string

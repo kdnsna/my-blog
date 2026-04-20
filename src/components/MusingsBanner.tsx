@@ -24,10 +24,13 @@ export default function MusingsBanner() {
 
   useEffect(() => {
     const pick = musings[Math.floor(Math.random() * musings.length)]
-    setMusing(pick)
-    // 延迟出现，让页面先渲染完
-    const t = setTimeout(() => setVisible(true), 300)
-    return () => clearTimeout(t)
+    // 延迟设置内容，让页面先渲染完
+    const t1 = setTimeout(() => setMusing(pick), 0)
+    const t2 = setTimeout(() => setVisible(true), 300)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
   }, [])
 
   return (

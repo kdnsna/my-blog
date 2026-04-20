@@ -68,12 +68,12 @@ export default function Guestbook() {
         .order('created_at', { ascending: false })
         .limit(100)
       if (error) throw error
-      const msgs: Message[] = (data || []).map((r: any) => ({
+      const msgs: Message[] = (data || []).map((r: Record<string, unknown>) => ({
         id: String(r.id),
-        name: r.nickname,
-        content: r.content,
-        time: r.created_at,
-        is_owner: r.is_owner ?? false,
+        name: r.nickname as string,
+        content: r.content as string,
+        time: r.created_at as string,
+        is_owner: (r.is_owner as boolean | undefined) ?? false,
       }))
       setMessages(msgs)
     } catch {
