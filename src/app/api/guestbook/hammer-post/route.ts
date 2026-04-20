@@ -2,12 +2,24 @@
 
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+// 如果环境变量缺失，返回错误响应
+function errorResponse(message: string, status: number) {
+  return new Response(JSON.stringify({ error: message }), {
+    status,
+    headers: { 'Content-Type': 'application/json' }
+  })
+}
 
 export async function POST(req: Request) {
+  // 0. 检查 Supabase 配置
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return errorResponse('Supabase not configured', 500)
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseAnonKey)
   // 1. 验证密钥
   const key = req.headers.get('x-hammer-key')
   if (key !== process.env.HAMMER_POST_KEY) {

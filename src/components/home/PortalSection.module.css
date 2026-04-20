@@ -1,0 +1,26 @@
+.section {
+  padding: var(--space-3xl) var(--space-lg);
+}
+
+.container {
+  max-width: var(--space-max-width, 1000px);
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+/* 移动端 */
+@media (max-width: 768px) {
+  .section {
+    padding: var(--space-2xl) var(--space-md);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+}

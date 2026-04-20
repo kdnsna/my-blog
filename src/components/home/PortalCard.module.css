@@ -1,0 +1,134 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 左侧装饰条 */
+.card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--color-amber-400), var(--color-amber-300));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.card:hover {
+  border-color: var(--color-amber-400);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md), 0 0 0 1px rgba(200, 148, 58, 0.1);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* 图标 */
+.icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-md);
+  transition: transform var(--transition-base);
+}
+
+.card:hover .icon {
+  transform: scale(1.1);
+}
+
+/* 标题 */
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+/* 描述 */
+.description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-lg);
+  flex-grow: 1;
+}
+
+/* 页脚 */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.stats {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
+}
+
+.arrow {
+  font-size: var(--text-sm);
+  color: var(--color-amber-300);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all var(--transition-fast);
+}
+
+.card:hover .arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 变体颜色 */
+.story:hover {
+  border-color: var(--color-hammer-200);
+}
+.story::before {
+  background: linear-gradient(180deg, var(--color-hammer-200), var(--color-hammer-100));
+}
+
+.method:hover {
+  border-color: var(--color-success);
+}
+.method::before {
+  background: linear-gradient(180deg, var(--color-success), #81C784);
+}
+
+.achievement:hover {
+  border-color: var(--color-amber-400);
+}
+.achievement::before {
+  background: linear-gradient(180deg, var(--color-amber-400), var(--color-amber-300));
+}
+
+/* 移动端 */
+@media (max-width: 640px) {
+  .card {
+    padding: var(--space-lg);
+  }
+
+  .icon {
+    font-size: 2rem;
+  }
+
+  .title {
+    font-size: var(--text-lg);
+  }
+
+  .arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

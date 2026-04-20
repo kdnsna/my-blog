@@ -1,0 +1,392 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+/* 筛选器 */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.typeTabs {
+  display: flex;
+  background: var(--hover-bg);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.typeTab {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.typeTab:hover {
+  color: var(--text-primary);
+}
+
+.typeTabActive {
+  background: var(--card-bg);
+  color: var(--purple);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.statusFilter {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.statusBtn {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.statusBtn:hover {
+  color: var(--text-secondary);
+  border-color: var(--text-tertiary);
+}
+
+.statusBtnActive {
+  color: var(--purple);
+  border-color: var(--purple);
+  background: color-mix(in srgb, var(--purple) 10%, transparent);
+}
+
+/* 项目卡片 */
+.projectGrid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.projectCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.projectCard:hover {
+  border-color: var(--purple);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.projectHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.projectIcon {
+  font-size: 1.75rem;
+}
+
+.projectName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+}
+
+.projectStatus {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid;
+  border-radius: 9999px;
+}
+
+.projectBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.projectBlock {
+  display: flex;
+  gap: 1rem;
+}
+
+.projectBlockLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-width: 40px;
+  padding-top: 0.125rem;
+}
+
+.projectBlockText {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.projectFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--hover-bg);
+}
+
+.projectTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.projectTag {
+  font-size: 0.6875rem;
+  padding: 0.25rem 0.625rem;
+  background: var(--card-bg);
+  color: var(--text-tertiary);
+  border-radius: 4px;
+}
+
+.projectLink {
+  font-size: 0.8125rem;
+  color: var(--purple);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.projectLink:hover {
+  color: var(--purple-dark);
+}
+
+/* 案例卡片 */
+.caseGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.caseCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.caseCard:hover {
+  border-color: var(--purple);
+  transform: translateY(-2px);
+}
+
+.caseContent {
+  margin-bottom: 1rem;
+}
+
+.caseTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.caseDesc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.caseFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.caseDate {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.caseTags {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.caseTag {
+  font-size: 0.6875rem;
+  padding: 0.125rem 0.5rem;
+  background: var(--tag-bg);
+  color: var(--text-tertiary);
+  border-radius: 4px;
+}
+
+/* 更新日志 */
+.changelog {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.changelogItem {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.changelogDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.changelogDay {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--purple);
+  line-height: 1;
+}
+
+.changelogMonth {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.changelogContent {
+  flex: 1;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.changelogItem:last-child .changelogContent {
+  border-bottom: none;
+}
+
+.changelogChange {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.changelogChange:last-child {
+  margin-bottom: 0;
+}
+
+.changelogBullet {
+  color: var(--purple);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.changelogText {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 空状态 */
+.empty {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-tertiary);
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .statusFilter {
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
+
+  .projectHeader {
+    flex-wrap: wrap;
+    padding: 1rem;
+  }
+
+  .projectName {
+    order: 1;
+    flex-basis: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .projectBody {
+    padding: 1rem;
+  }
+
+  .projectBlock {
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .projectFooter {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .projectLink {
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem;
+    background: var(--purple-light);
+    border-radius: 6px;
+  }
+
+  .caseGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .changelogItem {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .changelogDate {
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+}
