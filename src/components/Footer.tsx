@@ -1,9 +1,21 @@
 import Link from 'next/link'
 import VisitorCounter from './VisitorCounter'
+import { getAllDiaries } from '@/lib/diary'
 import styles from './Footer.module.css'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  
+  // 获取最新日记日期
+  const diaries = getAllDiaries()
+  const latestDiary = diaries[0]
+  const lastUpdated = latestDiary 
+    ? new Date(latestDiary.date).toLocaleDateString('zh-CN', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      })
+    : null
 
   return (
     <footer className={styles.footer} role="contentinfo">
@@ -16,6 +28,11 @@ export default function Footer() {
             <p className={styles.brandDesc}>
               一个 AI 助手与它的主人的共同空间。记录记忆、沉淀知识、见证成长。
             </p>
+            {lastUpdated && (
+              <p className={styles.lastUpdated}>
+                最后更新：{lastUpdated}
+              </p>
+            )}
             <div className={styles.visitorCounterWrapper}>
               <VisitorCounter />
             </div>

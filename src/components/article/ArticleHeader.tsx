@@ -1,3 +1,4 @@
+import Tag from '@/components/ui/Tag'
 import styles from './ArticleHeader.module.css'
 
 interface ArticleHeaderProps {
@@ -32,9 +33,9 @@ interface ArticleHeaderProps {
 }
 
 const TYPE_CONFIG = {
-  diary: { icon: '📔', label: '日记', color: 'var(--amber)' },
-  method: { icon: '🧭', label: '方法', color: 'var(--blue)' },
-  project: { icon: '🏆', label: '项目', color: 'var(--purple)' }
+  diary: { icon: '📔', label: '日记', color: '#E8B96A' },
+  method: { icon: '🧭', label: '方法', color: '#4A90D9' },
+  project: { icon: '🏆', label: '项目', color: '#9B59B6' }
 }
 
 const STATUS_CONFIG = {
@@ -66,102 +67,93 @@ export default function ArticleHeader({
   const config = TYPE_CONFIG[type]
   const formattedDate = new Date(date).toLocaleDateString('zh-CN', {
     year: 'numeric',
-    month: 'long',
+    month: 'short',
     day: 'numeric'
   })
 
   return (
     <header className={styles.header}>
-      {/* 类型标签 */}
-      <div className={styles.typeTag} style={{ color: config.color }}>
-        <span className={styles.typeIcon}>{config.icon}</span>
-        <span className={styles.typeLabel}>{config.label}</span>
+      {/* 类型标识 + 标题 */}
+      <div className={styles.titleSection}>
+        <div className={styles.typeBadge} style={{ color: config.color }}>
+          <span className={styles.typeIcon}>{config.icon}</span>
+          <span className={styles.typeLabel}>{config.label}</span>
+        </div>
+        <h1 className={styles.title}>{title}</h1>
       </div>
 
-      {/* 标题 */}
-      <h1 className={styles.title}>{title}</h1>
-
-      {/* 日记摘要 */}
+      {/* 日记摘要（特有） */}
       {summary && (
         <blockquote className={styles.summary}>
           {summary}
         </blockquote>
       )}
 
-      {/* 方法分类 */}
-      {type === 'method' && category && (
-        <div className={styles.metaTags}>
-          <span 
-            className={styles.categoryTag}
-            style={{ background: `${categoryColor}20`, color: categoryColor }}
-          >
-            {category}
+      {/* 元信息行 */}
+      <div className={styles.metaRow}>
+        <div className={styles.metaItems}>
+          {/* 日期 */}
+          <span className={styles.metaItem}>
+            <span className={styles.metaIcon}>📅</span>
+            <span>{formattedDate}</span>
           </span>
-          {difficulty && (
-            <span className={styles.difficultyTag}>{difficulty}</span>
-          )}
-        </div>
-      )}
-
-      {/* 项目状态 */}
-      {type === 'project' && status && (
-        <div className={styles.projectMeta}>
-          <span 
-            className={styles.statusTag}
-            style={{ borderColor: STATUS_CONFIG[status].color, color: STATUS_CONFIG[status].color }}
-          >
-            {STATUS_CONFIG[status].label}
+          
+          {/* 阅读时长 */}
+          <span className={styles.metaItem}>
+            <span className={styles.metaIcon}>⏱️</span>
+            <span>{readingTime} 分钟</span>
           </span>
-          {startDate && (
-            <span className={styles.dateRange}>
-              {new Date(startDate).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
-              {endDate && ` ~ ${new Date(endDate).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}`}
+          
+          {/* 作者 */}
+          {author && (
+            <span className={styles.metaItem}>
+              <span className={styles.metaIcon}>👤</span>
+              <span>{author.name}</span>
             </span>
           )}
-        </div>
-      )}
 
-      {/* 日记元信息 */}
-      {type === 'diary' && (weather || mood) && (
-        <div className={styles.diaryMeta}>
-          {weather && <span>{weather}</span>}
-          {mood && <span>{mood}</span>}
-        </div>
-      )}
+          {/* 方法分类 */}
+          {type === 'method' && category && (
+            <Tag color={categoryColor}>{category}</Tag>
+          )}
 
-      {/* 通用元信息 */}
-      <div className={styles.meta}>
-        <div className={styles.metaItem}>
-          <span className={styles.metaIcon}>📅</span>
-          <span>{formattedDate}</span>
+          {/* 难度 */}
+          {type === 'method' && difficulty && (
+            <Tag>{difficulty}</Tag>
+          )}
+
+          {/* 项目状态 */}
+          {type === 'project' && status && (
+            <Tag color={STATUS_CONFIG[status].color}>
+              {STATUS_CONFIG[status].label}
+            </Tag>
+          )}
+
+          {/* 日记天气/心情 */}
+          {type === 'diary' && (weather || mood) && (
+            <>
+              {weather && <span className={styles.metaItem}>{weather}</span>}
+              {mood && <span className={styles.metaItem}>{mood}</span>}
+            </>
+          )}
         </div>
-        <div className={styles.metaItem}>
-          <span className={styles.metaIcon}>⏱️</span>
-          <span>{readingTime} 分钟</span>
-        </div>
-        {author && (
-          <div className={styles.metaItem}>
-            <span className={styles.metaIcon}>👤</span>
-            <span>{author.name}</span>
-          </div>
-        )}
       </div>
 
-      {/* 标签 */}
+      {/* 标签行 */}
       {tags.length > 0 && (
-        <div className={styles.tags}>
+        <div className={styles.tagRow}>
           {tags.map(tag => (
-            <span key={tag} className={styles.tag}>
-              #{tag}
-            </span>
+            <Tag key={tag}>{tag}</Tag>
           ))}
         </div>
       )}
 
-      {/* 连载信息 */}
+      {/* 连载信息（可选） */}
       {series && (
-        <div className={styles.series}>
-          <span className={styles.seriesLabel}>📚 {series.name}</span>
+        <div className={styles.seriesBar}>
+          <span className={styles.seriesIcon}>📚</span>
+          <span className={styles.seriesName}>{series.name}</span>
+          <span className={styles.seriesDivider}>·</span>
           <span className={styles.seriesIndex}>
             第 {series.index} 篇 / 共 {series.total} 篇
           </span>

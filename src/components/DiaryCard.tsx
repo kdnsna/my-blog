@@ -23,7 +23,7 @@ export default function DiaryCard({ diaries, showViewAll = true }: DiaryCardProp
           <h2 className={styles.sectionTitle}>最近日记</h2>
         </div>
         {showViewAll && (
-          <Link href="/diary" className={styles.viewAllLink}>
+          <Link href="/story" className={styles.viewAllLink}>
             查看全部
             <span>→</span>
           </Link>

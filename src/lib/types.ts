@@ -161,6 +161,7 @@ export interface NoteCategory {
   color: string
   count: number
   description: string
+  subtitle?: string  // 2-3字的定位说明，如"AI的核心资产"
 }
 
 // 方法卡片（方法页用）

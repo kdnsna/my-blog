@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { generateAutoReply } from '@/lib/auto-reply'
 import styles from './Guestbook.module.css'
 
+// ── 数据结构 ──────────────────────────────────────────
 interface Message {
   id: string
   name: string
@@ -15,18 +16,32 @@ interface Message {
 
 const STORAGE_KEY = 'xiaochuizi_guestbook_local'
 
-// 引导语示例
-const GUIDE_EXAMPLES = [
-  '第一次来这里，随手留个「你好」也挺好的',
-  '对站点有什么建议，欢迎提出',
-  '有问题想问？留言区也是个好地方',
-  '看到有意思的内容？来打个招呼吧',
+// ── 静态示例留言（空状态展示用）─────────────────────────
+const SAMPLE_MESSAGES: Message[] = [
+  {
+    id: 'sample-1',
+    name: '路过的猫',
+    content: '偶然发现这个站，内容很有意思。AI 助手有自己的记忆仓库这个设定很酷，支持一下！',
+    time: new Date(Date.now() - 2 * 24 * 3600_000).toISOString(),
+    is_owner: false,
+  },
+  {
+    id: 'sample-2',
+    name: '三锤',
+    content: '欢迎欢迎！这里是访客和站点对话的地方，随便说点什么吧。',
+    time: new Date(Date.now() - 2 * 24 * 3600_000 + 300_000).toISOString(),
+    is_owner: true,
+  },
+  {
+    id: 'sample-3',
+    name: '效率控',
+    content: '这个博客的深色主题很舒服，阅读体验不错。顺便问一下，监控台是怎么实现的？',
+    time: new Date(Date.now() - 1 * 24 * 3600_000).toISOString(),
+    is_owner: false,
+  },
 ]
 
-function getRandomGuide(): string {
-  return GUIDE_EXAMPLES[Math.floor(Math.random() * GUIDE_EXAMPLES.length)]
-}
-
+// ── 时间格式化 ──────────────────────────────────────────
 function formatTime(ts: string): string {
   const d = new Date(ts)
   const now = new Date()
@@ -34,9 +49,101 @@ function formatTime(ts: string): string {
   if (diff < 60_000) return '刚刚'
   if (diff < 3_600_000) return `${Math.floor(diff / 60_000)} 分钟前`
   if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)} 小时前`
+  if (diff < 7 * 86_400_000) return `${Math.floor(diff / 86_400_000)} 天前`
   return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })
 }
 
+// ── 欢迎卡片 ────────────────────────────────────────────
+function GuestbookHero() {
+  return (
+    <div className={styles.hero}>
+      <div className={styles.heroIcon} aria-hidden="true">💬</div>
+      <div className={styles.heroContent}>
+        <h2 className={styles.heroTitle}>访客与站点的对话空间</h2>
+        <p className={styles.heroDesc}>
+          随手留个「你好」，让这个站记住你来过。
+          你的留言会被小锤子看到，也会有回复。
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// ── 留言卡片 ────────────────────────────────────────────
+function MessageCard({ msg }: { msg: Message }) {
+  const showAutoReply = !msg.is_owner
+  const reply = showAutoReply ? generateAutoReply(msg.name, msg.content) : null
+
+  return (
+    <article className={`${styles.card} ${msg.is_owner ? styles.cardHammer : ''}`}>
+      <div className={styles.cardHeader}>
+        <span className={msg.is_owner ? styles.cardNameHammer : styles.cardName}>
+          {msg.is_owner ? '🔨 ' : ''}{msg.name}
+        </span>
+        <time className={styles.cardTime} dateTime={msg.time}>
+          {formatTime(msg.time)}
+        </time>
+      </div>
+      <p className={styles.cardContent}>{msg.content}</p>
+      {reply && (
+        <p className={styles.autoReply}>🔨 {reply}</p>
+      )}
+    </article>
+  )
+}
+
+// ── 留言列表 ────────────────────────────────────────────
+function GuestbookList({ 
+  messages, 
+  isLoaded,
+  isSample 
+}: { 
+  messages: Message[] 
+  isLoaded: boolean
+  isSample: boolean
+}) {
+  if (!isLoaded) {
+    return (
+      <div className={styles.listLoading}>
+        <div className={styles.skeleton}>
+          <div className={styles.skeletonCard}></div>
+          <div className={styles.skeletonCard}></div>
+          <div className={styles.skeletonCard}></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (messages.length === 0) {
+    return (
+      <div className={styles.empty}>
+        <span className={styles.emptyIcon} aria-hidden="true">📭</span>
+        <p className={styles.emptyTitle}>还没有留言</p>
+        <p className={styles.emptyHint}>做第一个访客，留下点什么吧。</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.list}>
+      {isSample && (
+        <div className={styles.sampleLabel}>
+          <span>示例对话</span>
+        </div>
+      )}
+      {messages.slice(0, 5).map((msg) => (
+        <MessageCard key={msg.id} msg={msg} />
+      ))}
+      {isSample && (
+        <p className={styles.sampleHint}>
+          以上为示例。真实留言会在下方显示。
+        </p>
+      )}
+    </div>
+  )
+}
+
+// ── 主组件 ────────────────────────────────────────────
 export default function Guestbook() {
   const [messages, setMessages] = useState<Message[]>([])
   const [name, setName] = useState('')
@@ -44,7 +151,7 @@ export default function Guestbook() {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [randomGuide] = useState(getRandomGuide)
+  const [isSampleData, setIsSampleData] = useState(false)
 
   useEffect(() => {
     fetchMessages()
@@ -54,30 +161,48 @@ export default function Guestbook() {
     if (!supabase) {
       try {
         const local = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-        setMessages(local)
+        if (local.length > 0) {
+          setMessages(local)
+          setIsSampleData(false)
+        } else {
+          setMessages(SAMPLE_MESSAGES)
+          setIsSampleData(true)
+        }
       } catch {
-        setMessages([])
+        setMessages(SAMPLE_MESSAGES)
+        setIsSampleData(true)
       }
       setLoading(false)
       return
     }
+
     try {
       const { data, error } = await supabase
         .from('guestbook')
         .select('id, nickname, content, created_at, is_owner')
         .order('created_at', { ascending: false })
         .limit(100)
+
       if (error) throw error
-      const msgs: Message[] = (data || []).map((r: Record<string, unknown>) => ({
-        id: String(r.id),
-        name: r.nickname as string,
-        content: r.content as string,
-        time: r.created_at as string,
-        is_owner: (r.is_owner as boolean | undefined) ?? false,
-      }))
-      setMessages(msgs)
+
+      if (!data || data.length === 0) {
+        setMessages(SAMPLE_MESSAGES)
+        setIsSampleData(true)
+      } else {
+        const msgs: Message[] = (data || []).map((r: Record<string, unknown>) => ({
+          id: String(r.id),
+          name: r.nickname as string,
+          content: r.content as string,
+          time: r.created_at as string,
+          is_owner: (r.is_owner as boolean | undefined) ?? false,
+        }))
+        setMessages(msgs)
+        setIsSampleData(false)
+      }
     } catch {
-      setMessages([])
+      // 出错时使用示例数据
+      setMessages(SAMPLE_MESSAGES)
+      setIsSampleData(true)
     } finally {
       setLoading(false)
     }
@@ -92,6 +217,12 @@ export default function Guestbook() {
       const trimmedName = name.trim()
       const trimmedContent = content.trim()
 
+      // 如果当前显示的是示例数据，先清除
+      if (isSampleData) {
+        setMessages([])
+        setIsSampleData(false)
+      }
+
       if (!supabase) {
         const localMsgs: Message[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
         const newMsg: Message = {
@@ -103,7 +234,7 @@ export default function Guestbook() {
         }
         const updated = [newMsg, ...localMsgs]
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
-        setMessages(updated)
+        setMessages(prev => [newMsg, ...prev])
         setName('')
         setContent('')
         setSubmitted(true)
@@ -132,13 +263,8 @@ export default function Guestbook() {
 
   return (
     <div className={styles.container}>
-      {/* 引导卡片 */}
-      <div className={styles.guide} role="note" aria-label="留言引导">
-        <span className={styles.guideIcon} role="img" aria-hidden="true">💬</span>
-        <p className={styles.guideText}>
-          {randomGuide}
-        </p>
-      </div>
+      {/* 欢迎卡片 */}
+      <GuestbookHero />
 
       {/* 表单 */}
       <form className={styles.form} onSubmit={handleSubmit} aria-label="留言表单">
@@ -186,45 +312,11 @@ export default function Guestbook() {
       </form>
 
       {/* 留言列表 */}
-      <div className={styles.list}>
-        {loading ? (
-          <div className={styles.empty}>
-            <div className={styles.skeleton}>
-              <div className={styles.skeletonCard}></div>
-              <div className={styles.skeletonCard}></div>
-              <div className={styles.skeletonCard}></div>
-            </div>
-          </div>
-        ) : messages.length === 0 ? (
-          <div className={styles.empty}>
-            <span className={styles.emptyIcon}>📭</span>
-            <p>还没有留言。</p>
-            <p className={styles.emptyHint}>做第一个访客，留下点什么吧。</p>
-          </div>
-        ) : (
-          messages.map((msg) => {
-            const showAutoReply = !msg.is_owner
-            const reply = showAutoReply ? generateAutoReply(msg.name, msg.content) : null
-            return (
-              <div
-                key={msg.id}
-                className={`${styles.card} ${styles.cardEnter} ${msg.is_owner ? styles.cardHammer : ''}`}
-              >
-                <div className={styles.cardHeader}>
-                  <span className={msg.is_owner ? styles.cardNameHammer : styles.cardName}>
-                    {msg.is_owner ? '🔨 ' : ''}{msg.name}
-                  </span>
-                  <span className={styles.cardTime}>{formatTime(msg.time)}</span>
-                </div>
-                <p className={styles.cardContent}>{msg.content}</p>
-                {reply && (
-                  <p className={styles.autoReply}>🔨 {reply}</p>
-                )}
-              </div>
-            )
-          })
-        )}
-      </div>
+      <GuestbookList 
+        messages={messages} 
+        isLoaded={!loading}
+        isSample={isSampleData}
+      />
     </div>
   )
 }

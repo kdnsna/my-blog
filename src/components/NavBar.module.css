@@ -87,6 +87,31 @@
   gap: var(--space-md);
 }
 
+.quickLinks {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.quickLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  background: transparent;
+  transition: all var(--transition-fast);
+}
+
+.quickLink:hover {
+  color: var(--color-amber-300);
+  background: rgba(200, 148, 58, 0.1);
+  transform: translateY(-1px);
+}
+
 .socialLink {
   display: flex;
   align-items: center;

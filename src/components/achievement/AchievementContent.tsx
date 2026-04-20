@@ -22,6 +22,7 @@ export default function AchievementContent({
 }: AchievementContentProps) {
   const [typeFilter, setTypeFilter] = useState<'all' | 'project' | 'case'>('all')
   const [statusFilter, setStatusFilter] = useState<'all' | ProjectStatus>('all')
+  const [changelogExpanded, setChangelogExpanded] = useState(false)
 
   const filteredProjects = projects.filter(p => {
     if (statusFilter === 'all') return true
@@ -161,36 +162,48 @@ export default function AchievementContent({
         </section>
       )}
 
-      {/* 更新日志 */}
+      {/* 更新日志 - 默认折叠 */}
       {typeFilter === 'all' && (
         <section className={styles.section}>
-          <SectionHeader
-            icon="📋"
-            title="更新日志"
-            subtitle="最近的迭代记录"
-          />
-          <div className={styles.changelog}>
-            {changelog.map((entry, index) => (
-              <div key={index} className={styles.changelogItem}>
-                <div className={styles.changelogDate}>
-                  <span className={styles.changelogDay}>
-                    {new Date(entry.date).getDate()}
-                  </span>
-                  <span className={styles.changelogMonth}>
-                    {new Date(entry.date).toLocaleDateString('zh-CN', { month: 'short', year: 'numeric' })}
-                  </span>
+          <button 
+            className={styles.changelogToggle}
+            onClick={() => setChangelogExpanded(!changelogExpanded)}
+            aria-expanded={changelogExpanded}
+          >
+            <div className={styles.changelogToggleContent}>
+              <span className={styles.changelogToggleIcon}>📋</span>
+              <span className={styles.changelogToggleTitle}>更新日志</span>
+              <span className={styles.changelogToggleHint}>内部迭代记录</span>
+            </div>
+            <span className={`${styles.changelogToggleArrow} ${changelogExpanded ? styles.changelogToggleArrowOpen : ''}`}>
+              ▼
+            </span>
+          </button>
+          
+          {changelogExpanded && (
+            <div className={styles.changelog}>
+              {changelog.map((entry, index) => (
+                <div key={index} className={styles.changelogItem}>
+                  <div className={styles.changelogDate}>
+                    <span className={styles.changelogDay}>
+                      {new Date(entry.date).getDate()}
+                    </span>
+                    <span className={styles.changelogMonth}>
+                      {new Date(entry.date).toLocaleDateString('zh-CN', { month: 'short', year: 'numeric' })}
+                    </span>
+                  </div>
+                  <div className={styles.changelogContent}>
+                    {entry.changes.map((change, i) => (
+                      <div key={i} className={styles.changelogChange}>
+                        <span className={styles.changelogBullet}>•</span>
+                        <span className={styles.changelogText}>{change}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className={styles.changelogContent}>
-                  {entry.changes.map((change, i) => (
-                    <div key={i} className={styles.changelogChange}>
-                      <span className={styles.changelogBullet}>•</span>
-                      <span className={styles.changelogText}>{change}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
       )}
 
