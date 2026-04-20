@@ -121,12 +121,12 @@ RRF_score(d) = Σ 1/(k + rank_i(d))
 - FTS5 全文索引
 - 检索脚本工具
 
-### Phase 4：向量检索 + RRF 📋
+### Phase 4：向量检索 + RRF ✅
 - 向量存储（1024维嵌入）
 - RRF 混合检索
 - 需配置 embedding API
 
-前三阶段已完成，Phase 4 设计文档已就绪。
+四阶段全部完成。
 
 ---
 
