@@ -96,12 +96,6 @@ function formatDate(): string {
   return `${now.getMonth() + 1}月${now.getDate()}日 ${weekdays[now.getDay()]}`
 }
 
-// ── 日间/夜间判断 ─────────────────────────────────────
-function isNight(): boolean {
-  const h = new Date().getHours()
-  return h < 6 || h >= 20
-}
-
 // ── Mock 数据 ──────────────────────────────────────────
 const MOCK_MESSAGES: Message[] = [
   {
@@ -272,7 +266,6 @@ export default function Teahouse() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
-  const [nightMode, setNightMode] = useState(false)
   const [liked, setLiked] = useState<Set<string>>(new Set())
   const [topicFilter, setTopicFilter] = useState<TopicFilter>('all')
   const [showScrollBtn, setShowScrollBtn] = useState(false)
@@ -281,7 +274,6 @@ export default function Teahouse() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const prevScrollHeightRef = useRef(0)
 
-  const todayTopic = getTodayTopic()
   const dateStr = formatDate()
 
   // 按 topic 筛选
@@ -301,7 +293,6 @@ export default function Teahouse() {
     fetchAllMessages().then((msgs) => {
       if (mounted) {
         setAllMessages(msgs)
-        setNightMode(isNight())
         setLoading(false)
       }
     })
@@ -335,7 +326,7 @@ export default function Teahouse() {
         setLoadingMore(false)
       }, 300)
     }
-  }, [loadingMore, hasMore, filteredMessages.length, visibleMessages.length])
+  }, [loadingMore, hasMore, visibleMessages.length])
 
   // 滚动位置恢复
   useEffect(() => {

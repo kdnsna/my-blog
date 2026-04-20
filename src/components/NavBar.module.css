@@ -225,8 +225,16 @@
   backdrop-filter: blur(16px);
 }
 
+.mobileMenuOpen {
+  display: flex;
+}
+
 @media (max-width: 768px) {
   .mobileMenu {
+    display: none;
+  }
+
+  .mobileMenuOpen {
     display: flex;
   }
 }

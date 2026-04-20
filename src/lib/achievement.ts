@@ -27,7 +27,7 @@ export function getProjectAchievements(): ProjectAchievement[] {
       ...PROJECT_STATUS_INFO['completed'],
       result: '全新 UI 界面、统一的组件设计语言、完整的日记/知识库/项目/茶馆页面、真实数据 SSR 渲染。',
       tags: ['建站', 'Next.js', 'React', 'UI'],
-      updatedAt: '2026-04-15',
+      updatedAt: '2026-04-20',
       relatedDiaries: diaries
         .filter(d => d.title.includes('Blog') || d.title.includes('博客') || d.title.includes('重构'))
         .slice(0, 3)
@@ -102,9 +102,15 @@ export function getProjectAchievements(): ProjectAchievement[] {
  * 具体问题的解决过程
  */
 export function getCaseAchievements(): CaseAchievement[] {
-  const diaries = getAllDiaries()
-  
   const cases: CaseAchievement[] = [
+    {
+      id: 'mobile-nav-fix',
+      title: '手机端导航菜单修复',
+      description: '博客在手机端导航菜单始终展开无法收起，排查发现 CSS 未根据菜单状态控制显隐，添加 mobileMenuOpen 条件类名后修复。',
+      tags: ['建站', 'CSS', '移动端'],
+      date: '2026-04-20',
+      relatedProjectId: 'blog-refactor'
+    },
     {
       id: 'moonshot-flow-fix',
       title: 'Moonshot 流量暴涨根治',
@@ -146,10 +152,16 @@ export function getCaseAchievements(): CaseAchievement[] {
  * 从项目进展中提取
  */
 export function getChangelog(): ChangelogEntry[] {
-  const diaries = getAllDiaries()
-  
   // 从最近日记中提取更新内容
   const recentUpdates: ChangelogEntry[] = [
+    {
+      date: '2026-04-20',
+      changes: [
+        '修复手机端导航菜单无法收起的问题',
+        '博客重构项目持续优化'
+      ],
+      relatedType: 'case'
+    },
     {
       date: '2026-04-15',
       changes: [
