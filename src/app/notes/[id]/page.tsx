@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -53,13 +52,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 function estimateReadingTime(content: string): number {
   const words = content.length / 2
   return Math.max(1, Math.ceil(words / 400))
-}
-
-// 难度映射
-const DIFFICULTY_MAP: Record<string, string> = {
-  basic: '基础',
-  intermediate: '进阶',
-  advanced: '高级'
 }
 
 export default async function NoteDetailPage({ params }: PageProps) {

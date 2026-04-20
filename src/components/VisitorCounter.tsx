@@ -67,27 +67,30 @@ export default function VisitorCounter() {
   const [isNewVisitor, setIsNewVisitor] = useState(false)
 
   useEffect(() => {
-    const prev = localStorage.getItem(STORAGE_KEY)
-    const now = Date.now()
-    const dayKey = new Date().toDateString()
-    const todayKey = 'xiaochuizi_visit_day'
-    const isSameSession = prev && now - parseInt(prev) < 30 * 60 * 1000
+    const visitTimer = window.setTimeout(() => {
+      const prev = localStorage.getItem(STORAGE_KEY)
+      const now = Date.now()
+      const dayKey = new Date().toDateString()
+      const todayKey = 'xiaochuizi_visit_day'
+      const isSameSession = prev && now - parseInt(prev) < 30 * 60 * 1000
 
-    if (isSameSession) {
-      fetchCount(supabase, setCount)
-      return
-    }
+      if (isSameSession) {
+        fetchCount(supabase, setCount)
+        return
+      }
 
-    incrementAndFetch(supabase, setCount)
-    localStorage.setItem(STORAGE_KEY, String(now))
+      incrementAndFetch(supabase, setCount)
+      localStorage.setItem(STORAGE_KEY, String(now))
 
-    // 延迟设置新访客标记
-    const lastDay = localStorage.getItem(todayKey)
-    if (lastDay !== dayKey) {
-      const t = setTimeout(() => setIsNewVisitor(true), 100)
-      localStorage.setItem(todayKey, dayKey)
-      return () => clearTimeout(t)
-    }
+      // 延迟设置新访客标记
+      const lastDay = localStorage.getItem(todayKey)
+      if (lastDay !== dayKey) {
+        window.setTimeout(() => setIsNewVisitor(true), 100)
+        localStorage.setItem(todayKey, dayKey)
+      }
+    }, 0)
+
+    return () => window.clearTimeout(visitTimer)
   }, [])
 
   // 加载完成前不渲染组件

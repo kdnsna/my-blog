@@ -48,12 +48,68 @@
   line-height: var(--leading-relaxed);
 }
 
+/* ================================================
+   导航链接区域 - 轻奢导航风格
+   ================================================ */
 .actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-md);
+  gap: var(--space-xl);
   flex-wrap: wrap;
+}
+
+/* 导航链接基础样式 */
+.navLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+/* 底部金色细线下划线 */
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-amber-300), transparent);
+  transition: all var(--transition-base);
+  transform: translateX(-50%);
+}
+
+/* 图标 */
+.navIcon {
+  font-size: 1em;
+  opacity: 0.6;
+  transition: opacity var(--transition-base);
+}
+
+/* 链接文字 */
+.navLabel {
+  position: relative;
+}
+
+/* Hover 状态 */
+.navLink:hover {
+  color: var(--color-text-primary);
+}
+
+.navLink:hover .navIcon {
+  opacity: 1;
+}
+
+.navLink:hover::after {
+  width: 100%;
 }
 
 @keyframes fadeIn {
@@ -80,8 +136,25 @@
   }
 
   .actions {
-    flex-direction: column;
+    flex-direction: row;
     width: 100%;
-    gap: var(--space-sm);
+    gap: var(--space-lg);
+    justify-content: center;
+  }
+
+  .navLink {
+    font-size: var(--text-base);
+    padding: var(--space-xs) var(--space-xs);
+  }
+}
+
+/* 小屏幕横向排列优化 */
+@media (max-width: 480px) {
+  .actions {
+    gap: var(--space-md);
+  }
+
+  .navLink {
+    font-size: var(--text-sm);
   }
 }
