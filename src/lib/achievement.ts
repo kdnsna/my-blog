@@ -27,7 +27,7 @@ export function getProjectAchievements(): ProjectAchievement[] {
       ...PROJECT_STATUS_INFO['completed'],
       result: '全新 UI 界面、统一的组件设计语言、完整的日记/知识库/项目/茶馆页面、真实数据 SSR 渲染。',
       tags: ['建站', 'Next.js', 'React', 'UI'],
-      updatedAt: '2026-04-20',
+      updatedAt: '2026-04-23',
       relatedDiaries: diaries
         .filter(d => d.title.includes('Blog') || d.title.includes('博客') || d.title.includes('重构'))
         .slice(0, 3)
@@ -104,6 +104,22 @@ export function getProjectAchievements(): ProjectAchievement[] {
 export function getCaseAchievements(): CaseAchievement[] {
   const cases: CaseAchievement[] = [
     {
+      id: 'blog-share-buttons',
+      title: '博客分享功能上线',
+      description: '添加微博、微信一键分享按钮，支持访客将博客内容快速分享到社交平台，提升内容传播便利性。',
+      tags: ['建站', '功能', '社交'],
+      date: '2026-04-23',
+      relatedProjectId: 'blog-refactor'
+    },
+    {
+      id: 'hero-button-style',
+      title: '首页 Hero 按钮优化',
+      description: '首页引导按钮升级为黑金风格，金色描边 + 悬浮动效，与整体设计语言统一，提升视觉质感。',
+      tags: ['建站', 'UI', '设计'],
+      date: '2026-04-23',
+      relatedProjectId: 'blog-refactor'
+    },
+    {
       id: 'mobile-nav-fix',
       title: '手机端导航菜单修复',
       description: '博客在手机端导航菜单始终展开无法收起，排查发现 CSS 未根据菜单状态控制显隐，添加 mobileMenuOpen 条件类名后修复。',
@@ -154,6 +170,14 @@ export function getCaseAchievements(): CaseAchievement[] {
 export function getChangelog(): ChangelogEntry[] {
   // 从最近日记中提取更新内容
   const recentUpdates: ChangelogEntry[] = [
+    {
+      date: '2026-04-23',
+      changes: [
+        '博客分享功能上线（微博/微信）',
+        '首页 Hero 按钮黑金风格优化'
+      ],
+      relatedType: 'case'
+    },
     {
       date: '2026-04-20',
       changes: [
