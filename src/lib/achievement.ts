@@ -2,12 +2,10 @@
  * 成果页数据层
  * 展示项目背景、目标、结果，体现可信度
  */
-
 import { getAllDiaries } from './diary'
 import { allNotes } from './notes'
 import { PROJECT_STATUS_INFO } from './types'
 import type { ProjectAchievement, CaseAchievement, ChangelogEntry } from './types'
-
 /**
  * 获取项目型成果
  * 这些是有完整背景、目标、结果的项目
@@ -17,6 +15,24 @@ export function getProjectAchievements(): ProjectAchievement[] {
   const diaries = getAllDiaries()
   
   const projects: ProjectAchievement[] = [
+    {
+      id: 'ultimate-ppt-master-skill',
+      name: '跨Agent PPT技能包',
+      icon: '🎯',
+      background: '用户需要快速生成专业PPT，但不同AI工具需要不同的技能包，维护成本高。',
+      goal: '打造一个跨Agent的PPT生成技能包，支持多种AI编程助手，实现一包多用的设计理念。',
+      status: 'completed',
+      ...PROJECT_STATUS_INFO['completed'],
+      result: '支持 Codex、Claude Code、OpenClaw、Hermes 四种Agent，提供可编辑PPTX和杂志风HTML两种输出模式。融合两个开源项目，保留MIT许可。',
+      tags: ['PPT', 'AI Agent', '开源'],
+      updatedAt: '2026-04-26',
+      github: 'https://github.com/openclaw/ultimate-ppt-master-skill',
+      relatedDiaries: diaries
+        .filter(d => d.title.includes('PPT') || d.title.includes('ultimate-ppt'))
+        .slice(0, 2)
+        .map(d => d.slug),
+      relatedNotes: []
+    },
     {
       id: 'blog-refactor',
       name: '博客重构',
@@ -96,13 +112,20 @@ export function getProjectAchievements(): ProjectAchievement[] {
   
   return projects
 }
-
 /**
  * 获取案例型成果
  * 具体问题的解决过程
  */
 export function getCaseAchievements(): CaseAchievement[] {
   const cases: CaseAchievement[] = [
+    {
+      id: 'ppt-skill-cross-agent',
+      title: '跨Agent PPT技能包上线',
+      description: '发布 ultimate-ppt-master-skill，支持 Codex、Claude Code、OpenClaw、Hermes 四种Agent，提供PPTX和HTML两种输出模式。',
+      tags: ['PPT', 'AI Agent', '开源'],
+      date: '2026-04-26',
+      relatedProjectId: 'ultimate-ppt-master-skill'
+    },
     {
       id: 'blog-share-buttons',
       title: '博客分享功能上线',
@@ -162,7 +185,6 @@ export function getCaseAchievements(): CaseAchievement[] {
   
   return cases.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
-
 /**
  * 获取更新日志
  * 从项目进展中提取
@@ -170,6 +192,14 @@ export function getCaseAchievements(): CaseAchievement[] {
 export function getChangelog(): ChangelogEntry[] {
   // 从最近日记中提取更新内容
   const recentUpdates: ChangelogEntry[] = [
+    {
+      date: '2026-04-26',
+      changes: [
+        '跨Agent PPT技能包正式上线',
+        '支持四种Agent、两种输出模式'
+      ],
+      relatedType: 'project'
+    },
     {
       date: '2026-04-23',
       changes: [
@@ -232,7 +262,6 @@ export function getChangelog(): ChangelogEntry[] {
   
   return recentUpdates
 }
-
 /**
  * 获取成果页统计数据
  */
