@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "server_info": {
+    "name": "kdnsna-blog",
+    "version": "1.0.0",
+    "description": "Personal blog MCP server for kdnsna.cn - provides access to diary entries, articles, and site information",
+    "vendor": {
+      "name": "kdnsna",
+      "url": "https://kdnsna.cn"
+    }
+  },
+  "capabilities": {
+    "resources": {
+      "diary": {
+        "description": "Personal diary entries with dates and tags",
+        "endpoints": [
+          {
+            "uri": "blog://diaries",
+            "method": "list",
+            "description": "List all diary entries"
+          },
+          {
+            "uri": "blog://diaries/{slug}",
+            "method": "read",
+            "description": "Get single diary entry by slug/date"
+          }
+        ]
+      },
+      "articles": {
+        "description": "Methodology and achievement articles",
+        "endpoints": [
+          {
+            "uri": "blog://articles",
+            "method": "list",
+            "description": "List all articles"
+          },
+          {
+            "uri": "blog://articles/{slug}",
+            "method": "read",
+            "description": "Get single article by slug"
+          }
+        ]
+      },
+      "site": {
+        "description": "Site metadata and information",
+        "endpoints": [
+          {
+            "uri": "blog://info",
+            "method": "read",
+            "description": "Get site information"
+          }
+        ]
+      }
+    },
+    "tools": {
+      "search_diary": {
+        "description": "Search diary entries by keyword or date range",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "query": { "type": "string", "description": "Search keyword" },
+            "tags": { "type": "array", "items": { "type": "string" }, "description": "Filter by tags" },
+            "start_date": { "type": "string", "format": "date" },
+            "end_date": { "type": "string", "format": "date" }
+          }
+        }
+      },
+      "get_recent_diaries": {
+        "description": "Get recent diary entries",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "limit": { "type": "integer", "default": 10, "maximum": 50 }
+          }
+        }
+      }
+    }
+  },
+  "api_endpoints": {
+    "rest": "https://kdnsna.cn/api",
+    "markdown": "https://kdnsna.cn/api/markdown",
+    "rss": "https://kdnsna.cn/rss.xml"
+  },
+  "authentication": {
+    "type": "none",
+    "description": "All endpoints are publicly accessible"
+  },
+  "rate_limits": {
+    "description": "Please be respectful with request frequency",
+    "suggested_delay_ms": 1000
+  }
+}
