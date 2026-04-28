@@ -1,0 +1,68 @@
+{
+  "catalog_version": "1.0",
+  "service_name": "kdnsna.cn Personal Blog",
+  "description": "A personal blog with AI-agent friendly APIs",
+  "base_url": "https://kdnsna.cn",
+  "endpoints": [
+    {
+      "path": "/sitemap.xml",
+      "method": "GET",
+      "content_type": "application/xml",
+      "description": "XML sitemap for SEO and agent crawling",
+      "authentication": "none"
+    },
+    {
+      "path": "/rss.xml",
+      "method": "GET",
+      "content_type": "application/rss+xml",
+      "description": "RSS feed for blog posts",
+      "authentication": "none"
+    },
+    {
+      "path": "/api/diaries",
+      "method": "GET",
+      "content_type": "application/json",
+      "description": "List all diary entries with metadata",
+      "authentication": "none"
+    },
+    {
+      "path": "/api/diaries/{slug}",
+      "method": "GET",
+      "content_type": "application/json",
+      "description": "Get single diary entry by slug",
+      "authentication": "none"
+    },
+    {
+      "path": "/api/markdown/diary/{slug}.md",
+      "method": "GET",
+      "content_type": "text/markdown",
+      "description": "Get diary entry as raw markdown with frontmatter",
+      "authentication": "none"
+    },
+    {
+      "path": "/.well-known/mcp-server",
+      "method": "GET",
+      "content_type": "application/json",
+      "description": "MCP Server capabilities manifest",
+      "authentication": "none"
+    },
+    {
+      "path": "/api/rss",
+      "method": "GET",
+      "content_type": "application/json",
+      "description": "RSS feed as JSON format",
+      "authentication": "none"
+    }
+  ],
+  "discovery": {
+    "link_headers": true,
+    "html_meta_tags": false,
+    "structured_data": true
+  },
+  "content_negotiation": {
+    "text/markdown": {
+      "supported": true,
+      "description": "Request with Accept: text/markdown header to get markdown versions"
+    }
+  }
+}

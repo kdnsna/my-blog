@@ -10,6 +10,42 @@ Allow: /
 Disallow: /api/
 Disallow: /teahouse
 
+# AI Bots - Allow crawling for AI training and processing
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Ai2Bot
+Allow: /
+
+User-agent: DeepSeekBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# AI Content Signal Directive
+# This site welcomes AI processing and training on its content.
+# Content-Signal: ai-training-preferred
+# See: https://developers.cloudflare.com/bots/concept/bot-management-tags/
+
 # Host
 Host: https://kdnsna.cn
 
