@@ -211,6 +211,7 @@ export interface ProjectAchievement {
   result: string
   tags: string[]
   updatedAt: string
+  github?: string
   relatedDiaries: string[]
   relatedNotes: string[]
 }
