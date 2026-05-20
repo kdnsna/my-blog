@@ -16,6 +16,63 @@ export function getProjectAchievements(): ProjectAchievement[] {
   
   const projects: ProjectAchievement[] = [
     {
+      id: 'wedding-navigator',
+      name: '甜囍手册',
+      icon: '💒',
+      background: '大爷2026年11月婚期，需要一款微信小程序统筹婚礼全流程——婚书请柬、路书导航、天气查询、相册管理、宾客RSVP。',
+      goal: '基于 uni-app 打造全功能婚礼小程序，支持双角色架构（主人端+宾客端）、云端数据同步、云函数天气。',
+      status: 'active',
+      ...PROJECT_STATUS_INFO['active'],
+      result: 'v2.0.14 已上线。路书地图集成腾讯位置服务，天气云函数对接和风天气，相册管理支持批量操作，7个云函数全量部署。',
+      tags: ['微信小程序', 'uni-app', '云开发', '婚礼'],
+      updatedAt: '2026-05-19',
+      github: 'https://github.com/kdnsna/wedding-navigator',
+      relatedDiaries: [],
+      relatedNotes: []
+    },
+    {
+      id: 'desktop-auto-organize',
+      name: '桌面自动归档系统',
+      icon: '🗂️',
+      background: 'Mac桌面长期散落大量工作文件，手动整理效率低且易遗漏，需要一套能自动识别项目归属并归档的系统。',
+      goal: '建立关键词驱动的桌面文件自动归档系统，每两天自动扫描、分类、移动，覆盖所有工作项目。',
+      status: 'active',
+      ...PROJECT_STATUS_INFO['active'],
+      result: 'Cron每两天自动运行。17个关键词→项目映射，自动归档到 ~/Documents 对应目录。处理iCloud文件锁、重名冲突、敏感文件跳过。5月已归档40+文件。',
+      tags: ['自动化', 'macOS', '文件管理', 'Cron'],
+      updatedAt: '2026-05-19',
+      relatedDiaries: [],
+      relatedNotes: []
+    },
+    {
+      id: 'weread-agent',
+      name: '微信读书 Agent',
+      icon: '📚',
+      background: '大爷微信读书书架有249本书，品类横跨玄幻、历史、科幻、经济，需要一个AI助手统一管理和推荐。',
+      goal: '接入微信读书 Agent API，实现书架智能管理、阅读进度追踪、个性化推荐和笔记分析。',
+      status: 'active',
+      ...PROJECT_STATUS_INFO['active'],
+      result: '已通过 Agent API 成功接入，可实时查询249本书架（含阅读进度和分类），支持公开/私密阅读状态识别。',
+      tags: ['微信读书', 'API', '阅读管理'],
+      updatedAt: '2026-05-17',
+      relatedDiaries: [],
+      relatedNotes: []
+    },
+    {
+      id: 'hermes-feishu-integration',
+      name: 'Hermes 飞书深度集成',
+      icon: '🔗',
+      background: '飞书作为主力通讯平台，与 Hermes 集成中存在多个痛点——交互卡片按钮报错200340、代理导致WebSocket断连、消息Markdown渲染异常。',
+      goal: '逐项排查并修复飞书集成中的所有问题，确保稳定通信和良好体验。',
+      status: 'completed',
+      ...PROJECT_STATUS_INFO['completed'],
+      result: '修复卡片交互200340（三项配置检查法）、配置NO_PROXY解决代理断连、优化消息排版（弃用表格、精简格式）。',
+      tags: ['飞书', 'Hermes', '集成', '排障'],
+      updatedAt: '2026-05-10',
+      relatedDiaries: [],
+      relatedNotes: []
+    },
+    {
       id: 'ultimate-ppt-master-skill',
       name: '跨Agent PPT技能包',
       icon: '🎯',
@@ -74,13 +131,13 @@ export function getProjectAchievements(): ProjectAchievement[] {
       id: 'memory-system',
       name: '三锤记忆系统',
       icon: '🧠',
-      background: 'AI 助手需要长期记忆能力，原方案过于简单，需要更系统的记忆管理机制。',
-      goal: '构建基于 EverMemOS SOTA 方案的云端记忆系统，支持 MemCell 结构化存储、Foresight 预测、RRF 混合检索。',
+      background: 'AI 助手需要长期记忆能力，原方案过于简单。三个锤子在共享记忆库中容易混淆身份边界。',
+      goal: '构建分层记忆体系，锚定大锤主身份，三锤各自建独立记忆库，共享库仅作档案馆。',
       status: 'completed',
       ...PROJECT_STATUS_INFO['completed'],
-      result: '完整的记忆系统架构，支持三层存储（Markdown/SQLite/向量）、每日自动整理、GitHub 异地备份。',
-      tags: ['记忆系统', 'AI', 'SQLite', '架构'],
-      updatedAt: '2026-04-15',
+      result: '大锤主记忆库完成身份锚定。按 people/projects/automations/rituals/decisions/lessons 六维分类。支持跨会话记忆恢复、FTS5全文搜索、GitHub异地备份。',
+      tags: ['记忆系统', 'AI', '架构', 'GitHub'],
+      updatedAt: '2026-05-10',
       relatedDiaries: diaries
         .filter(d => d.title.includes('记忆') || d.title.includes('Memory'))
         .slice(0, 3)
@@ -118,6 +175,38 @@ export function getProjectAchievements(): ProjectAchievement[] {
  */
 export function getCaseAchievements(): CaseAchievement[] {
   const cases: CaseAchievement[] = [
+    {
+      id: 'wedding-v2.0.14',
+      title: '甜囍手册 v2.0.14 上线',
+      description: '路书地图页重构、天气云函数增强对接和风天气、相册管理UI大改支持批量操作，7个云函数全量部署。主包1.78MB+分包280KB。',
+      tags: ['微信小程序', 'uni-app', '云开发'],
+      date: '2026-05-19',
+      relatedProjectId: 'wedding-navigator'
+    },
+    {
+      id: 'hermes-upgrade-v0.14.0',
+      title: 'Hermes 大版本升级 v0.14.0',
+      description: '从 v0.13.0 跨 396 个 commit 升级到 v0.14.0，核心对话引擎拆分为模块化架构（conversation_loop / agent_init / tool_executor）。',
+      tags: ['Hermes', '升级', '架构'],
+      date: '2026-05-19',
+      relatedProjectId: 'hermes-feishu-integration'
+    },
+    {
+      id: 'weread-api-connected',
+      title: '微信读书 Agent API 接入',
+      description: '成功接入微信读书 Agent API，实时查询249本书架，支持阅读进度、分类、笔记管理。',
+      tags: ['微信读书', 'API', '集成'],
+      date: '2026-05-17',
+      relatedProjectId: 'weread-agent'
+    },
+    {
+      id: 'desktop-organize-evolution',
+      title: '桌面自动整理进化：从手动到智能路由',
+      description: 'Cron 从简单归档升级为17个关键词自动路由 + iCloud锁处理 + 重名冲突解决。5月13日一次性归档40个积压文件。',
+      tags: ['自动化', 'macOS', '文件管理'],
+      date: '2026-05-13',
+      relatedProjectId: 'desktop-auto-organize'
+    },
     {
       id: 'ppt-skill-cross-agent',
       title: '跨Agent PPT技能包上线',
@@ -192,6 +281,38 @@ export function getCaseAchievements(): CaseAchievement[] {
 export function getChangelog(): ChangelogEntry[] {
   // 从最近日记中提取更新内容
   const recentUpdates: ChangelogEntry[] = [
+    {
+      date: '2026-05-19',
+      changes: [
+        '甜囍手册 v2.0.14 上线：路书地图、天气云函数、相册管理',
+        'Hermes v0.14.0 大版本升级完成'
+      ],
+      relatedType: 'project'
+    },
+    {
+      date: '2026-05-17',
+      changes: [
+        '微信读书 Agent API 成功接入，249本书架可查询',
+        'Hermes 修复升级至稳定版'
+      ],
+      relatedType: 'project'
+    },
+    {
+      date: '2026-05-13',
+      changes: [
+        '桌面自动归档系统完成进化，40个积压文件一次性归档',
+        'Cron 增加17个关键词自动路由'
+      ],
+      relatedType: 'project'
+    },
+    {
+      date: '2026-05-10',
+      changes: [
+        'Hermes 飞书深度集成完成：卡片交互、代理、排版修复',
+        '三锤记忆系统身份锚定完成，记忆库重组'
+      ],
+      relatedType: 'project'
+    },
     {
       date: '2026-04-26',
       changes: [
