@@ -1,19 +1,18 @@
 import Link from 'next/link'
 import VisitorCounter from './VisitorCounter'
-import { getAllDiaries } from '@/lib/diary'
+import { getAchievementStats } from '@/lib/achievement'
 import styles from './Footer.module.css'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
   
-  // 获取最新日记日期
-  const diaries = getAllDiaries()
-  const latestDiary = diaries[0]
-  const lastUpdated = latestDiary 
-    ? new Date(latestDiary.date).toLocaleDateString('zh-CN', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+  // 从成果页获取最新更新日期
+  const stats = getAchievementStats()
+  const lastUpdated = stats.latestDate
+    ? new Date(stats.latestDate).toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
       })
     : null
 

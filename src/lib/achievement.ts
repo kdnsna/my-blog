@@ -16,6 +16,20 @@ export function getProjectAchievements(): ProjectAchievement[] {
   
   const projects: ProjectAchievement[] = [
     {
+      id: 'qilu-driving-guide',
+      name: '齐鲁自驾图鉴',
+      icon: '🚗',
+      background: '需要一张以济南为起点的自驾可达范围地图，展示山东省内 15~240 分钟车程内的景点、美食、文化和休闲场所。',
+      goal: '基于 Leaflet + 高德瓦片构建等时圈地图，覆盖山东全省 16 个地级市，收录 277 个 POI。',
+      status: 'completed',
+      ...PROJECT_STATUS_INFO['completed'],
+      result: '完成交互式自驾地图。支持时间范围滑块、分类筛选、城市筛选、POI 详情弹窗。等时圈基于 85km/h 自驾速度动态计算半径。无需地图 API Key。',
+      tags: ['地图', 'Leaflet', '自驾', '山东'],
+      updatedAt: '2026-04-23',
+      relatedDiaries: [],
+      relatedNotes: []
+    },
+    {
       id: 'wedding-navigator',
       name: '甜囍手册',
       icon: '💒',
@@ -55,6 +69,8 @@ export function getProjectAchievements(): ProjectAchievement[] {
       result: '已通过 Agent API 成功接入，可实时查询249本书架（含阅读进度和分类），支持公开/私密阅读状态识别。',
       tags: ['微信读书', 'API', '阅读管理'],
       updatedAt: '2026-05-17',
+      relatedDiaries: [],
+      relatedNotes: []
     },
     {
       id: 'hermes-feishu-integration',

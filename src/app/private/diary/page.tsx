@@ -1,35 +1,42 @@
 import Link from 'next/link'
 import styles from '../page.module.css'
-import { getAllDiaries } from '@/lib/diary'
+import { getAllPrivateDiaries } from '@/lib/private-diary'
 
 export default function PrivateDiaryPage() {
-  // 这里可以放未脱敏的日记
-  const diaries = getAllDiaries()
+  const diaries = getAllPrivateDiaries()
 
   return (
     <main className={styles.page}>
       <header className={styles.header}>
         <h1 className={styles.title}>📔 工作日记</h1>
         <p className={styles.subtitle}>
-          这里是未经脱敏的完整日记，包含工作细节和内部信息。
+          完整日记存档，包含未脱敏的工作细节和内部信息。仅大爷可见。
         </p>
       </header>
 
       {diaries.length === 0 ? (
-        <p className={styles.empty}>暂无内容。在 `src/content/private-diary/` 下添加 `.mdx` 文件即可。</p>
+        <p className={styles.empty}>暂无日记。</p>
       ) : (
-        <div className={styles.list}>
-          {diaries.slice(0, 10).map((d) => (
-            <Link
-              key={d.slug}
-              href={`/private/diary/${d.slug}`}
-              className={styles.item}
-            >
-              <span className={styles.itemDate}>{d.date}</span>
-              <span className={styles.itemTitle}>{d.title}</span>
-            </Link>
-          ))}
-        </div>
+        <>
+          <p className={styles.count}>共 {diaries.length} 篇</p>
+          <div className={styles.list}>
+            {diaries.map((d) => (
+              <Link
+                key={d.slug}
+                href={`/private/diary/${d.slug}`}
+                className={styles.item}
+              >
+                <span className={styles.itemDate}>{d.date}</span>
+                <div className={styles.itemInfo}>
+                  <span className={styles.itemTitle}>{d.title}</span>
+                  {d.excerpt && (
+                    <span className={styles.itemExcerpt}>{d.excerpt}</span>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </>
       )}
 
       <footer className={styles.footer}>
