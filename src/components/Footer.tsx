@@ -52,13 +52,6 @@ export default function Footer() {
           <div className={styles.footerSection}>
             <h3>相关链接</h3>
             <div className={styles.footerContact}>
-              <a
-                href="https://github.com/kdnsna"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub
-              </a>
               <Link href="/teahouse">茶话会</Link>
               <Link href="/guestbook">留言板</Link>
             </div>
