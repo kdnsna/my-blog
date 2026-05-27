@@ -10,6 +10,7 @@ module.exports = {
         disallow: [
           '/api/',
           '/teahouse',  // 动态内容页面不索引
+          '/private/',  // 私人空间不索引
         ],
       },
       {
@@ -18,6 +19,7 @@ module.exports = {
         disallow: [
           '/api/',
           '/teahouse',
+          '/private/',
         ],
       },
     ],
@@ -25,12 +27,14 @@ module.exports = {
   exclude: [
     '/api/*',
     '/teahouse',
+    '/private/*',
   ],
   // 添加所有栏目页和详情页路由
   filters: {
     exclude: [
       '/api/*',
       '/teahouse',
+      '/private/*',
     ],
   },
   // 文章详情页的优先级
