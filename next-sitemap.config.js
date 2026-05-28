@@ -39,7 +39,7 @@ module.exports = {
   },
   // 文章详情页的优先级
   transform: async (config, url) => {
-    if (url.includes('/diary/') || url.includes('/notes/')) {
+    if (url.includes('/story/') || url.includes('/method/')) {
       return {
         loc: url,
         lastmod: new Date().toISOString(),
