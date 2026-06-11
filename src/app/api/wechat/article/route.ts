@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   try {
     const { token } = await getAccessToken();
     let url: string;
-    let method = 'POST';
+    const method = 'POST';
 
     switch (action) {
       case 'create':
