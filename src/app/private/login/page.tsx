@@ -1,10 +1,23 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { Suspense, useState, FormEvent } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import styles from './page.module.css'
 
-export default function PrivateLoginPage() {
+function LoginFallback() {
+  return (
+    <main className={styles.page}>
+      <div className={styles.card}>
+        <h1 className={styles.title}>🔒 私人空间</h1>
+        <p className={styles.subtitle}>
+          这部分内容仅对大爷开放。输入密码进入。
+        </p>
+      </div>
+    </main>
+  )
+}
+
+function PrivateLoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') || '/private'
@@ -70,5 +83,13 @@ export default function PrivateLoginPage() {
         </form>
       </div>
     </main>
+  )
+}
+
+export default function PrivateLoginPage() {
+  return (
+    <Suspense fallback={<LoginFallback />}>
+      <PrivateLoginForm />
+    </Suspense>
   )
 }
