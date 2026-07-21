@@ -16,16 +16,17 @@ export function getProjectAchievements(): ProjectAchievement[] {
   
   const projects: ProjectAchievement[] = [
     {
-      id: 'smart-ppt-image-studio',
-      name: 'PPT 智图工坊',
-      icon: '🖼️',
-      background: '制作演示文稿时，最耗时的往往不是写文字，而是为每一页找到风格统一、信息准确的主视觉。',
-      goal: '把“先定视觉、再叠信息”的方法做成一套可复用的工作流，让演示从大纲到成品拥有一致的视觉叙事。',
+      id: 'pptlint',
+      name: 'PPTLint',
+      icon: '🔎',
+      background: 'PPT 在交付前常藏着难以肉眼穷尽的问题：溢出、对齐、字体、不可编辑元素和版本差异。',
+      goal: '提供本地优先的演示文稿交付前检查，输出明确的修复建议，并在修复后完成验证。',
       status: 'active',
       ...PROJECT_STATUS_INFO['active'],
-      result: '已形成从页面规划、主视觉生成到预览与构建的完整流程。每一页先用主视觉确定情绪和构图，再补充必要的信息层。',
-      tags: ['演示设计', 'AI 图像', '工作流'],
-      updatedAt: '2026-06-12',
+      result: '已形成可复用的 PowerPoint 预检与修复工作流：检查、生成修复计划、保留清理副本并验证交付结果。',
+      tags: ['PowerPoint', '质量检查', '本地优先'],
+      updatedAt: '2026-07-14',
+      github: 'https://github.com/kdnsna/pptlint',
       relatedDiaries: [],
       relatedNotes: []
     },
@@ -102,16 +103,16 @@ export function getProjectAchievements(): ProjectAchievement[] {
     },
     {
       id: 'ultimate-ppt-master-skill',
-      name: '跨Agent PPT技能包',
+      name: 'Ultimate PPT Master Skill',
       icon: '🎯',
-      background: '用户需要快速生成专业PPT，但不同AI工具需要不同的技能包，维护成本高。',
-      goal: '打造一个跨Agent的PPT生成技能包，支持多种AI编程助手，实现一包多用的设计理念。',
+      background: '从一句话需求到可编辑的演示成品，中间往往缺少对受众、场景、资料和交付质量的系统化判断。',
+      goal: '把需求澄清、资料整理、PPTX / Web Deck 生成、视觉审阅与交付审计组合成一套开源工作流。',
       status: 'completed',
       ...PROJECT_STATUS_INFO['completed'],
-      result: '支持 Codex、Claude Code、OpenClaw、Hermes 四种Agent，提供可编辑PPTX和杂志风HTML两种输出模式。融合两个开源项目，保留MIT许可。',
-      tags: ['PPT', 'AI Agent', '开源'],
-      updatedAt: '2026-04-26',
-      github: 'https://github.com/openclaw/ultimate-ppt-master-skill',
+      result: '以开源方式持续维护：从需求拆解到可编辑成稿均有明确步骤，并支持生成后渲染审阅与审计留痕。',
+      tags: ['PPT', 'AI 工作流', '开源'],
+      updatedAt: '2026-07-16',
+      github: 'https://github.com/kdnsna/ultimate-ppt-master-skill',
       relatedDiaries: diaries
         .filter(d => d.title.includes('PPT') || d.title.includes('ultimate-ppt'))
         .slice(0, 2)
@@ -195,7 +196,11 @@ export function getProjectAchievements(): ProjectAchievement[] {
     }
   ]
   
-  return projects.filter((project) => project.status !== 'stopped')
+  return projects.filter(
+    (project) =>
+      project.status !== 'stopped' &&
+      !['wedding-navigator', 'weread-agent'].includes(project.id)
+  )
 }
 /**
  * 获取案例型成果
@@ -204,12 +209,12 @@ export function getProjectAchievements(): ProjectAchievement[] {
 export function getCaseAchievements(): CaseAchievement[] {
   const cases: CaseAchievement[] = [
     {
-      id: 'visual-first-presentation-workflow',
-      title: '视觉定妆照驱动的 PPT 工作流成型',
-      description: '将每页主视觉前置到演示制作流程：先统一情绪、构图与叙事，再补充标题、图表和解释信息。',
-      tags: ['PPT', '视觉叙事', '工作流'],
-      date: '2026-06-12',
-      relatedProjectId: 'smart-ppt-image-studio'
+      id: 'presentation-workflow-release',
+      title: 'Ultimate PPT Master Skill 的开源工作流发布',
+      description: '将需求澄清、资料编排、可编辑演示生成与交付检查串成一条可复用的开源流程。',
+      tags: ['PPT', 'AI 工作流', '开源'],
+      date: '2026-07-16',
+      relatedProjectId: 'ultimate-ppt-master-skill'
     },
     {
       id: 'wedding-v2.0.14',
@@ -308,7 +313,12 @@ export function getCaseAchievements(): CaseAchievement[] {
     }
   ]
   
-  return cases.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  return cases
+    .filter(
+      (item) =>
+        !['wedding-navigator', 'weread-agent'].includes(item.relatedProjectId ?? '')
+    )
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 /**
  * 获取更新日志
@@ -327,10 +337,10 @@ export function getChangelog(): ChangelogEntry[] {
       relatedType: 'project'
     },
     {
-      date: '2026-06-12',
+      date: '2026-07-14',
       changes: [
-        'PPT 智图工坊形成视觉定妆照驱动的演示工作流',
-        '新增“先定主视觉、再叠信息层”的方法卡片'
+        'PPTLint 增加本地优先的演示文稿交付前检查与验证流程',
+        'Ultimate PPT Master Skill 持续完善从需求到成稿的开源工作流'
       ],
       relatedType: 'project'
     },
@@ -434,7 +444,7 @@ export function getChangelog(): ChangelogEntry[] {
     }
   ]
   
-  return recentUpdates
+  return recentUpdates.slice(0, 2)
 }
 /**
  * 获取成果页统计数据
