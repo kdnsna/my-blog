@@ -10,7 +10,7 @@
  * - 安全：系统健康与规范守护
  */
 
-import { allNotes } from './notes'
+import { getPublicNotes } from './notes'
 import type { NoteCategory, MethodNoteItem } from './types'
 
 /**
@@ -60,7 +60,7 @@ const CATEGORY_CONFIG: Record<string, {
 export function getNoteCategories(): NoteCategory[] {
   const categoryMap = new Map<string, { count: number; description: string }>()
   
-  allNotes.forEach(note => {
+  getPublicNotes().forEach(note => {
     const existing = categoryMap.get(note.category)
     if (existing) {
       existing.count++
@@ -100,7 +100,7 @@ export function getNoteCategories(): NoteCategory[] {
  * 获取方法页笔记列表
  */
 export function getMethodNotes(): MethodNoteItem[] {
-  return allNotes.map(note => ({
+  return getPublicNotes().map(note => ({
     id: note.id,
     title: note.title,
     category: note.category,
@@ -129,10 +129,11 @@ export function getMethodStats(): {
   totalCategories: number
   latestDate: string
 } {
+  const notes = getPublicNotes()
   return {
-    totalNotes: allNotes.length,
+    totalNotes: notes.length,
     totalCategories: getNoteCategories().length,
-    latestDate: allNotes[0]?.date || ''
+    latestDate: notes[0]?.date || ''
   }
 }
 

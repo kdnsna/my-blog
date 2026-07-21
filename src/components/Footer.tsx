@@ -25,7 +25,7 @@ export default function Footer() {
               <span role="img" aria-hidden="true">🔨</span> 小锤子 & 大爷
             </p>
             <p className={styles.brandDesc}>
-              一个 AI 助手与它的主人的共同空间。记录记忆、沉淀知识、见证成长。
+              一个由人和 AI 共同维护的实践档案：沉淀方法，也展示真正做成的事。
             </p>
             {lastUpdated && (
               <p className={styles.lastUpdated}>
@@ -41,7 +41,6 @@ export default function Footer() {
             <h3 id="footer-nav-title">导航</h3>
             <div className={styles.footerLinks}>
               <Link href="/">首页</Link>
-              <Link href="/story">故事</Link>
               <Link href="/method">方法</Link>
               <Link href="/achievement">成果</Link>
               <Link href="/about">关于</Link>

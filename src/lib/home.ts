@@ -4,7 +4,7 @@
 // ============================================
 
 import { getAllDiaries } from './diary'
-import { allNotes } from './notes'
+import { getPublicNotes } from './notes'
 import type { Portal, UpdateItem, FeaturedItem, EngageItem } from './types'
 
 // ============================================
@@ -13,7 +13,7 @@ import type { Portal, UpdateItem, FeaturedItem, EngageItem } from './types'
 
 export function getPortalData(): Portal[] {
   const diaries = getAllDiaries()
-  const notes = allNotes
+  const notes = getPublicNotes()
   
   return [
     {
@@ -49,7 +49,7 @@ export function getPortalData(): Portal[] {
 
 export function getRecentUpdates(maxItems = 5): UpdateItem[] {
   const diaries = getAllDiaries()
-  const notes = allNotes
+  const notes = getPublicNotes()
 
   const updates: UpdateItem[] = [
     ...diaries.slice(0, 3).map(d => ({
@@ -79,7 +79,7 @@ export function getRecentUpdates(maxItems = 5): UpdateItem[] {
 // ============================================
 
 export function getFeaturedItems(maxItems = 2): FeaturedItem[] {
-  return allNotes
+  return getPublicNotes()
     .filter(n => n.featured)
     .slice(0, maxItems)
     .map(n => ({

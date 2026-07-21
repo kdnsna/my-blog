@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { getNoteById, allNotes } from '@/lib/notes'
+import { getNoteById, getPublicNotes } from '@/lib/notes'
 import { ArticleHeader, ArticleFooter } from '@/components/article'
 import Breadcrumb from '@/components/Breadcrumb'
 import styles from './page.module.css'
@@ -63,7 +63,7 @@ export default async function NoteDetailPage({ params }: PageProps) {
   }
 
   // 获取相关推荐（同分类笔记）
-  const relatedNotes = allNotes
+  const relatedNotes = getPublicNotes()
     .filter(n => 
       n.id !== id && 
       (n.category === note.category || n.tags.some(tag => note.tags.includes(tag)))

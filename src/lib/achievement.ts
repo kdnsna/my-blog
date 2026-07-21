@@ -3,7 +3,7 @@
  * 展示项目背景、目标、结果，体现可信度
  */
 import { getAllDiaries } from './diary'
-import { allNotes } from './notes'
+import { getPublicNotes } from './notes'
 import { PROJECT_STATUS_INFO } from './types'
 import type { ProjectAchievement, CaseAchievement, ChangelogEntry } from './types'
 /**
@@ -15,6 +15,20 @@ export function getProjectAchievements(): ProjectAchievement[] {
   const diaries = getAllDiaries()
   
   const projects: ProjectAchievement[] = [
+    {
+      id: 'smart-ppt-image-studio',
+      name: 'PPT 智图工坊',
+      icon: '🖼️',
+      background: '制作演示文稿时，最耗时的往往不是写文字，而是为每一页找到风格统一、信息准确的主视觉。',
+      goal: '把“先定视觉、再叠信息”的方法做成一套可复用的工作流，让演示从大纲到成品拥有一致的视觉叙事。',
+      status: 'active',
+      ...PROJECT_STATUS_INFO['active'],
+      result: '已形成从页面规划、主视觉生成到预览与构建的完整流程。每一页先用主视觉确定情绪和构图，再补充必要的信息层。',
+      tags: ['演示设计', 'AI 图像', '工作流'],
+      updatedAt: '2026-06-12',
+      relatedDiaries: [],
+      relatedNotes: []
+    },
     {
       id: 'qilu-driving-guide',
       name: '齐鲁自驾图鉴',
@@ -33,12 +47,12 @@ export function getProjectAchievements(): ProjectAchievement[] {
       id: 'wedding-navigator',
       name: '甜囍手册',
       icon: '💒',
-      background: '近期婚期临近，需要一款微信小程序统筹婚礼全流程——婚书请柬、路书导航、天气查询、相册管理、宾客RSVP。',
-      goal: '基于 uni-app 打造全功能婚礼小程序，支持双角色架构（主人端+宾客端）、云端数据同步、云函数天气。',
+      background: '想为一场重要庆典准备一款轻量、好用的移动端信息手册，统一承载邀请、行程、天气、相册与回执。',
+      goal: '基于 uni-app 打造双角色的小程序体验，让组织者和来宾都能在一个入口完成必要的信息协作。',
       status: 'active',
       ...PROJECT_STATUS_INFO['active'],
-      result: 'v2.0.14 已上线。路书地图集成腾讯位置服务，天气云函数对接和风天气，相册管理支持批量操作，7个云函数全量部署。',
-      tags: ['微信小程序', 'uni-app', '云开发', '婚礼'],
+      result: '已完成多次可用版本迭代：行程地图、天气信息和相册管理均纳入同一体验，并支持更高效的内容维护。',
+      tags: ['微信小程序', 'uni-app', '移动体验'],
       updatedAt: '2026-05-19',
       github: undefined,
       relatedDiaries: [],
@@ -49,10 +63,10 @@ export function getProjectAchievements(): ProjectAchievement[] {
       name: '桌面自动归档系统',
       icon: '🗂️',
       background: 'Mac桌面长期散落大量工作文件，手动整理效率低且易遗漏，需要一套能自动识别项目归属并归档的系统。',
-      goal: '建立关键词驱动的桌面文件自动归档系统，每两天自动扫描、分类、移动，覆盖所有工作项目。',
+      goal: '建立关键词驱动的桌面文件自动归档系统，定期扫描、分类并移动文件，让项目资料回到统一的资料体系。',
       status: 'active',
       ...PROJECT_STATUS_INFO['active'],
-      result: 'Cron每两天自动运行。17个关键词→项目映射，自动归档到 ~/Documents 对应目录。处理iCloud文件锁、重名冲突、敏感文件跳过。5月已归档40+文件。',
+      result: '自动归档持续运行，能处理云端同步占用、同名文件和敏感文件跳过等常见边界，让桌面始终保持可控。',
       tags: ['自动化', 'macOS', '文件管理', 'Cron'],
       updatedAt: '2026-05-19',
       relatedDiaries: [],
@@ -136,7 +150,7 @@ export function getProjectAchievements(): ProjectAchievement[] {
         .filter(d => d.title.includes('监控') || d.title.includes('监控台'))
         .slice(0, 2)
         .map(d => d.slug),
-      relatedNotes: allNotes
+      relatedNotes: getPublicNotes()
         .filter(n => n.tags.includes('监控'))
         .slice(0, 2)
         .map(n => n.id)
@@ -156,7 +170,7 @@ export function getProjectAchievements(): ProjectAchievement[] {
         .filter(d => d.title.includes('记忆') || d.title.includes('Memory'))
         .slice(0, 3)
         .map(d => d.slug),
-      relatedNotes: allNotes
+      relatedNotes: getPublicNotes()
         .filter(n => n.category === '记忆系统')
         .map(n => n.id)
     },
@@ -175,13 +189,13 @@ export function getProjectAchievements(): ProjectAchievement[] {
         .filter(d => d.title.includes('晨报') || d.title.includes('情报'))
         .slice(0, 2)
         .map(d => d.slug),
-      relatedNotes: allNotes
+      relatedNotes: getPublicNotes()
         .filter(n => n.category === '自动化')
         .map(n => n.id)
     }
   ]
   
-  return projects
+  return projects.filter((project) => project.status !== 'stopped')
 }
 /**
  * 获取案例型成果
@@ -190,10 +204,18 @@ export function getProjectAchievements(): ProjectAchievement[] {
 export function getCaseAchievements(): CaseAchievement[] {
   const cases: CaseAchievement[] = [
     {
+      id: 'visual-first-presentation-workflow',
+      title: '视觉定妆照驱动的 PPT 工作流成型',
+      description: '将每页主视觉前置到演示制作流程：先统一情绪、构图与叙事，再补充标题、图表和解释信息。',
+      tags: ['PPT', '视觉叙事', '工作流'],
+      date: '2026-06-12',
+      relatedProjectId: 'smart-ppt-image-studio'
+    },
+    {
       id: 'wedding-v2.0.14',
-      title: '甜囍手册 v2.0.14 上线',
-      description: '路书地图页重构、天气云函数增强对接和风天气、相册管理UI大改支持批量操作，7个云函数全量部署。主包1.78MB+分包280KB。',
-      tags: ['微信小程序', 'uni-app', '云开发'],
+      title: '甜囍手册的移动体验迭代',
+      description: '行程地图、天气信息和相册管理完成体验调整，让组织者与来宾能更顺畅地获取和维护必要信息。',
+      tags: ['微信小程序', 'uni-app', '移动体验'],
       date: '2026-05-19',
       relatedProjectId: 'wedding-navigator'
     },
@@ -295,6 +317,23 @@ export function getCaseAchievements(): CaseAchievement[] {
 export function getChangelog(): ChangelogEntry[] {
   // 从最近日记中提取更新内容
   const recentUpdates: ChangelogEntry[] = [
+    {
+      date: '2026-07-16',
+      changes: [
+        '公开站完成定位更新：聚焦方法、成果与协作方式',
+        '首页升级为实践档案布局，更新最近方法与成果内容',
+        '公开内容完成一轮隐私收口，移除不必要的本机路径和精确运行细节'
+      ],
+      relatedType: 'project'
+    },
+    {
+      date: '2026-06-12',
+      changes: [
+        'PPT 智图工坊形成视觉定妆照驱动的演示工作流',
+        '新增“先定主视觉、再叠信息层”的方法卡片'
+      ],
+      relatedType: 'project'
+    },
     {
       date: '2026-05-19',
       changes: [
@@ -413,6 +452,6 @@ export function getAchievementStats(): {
     totalProjects: projects.length,
     completedProjects: projects.filter(p => p.status === 'completed').length,
     totalCases: cases.length,
-    latestDate: projects[0]?.updatedAt || ''
+    latestDate: getChangelog()[0]?.date || projects[0]?.updatedAt || ''
   }
 }

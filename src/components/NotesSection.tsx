@@ -1,11 +1,11 @@
 import Link from 'next/link'
-import { allNotes } from '@/lib/notes'
+import { getPublicNotes } from '@/lib/notes'
 import styles from './NotesSection.module.css'
 
 export default function NotesSection() {
   // Featured 笔记优先，其次按日期倒序，最多 6 条
-  const featured = allNotes.filter(n => n.featured)
-  const others = allNotes.filter(n => !n.featured)
+  const featured = getPublicNotes().filter(n => n.featured)
+  const others = getPublicNotes().filter(n => !n.featured)
     .sort((a, b) => b.date.localeCompare(a.date))
   const displayNotes = [...featured, ...others].slice(0, 6)
 
