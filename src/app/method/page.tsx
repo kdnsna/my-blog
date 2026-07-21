@@ -55,12 +55,12 @@ export default function MethodPage() {
       {/* 导流区域 */}
       <section className={styles.crossLinks}>
         <div className={styles.crossLink}>
-          <span className={styles.crossLinkIcon}>📖</span>
+          <span className={styles.crossLinkIcon}>✦</span>
           <div className={styles.crossLinkContent}>
-            <h3>背后的故事</h3>
-            <p>这些方法是怎么来的？看日记了解过程</p>
+            <h3>协作方式</h3>
+            <p>了解这些方法背后的协作原则</p>
           </div>
-          <a href="/story" className={styles.crossLinkBtn}>去看看 →</a>
+          <a href="/about" className={styles.crossLinkBtn}>去看看 →</a>
         </div>
         <div className={styles.crossLink}>
           <span className={styles.crossLinkIcon}>🏆</span>

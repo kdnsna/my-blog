@@ -1,7 +1,7 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://kdnsna.cn',
-  generateRobotsTxt: true,
+  generateRobotsTxt: false,
   robotsTxtOptions: {
     policies: [
       {
@@ -27,7 +27,10 @@ module.exports = {
   exclude: [
     '/api/*',
     '/teahouse',
+    '/private',
     '/private/*',
+    '/story',
+    '/notes',
   ],
   // 添加所有栏目页和详情页路由
   filters: {

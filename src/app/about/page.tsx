@@ -6,8 +6,8 @@ import styles from './page.module.css'
 const QUICK_LINKS = [
   { id: 'about-site', label: '这个站是什么' },
   { id: 'about-team', label: '认识他们' },
-  { id: 'about-system', label: '协作系统' },
-  { id: 'about-content', label: '内容导航' },
+  { id: 'about-system', label: '协作方式' },
+  { id: 'about-content', label: '从哪里开始' },
 ] as const
 
 export default function AboutPage() {
@@ -29,19 +29,18 @@ export default function AboutPage() {
           <span>欢迎了解我们</span>
         </div>
         <h1 className={styles.pageTitle}>关于这个站</h1>
-        <p className={styles.pageSubtitle}>记录人与 AI 协作的数字空间</p>
+        <p className={styles.pageSubtitle}>一份由人和 AI 共同维护的实践档案</p>
       </header>
 
       {/* 核心说明 */}
       <section id="about-site" className={styles.coreSection}>
         <h2 className={styles.coreTitle}>这个站是什么</h2>
         <p className={styles.coreText}>
-          这不是一个技术作品集，也不是 AI 能力演示页面。
-          这是一个记录<strong>人与 AI 一起生活、一起做事的数字空间</strong>。
+          这不是 AI 能力的演示页面，也不是把生活原样摊开的日记本。
+          它记录<strong>人与 AI 如何一起把事情做成</strong>：判断、方法、工具和已经落地的成果。
         </p>
         <p className={styles.coreText}>
-          在这里你会看到：协作的痕迹、思考的过程、做出来的东西。
-          一切围绕一个核心：<strong>把事情做成</strong>。
+          私人的叙事留在私人空间；公开的内容只留下真正可复用、经得起回看的实践。
         </p>
       </section>
 
@@ -63,8 +62,8 @@ export default function AboutPage() {
             </div>
 
             <p className={styles.profileBio}>
-              一个会用 AI 做事的银行人。追求系统化、讲究质感，没事喜欢折腾效率工具。
-              不懂技术细节，但擅长提需求和做决策。
+              一个愿意把想法落地的人。追求系统化，也在意体验和质感；擅长提出问题、做关键判断，并持续打磨自己的工作方式。
+              不必懂每一行技术细节，但始终知道什么值得做。
             </p>
 
             <div className={styles.profileTags}>
@@ -100,7 +99,7 @@ export default function AboutPage() {
 
       {/* 协作系统 */}
       <section id="about-system" className={styles.systemSection}>
-        <h2 className={styles.sectionTitle}>协作系统</h2>
+        <h2 className={styles.sectionTitle}>协作方式</h2>
         
         <p className={styles.sectionIntro}>
           大爷不只一个小锤子——其实有三个，像一个没有会议室的小团队。
@@ -142,22 +141,22 @@ export default function AboutPage() {
 
       {/* 内容导航 */}
       <section id="about-content" className={styles.contentSection}>
-        <h2 className={styles.sectionTitle}>内容导航</h2>
+        <h2 className={styles.sectionTitle}>从哪里开始</h2>
 
         <div className={styles.contentGrid}>
-          <a href="/story" className={styles.contentCard}>
-            <span className={styles.contentIcon} aria-hidden="true">📖</span>
+          <a href="/method" className={styles.contentCard}>
+            <span className={styles.contentIcon} aria-hidden="true">🧭</span>
             <div className={styles.contentInfo}>
-              <h3>故事</h3>
-              <p>日记、随笔、生活记录</p>
+              <h3>方法</h3>
+              <p>可复用的工作流、判断与工具经验</p>
             </div>
           </a>
 
-          <a href="/method" className={styles.contentCard}>
-            <span className={styles.contentIcon} aria-hidden="true">📚</span>
+          <a href="/guestbook" className={styles.contentCard}>
+            <span className={styles.contentIcon} aria-hidden="true">💬</span>
             <div className={styles.contentInfo}>
-              <h3>方法</h3>
-              <p>知识沉淀、经验总结、工具心得</p>
+              <h3>交流</h3>
+              <p>留下问题、建议或一次真实的反馈</p>
             </div>
           </a>
 

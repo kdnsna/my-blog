@@ -55,12 +55,12 @@ export default function AchievementPage() {
       {/* 导流区域 */}
       <section className={styles.crossLinks}>
         <div className={styles.crossLink}>
-          <span className={styles.crossLinkIcon}>📖</span>
+          <span className={styles.crossLinkIcon}>🧭</span>
           <div className={styles.crossLinkContent}>
-            <h3>背后的故事</h3>
-            <p>这些成果是怎么做出来的？日记里有记录</p>
+            <h3>方法沉淀</h3>
+            <p>这些成果背后，有可以复用的工作方式</p>
           </div>
-          <a href="/story" className={styles.crossLinkBtn}>去看看 →</a>
+          <a href="/method" className={styles.crossLinkBtn}>去看看 →</a>
         </div>
         <div className={styles.crossLink}>
           <span className={styles.crossLinkIcon}>🧭</span>

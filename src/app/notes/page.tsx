@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { allNotes } from '@/lib/notes'
+import { getPublicNotes } from '@/lib/notes'
 import styles from './page.module.css'
 
 const categories = ['全部', '自动化', '记忆系统', '苹果生态', '项目', '学习', '安全', '日记', '备份']
@@ -11,8 +11,8 @@ export default function NotesPage() {
   const [activeCategory, setActiveCategory] = useState('全部')
 
   const filteredNotes = activeCategory === '全部'
-    ? allNotes
-    : allNotes.filter(note => note.category === activeCategory)
+    ? getPublicNotes()
+    : getPublicNotes().filter(note => note.category === activeCategory)
 
   return (
     <div className={styles.page}>

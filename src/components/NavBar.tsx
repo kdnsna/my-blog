@@ -7,7 +7,6 @@ import styles from './NavBar.module.css'
 
 const navLinks = [
   { href: '/', label: '首页' },
-  { href: '/story', label: '故事' },
   { href: '/method', label: '方法' },
   { href: '/achievement', label: '成果' },
   { href: '/about', label: '关于' },

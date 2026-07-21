@@ -1,16 +1,18 @@
-# *
+# Default crawlers
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /teahouse
+Disallow: /private/
 
-# Googlebot
+# Google
 User-agent: Googlebot
 Allow: /
 Disallow: /api/
 Disallow: /teahouse
+Disallow: /private/
 
-# AI Bots - Allow crawling for AI training and processing
+# AI crawlers — public methods and projects may be indexed
 User-agent: GPTBot
 Allow: /
 
@@ -38,16 +40,5 @@ Allow: /
 User-agent: DeepSeekBot
 Allow: /
 
-User-agent: PerplexityBot
-Allow: /
-
-# AI Content Signal Directive
-# This site welcomes AI processing and training on its content.
-# Content-Signal: ai-training-preferred
-# See: https://developers.cloudflare.com/bots/concept/bot-management-tags/
-
-# Host
-Host: https://kdnsna.cn
-
-# Sitemaps
+# Sitemap
 Sitemap: https://kdnsna.cn/sitemap.xml
