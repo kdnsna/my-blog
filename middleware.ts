@@ -1,72 +1,89 @@
+import { jwtVerify } from 'jose'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 /**
- * Middleware for Agent-friendly enhancements
- * 1. RFC 8288 Link headers for discovery
- * 2. Content negotiation for text/markdown
+ * Single active edge middleware.
+ * - Protects the private area with a signed JWT cookie.
+ * - Adds discovery Link headers to public pages.
+ * - Supports markdown content negotiation for public article routes.
  */
 
 const BASE_URL = 'https://kdnsna.cn'
+const PUBLIC_PRIVATE_PATHS = ['/private/login']
 
-// Link header targets for discovery
 const LINK_TARGETS = [
   { rel: 'sitemap', url: `${BASE_URL}/sitemap.xml` },
   { rel: 'alternate', type: 'application/json', url: `${BASE_URL}/.well-known/api-catalog` },
   { rel: 'related', type: 'application/json', url: `${BASE_URL}/.well-known/mcp-server` },
 ]
 
-// Paths that can return markdown content
 const MARKDOWN_PATTERNS = ['/diary/', '/method/', '/achievement/', '/story/']
 
 function buildLinkHeader(): string {
   return LINK_TARGETS
-    .map(target => {
+    .map((target) => {
       const parts = [`<${target.url}>`, `rel="${target.rel}"`]
-      if (target.type) {
-        parts.push(`type="${target.type}"`)
-      }
+      if (target.type) parts.push(`type="${target.type}"`)
       return parts.join('; ')
     })
     .join(', ')
 }
 
 function shouldReturnMarkdown(request: NextRequest, pathname: string): boolean {
-  // Check if Accept header contains text/markdown
   const accept = request.headers.get('accept') || ''
-  
-  if (!accept.includes('text/markdown')) {
-    return false
-  }
-  
-  // Check if the path matches content patterns
-  return MARKDOWN_PATTERNS.some(pattern => pathname.startsWith(pattern))
+  return accept.includes('text/markdown') && MARKDOWN_PATTERNS.some((pattern) => pathname.startsWith(pattern))
 }
 
-export function middleware(request: NextRequest) {
+async function authorizePrivateRequest(request: NextRequest): Promise<NextResponse | null> {
   const { pathname } = request.nextUrl
-  
-  // 1. Add Link headers for discovery (RFC 8288)
+
+  if (!pathname.startsWith('/private') || PUBLIC_PRIVATE_PATHS.includes(pathname)) {
+    return null
+  }
+
+  const token = request.cookies.get('private_token')?.value
+  if (!token) {
+    const loginUrl = new URL('/private/login', request.url)
+    loginUrl.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(loginUrl)
+  }
+
+  const authSecret = process.env.PRIVATE_AUTH_SECRET
+  if (!authSecret) {
+    return new NextResponse('Private section not configured', { status: 500 })
+  }
+
+  try {
+    await jwtVerify(token, new TextEncoder().encode(authSecret))
+    return null
+  } catch {
+    const loginUrl = new URL('/private/login', request.url)
+    loginUrl.searchParams.set('redirect', pathname)
+    const response = NextResponse.redirect(loginUrl)
+    response.cookies.delete('private_token')
+    return response
+  }
+}
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  const authorizationResponse = await authorizePrivateRequest(request)
+  if (authorizationResponse) return authorizationResponse
+
   const response = NextResponse.next()
   response.headers.set('Link', buildLinkHeader())
-  
-  // 2. Handle content negotiation for markdown
+
   if (shouldReturnMarkdown(request, pathname)) {
-    // For now, redirect to a .md suffix endpoint
-    // The actual markdown conversion can be handled by an API route
-    const markdownUrl = new URL(pathname + '.md', request.url)
-    const markdownResponse = NextResponse.rewrite(markdownUrl)
+    const markdownResponse = NextResponse.rewrite(new URL(pathname + '.md', request.url))
     markdownResponse.headers.set('Content-Type', 'text/markdown; charset=utf-8')
     markdownResponse.headers.set('Link', buildLinkHeader())
     return markdownResponse
   }
-  
+
   return response
 }
 
 export const config = {
-  matcher: [
-    // Match all paths except static files and api routes
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|css|js)).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|css|js)).*)'],
 }
