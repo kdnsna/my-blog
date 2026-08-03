@@ -42,7 +42,7 @@
 
 | 类别 | 技术 |
 |------|------|
-| 框架 | Next.js 16.2.10 (App Router) |
+| 框架 | Next.js 16.2.12 (App Router) |
 | 语言 | TypeScript + React 19 |
 | 内容 | MDX + gray-matter |
 | 样式 | CSS Modules + CSS Variables |
